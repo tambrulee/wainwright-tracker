@@ -10,8 +10,25 @@ const WainwrightMap = dynamic(() => import("@/components/WainwrightMap"), {
 type Props = {
   fells: Wainwright[];
   onSelectFell: (fellId: string) => void;
+  selectedFell?: Wainwright | null;
+  routeFellIds: string[];
+  onToggleRouteFell: (fellId: string) => void;
 };
 
-export default function MapWrapper({ fells, onSelectFell }: Props) {
-  return <WainwrightMap fells={fells} onSelectFell={onSelectFell} />;
+export default function MapWrapper({
+  fells,
+  onSelectFell,
+  selectedFell,
+  routeFellIds,
+  onToggleRouteFell,
+}: Props) {
+  return (
+    <WainwrightMap
+      fells={fells}
+      onSelectFell={onSelectFell}
+      selectedFell={selectedFell}
+      routeFellIds={routeFellIds}
+      onToggleRouteFell={onToggleRouteFell}
+    />
+  );
 }

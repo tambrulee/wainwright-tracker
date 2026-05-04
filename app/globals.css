@@ -27,9 +27,12 @@ body {
 /* Make form text readable */
 input,
 select,
-textarea,
-button {
+textarea {
   color: #1c1917;
+}
+
+button {
+  color: inherit;
 }
 
 input::placeholder {
