@@ -9,6 +9,16 @@ const __dirname = path.dirname(__filename);
 const inputPath = path.join(__dirname, "../data/wainwrights.csv");
 const outputPath = path.join(__dirname, "../data/wainwrights.json");
 
+function normaliseKey(key) {
+  return String(key || "")
+    .replace(/\uFFFD/g, " ") // removes � replacement characters
+    .replace(/\u00A0/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/[().§]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
 function slugify(text) {
   return String(text || "")
     .toLowerCase()
@@ -34,28 +44,38 @@ const parsed = Papa.parse(csv, {
   skipEmptyLines: true,
 });
 
-const data = parsed.data.map((row) => ({
-  id: slugify(row["Name"]),
-  heightRank: parseNumber(row["Height Rank"]),
-  name: row["Name"],
-  classification: row["Classification(§ DoBIH codes)"],
-  completed: parseBool(row["Completed"]),
-  completedDate: row["Completed Date"] || null,
-  heightFt: parseNumber(row["Height (ft)"]),
-  heightM: parseNumber(row["Height (m)"]),
-  url: row["URL"],
-  osGridReference: row["OS Grid Reference"],
-  planned: parseBool(row["Planned"]),
-  priority: parseBool(row["Priority"]),
-  prominenceFt: parseNumber(row["Prom. (ft)"]),
-  prominenceM: parseNumber(row["Prom. (m)"]),
-  section: row["Section"],
-  topoMap: row["Topo Map"],
-  x: parseNumber(row["X"]),
-  y: parseNumber(row["Y"]),
-  latitude: parseNumber(row["Latitude"]),
-  longitude: parseNumber(row["Longitude"]),
-}));
+console.log(parsed.meta.fields.map(normaliseKey));
+
+const data = parsed.data.map((row) => {
+  const cleanRow = {};
+
+  Object.entries(row).forEach(([key, value]) => {
+    cleanRow[normaliseKey(key)] = value;
+  });
+
+  return {
+    id: slugify(cleanRow["name"]),
+    heightRank: parseNumber(cleanRow["height rank"]),
+    name: cleanRow["name"],
+    classification: cleanRow["classification dobih codes"],
+    completed: parseBool(cleanRow["completed"]),
+    completedDate: cleanRow["completed date"] || null,
+    heightFt: parseNumber(cleanRow["height ft"]),
+    heightM: parseNumber(cleanRow["height m"]),
+    url: cleanRow["url"],
+    osGridReference: cleanRow["os grid reference"],
+    planned: parseBool(cleanRow["planned"]),
+    priority: parseBool(cleanRow["priority"]),
+    prominenceFt: parseNumber(cleanRow["prom ft"]),
+    prominenceM: parseNumber(cleanRow["prom m"]),
+    section: cleanRow["section"],
+    topoMap: cleanRow["topo map"],
+    x: parseNumber(cleanRow["x"]),
+    y: parseNumber(cleanRow["y"]),
+    latitude: parseNumber(cleanRow["latitude"]),
+    longitude: parseNumber(cleanRow["longitude"]),
+  };
+});
 
 const missingCoords = data.filter((fell) => !fell.latitude || !fell.longitude);
 

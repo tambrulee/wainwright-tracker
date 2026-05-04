@@ -3,13 +3,13 @@ import type { Wainwright } from "@/types/wainwright";
 import WainwrightDashboard from "@/components/WainwrightDashboard";
 
 export default function Home() {
-  const fells = wainwrights as Wainwright[];
+  const fells = wainwrights as unknown as Wainwright[];
 
   return (
     <main className="min-h-screen bg-stone-100 p-6">
       <div className="mx-auto max-w-7xl space-y-6">
         <header>
-          <p className="text-sm uppercase tracking-wide text-stone-500">
+          <p className="text-sm uppercase tracking-wide text-stone-700">
             Lake District tracker
           </p>
           <h1 className="text-4xl font-bold text-stone-900">
