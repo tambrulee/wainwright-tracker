@@ -1,0 +1,22 @@
+export type Wainwright = {
+  id: string;
+  heightRank: number;
+  name: string;
+  classification: string;
+  completed: boolean;
+  completedDate: string | null;
+  heightFt: number;
+  heightM: number;
+  url: string;
+  osGridReference: string;
+  planned: boolean;
+  priority: boolean;
+  prominenceFt: number;
+  prominenceM: number;
+  section: string;
+  topoMap: string;
+  x: number;
+  y: number;
+  latitude: number;
+  longitude: number;
+};
