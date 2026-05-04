@@ -8,18 +8,31 @@ import {
   Popup,
   Polyline,
   useMap,
+  Marker,
+  useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Wainwright } from "@/types/wainwright";
 import type { WalkingRoute } from "@/lib/getWalkingRoute";
 
+type RoutePoint = {
+  id: string;
+  type: "fell" | "custom";
+  lat: number;
+  lng: number;
+  name: string;
+  fellId?: string;
+};
+
 type Props = {
   fells: Wainwright[];
   onSelectFell: (fellId: string) => void;
   selectedFell?: Wainwright | null;
-  routeFellIds: string[];
-  onToggleRouteFell: (fellId: string) => void;
+  isRouteMode: boolean;
+  routePoints: RoutePoint[];
   walkingRoute?: WalkingRoute | null;
+  onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
+  onRemoveRoutePoint: (pointId: string) => void;
 };
 
 function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
@@ -32,25 +45,44 @@ function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
   return null;
 }
 
+function RouteClickHandler({
+  isRouteMode,
+  onAddRoutePoint,
+}: {
+  isRouteMode: boolean;
+  onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
+}) {
+  useMapEvents({
+    click(e) {
+      if (!isRouteMode) return;
+
+      onAddRoutePoint({
+        type: "custom",
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
+        name: "Custom point",
+      });
+    },
+  });
+
+  return null;
+}
+
 export default function WainwrightMap({
   fells,
   onSelectFell,
   selectedFell,
-  routeFellIds,
-  onToggleRouteFell,
+  isRouteMode,
+  routePoints,
   walkingRoute,
+  onAddRoutePoint,
+  onRemoveRoutePoint,
 }: Props) {
-  const straightRoutePositions = routeFellIds
-    .map((id) => fells.find((fell) => fell.id === id))
-    .filter(
-      (fell): fell is Wainwright =>
-        !!fell &&
-        typeof fell.latitude === "number" &&
-        typeof fell.longitude === "number"
-    )
-    .map((fell) => [fell.latitude, fell.longitude] as [number, number]);
+  const fallbackRoutePositions = routePoints.map(
+    (point) => [point.lat, point.lng] as [number, number]
+  );
 
-  const displayedRoute = walkingRoute?.coordinates ?? straightRoutePositions;
+  const displayedRoute = walkingRoute?.coordinates ?? fallbackRoutePositions;
 
   return (
     <div className="h-[75vh] w-full overflow-hidden rounded-2xl border border-stone-300">
@@ -60,6 +92,16 @@ export default function WainwrightMap({
         scrollWheelZoom
         className="h-full w-full"
       >
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        <RouteClickHandler
+          isRouteMode={isRouteMode}
+          onAddRoutePoint={onAddRoutePoint}
+        />
+
         {displayedRoute.length > 1 && (
           <Polyline
             positions={displayedRoute}
@@ -71,6 +113,28 @@ export default function WainwrightMap({
           />
         )}
 
+        {routePoints.map((point, index) => (
+          <Marker
+            key={point.id}
+            position={[point.lat, point.lng]}
+            eventHandlers={{
+              click: () => {
+                if (isRouteMode) onRemoveRoutePoint(point.id);
+              },
+            }}
+          >
+            <Popup>
+              <strong>
+                {index + 1}. {point.name}
+              </strong>
+              <br />
+              {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
+              <br />
+              {isRouteMode && <span>Click marker to remove it.</span>}
+            </Popup>
+          </Marker>
+        ))}
+
         {selectedFell &&
           typeof selectedFell.latitude === "number" &&
           typeof selectedFell.longitude === "number" && (
@@ -80,11 +144,6 @@ export default function WainwrightMap({
             />
           )}
 
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-
         {fells
           .filter(
             (fell) =>
@@ -93,7 +152,9 @@ export default function WainwrightMap({
           )
           .map((fell) => {
             const isSelected = selectedFell?.id === fell.id;
-            const isInRoute = routeFellIds.includes(fell.id);
+            const isInRoute = routePoints.some(
+              (point) => point.fellId === fell.id
+            );
 
             return (
               <CircleMarker
@@ -101,7 +162,21 @@ export default function WainwrightMap({
                 center={[fell.latitude, fell.longitude]}
                 radius={isSelected ? 11 : isInRoute ? 9 : fell.completed ? 7 : 5}
                 eventHandlers={{
-                  click: () => onSelectFell(fell.id),
+                  click: () => {
+                    if (isRouteMode) {
+                      onAddRoutePoint({
+                        type: "fell",
+                        fellId: fell.id,
+                        lat: fell.latitude,
+                        lng: fell.longitude,
+                        name: fell.name,
+                      });
+
+                      return;
+                    }
+
+                    onSelectFell(fell.id);
+                  },
                 }}
                 pathOptions={{
                   color: isSelected
@@ -135,12 +210,13 @@ export default function WainwrightMap({
                   <br />
                   Completed: {fell.completed ? "Yes" : "No"}
                   <br />
-                  <button
-                    onClick={() => onToggleRouteFell(fell.id)}
-                    className="mt-2 rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-900 hover:bg-blue-100"
-                  >
-                    {isInRoute ? "Remove from route" : "Add to route"}
-                  </button>
+                  {isRouteMode ? (
+                    <span className="text-sm font-semibold">
+                      Click marker to add to route
+                    </span>
+                  ) : (
+                    <span className="text-sm">Click marker to view details</span>
+                  )}
                 </Popup>
               </CircleMarker>
             );

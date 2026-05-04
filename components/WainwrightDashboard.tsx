@@ -9,9 +9,18 @@ import FellList from "@/components/FellList";
 
 type ProgressState = Record<string, FellProgress>;
 
+type RoutePoint = {
+  id: string;
+  type: "fell" | "custom";
+  lat: number;
+  lng: number;
+  name: string;
+  fellId?: string;
+};
+
 type SavedRoute = {
   name: string;
-  fellIds: string[];
+  points: RoutePoint[];
 };
 
 type SortOption = "name" | "height-high" | "height-low" | "section";
@@ -41,29 +50,39 @@ function formatMinutes(minutes: number) {
 }
 
 export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) {
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const [search, setSearch] = useState("");
   const [section, setSection] = useState("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
   const [sortBy, setSortBy] = useState<SortOption>("name");
 
   const [selectedFellId, setSelectedFellId] = useState<string | null>(null);
-  const [routeFellIds, setRouteFellIds] = useState<string[]>([]);
+  const [isRouteMode, setIsRouteMode] = useState(false);
+  const [routePoints, setRoutePoints] = useState<RoutePoint[]>([]);
 
-  const [progress, setProgress] = useState<ProgressState>(() =>
-    readFromStorage("wainwright-progress", {})
-  );
-
-  const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>(() =>
-    readFromStorage("wainwright-saved-routes", [])
-  );
+  const [progress, setProgress] = useState<ProgressState>({});
+  const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>([]);
 
   useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setProgress(readFromStorage("wainwright-progress", {}));
+      setSavedRoutes(readFromStorage("wainwright-saved-routes-v2", []));
+      setHasLoaded(true);
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoaded) return;
     localStorage.setItem("wainwright-progress", JSON.stringify(progress));
-  }, [progress]);
+  }, [progress, hasLoaded]);
 
   useEffect(() => {
-    localStorage.setItem("wainwright-saved-routes", JSON.stringify(savedRoutes));
-  }, [savedRoutes]);
+    if (!hasLoaded) return;
+    localStorage.setItem("wainwright-saved-routes-v2", JSON.stringify(savedRoutes));
+  }, [savedRoutes, hasLoaded]);
 
   const mergedFells = useMemo(
     () => fells.map((fell) => ({ ...fell, ...progress[fell.id] })),
@@ -78,10 +97,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   const filteredFells = useMemo(() => {
     return mergedFells
       .filter((fell) => {
-        const matchesSearch = fell.name
-          .toLowerCase()
-          .includes(search.toLowerCase());
-
+        const matchesSearch = fell.name.toLowerCase().includes(search.toLowerCase());
         const matchesSection = section === "All" || fell.section === section;
 
         const matchesStatus =
@@ -103,8 +119,9 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
   const selectedFell = mergedFells.find((fell) => fell.id === selectedFellId);
 
-  const routeFells = routeFellIds
-    .map((id) => mergedFells.find((fell) => fell.id === id))
+  const routeFells = routePoints
+    .filter((point) => point.type === "fell" && point.fellId)
+    .map((point) => mergedFells.find((fell) => fell.id === point.fellId))
     .filter(Boolean) as Wainwright[];
 
   const routeStats = useMemo(() => {
@@ -115,12 +132,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         ascentM: total.ascentM + (fell.ascentM ?? 0),
         descentM: total.descentM + (fell.descentM ?? 0),
       }),
-      {
-        minutes: 0,
-        distanceKm: 0,
-        ascentM: 0,
-        descentM: 0,
-      }
+      { minutes: 0, distanceKm: 0, ascentM: 0, descentM: 0 }
     );
   }, [routeFells]);
 
@@ -143,20 +155,30 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     });
   }
 
-  function toggleRouteFell(fellId: string) {
-    setRouteFellIds((current) =>
-      current.includes(fellId)
-        ? current.filter((id) => id !== fellId)
-        : [...current, fellId]
-    );
+  function addRoutePoint(point: Omit<RoutePoint, "id">) {
+    setRoutePoints((current) => [
+      ...current,
+      {
+        ...point,
+        id: `${point.type}-${point.fellId ?? "custom"}-${Date.now()}-${current.length}`,
+      },
+    ]);
+  }
+
+  function removeRoutePoint(pointId: string) {
+    setRoutePoints((current) => current.filter((point) => point.id !== pointId));
+  }
+
+  function undoRoutePoint() {
+    setRoutePoints((current) => current.slice(0, -1));
   }
 
   function clearRoute() {
-    setRouteFellIds([]);
+    setRoutePoints([]);
   }
 
   function saveCurrentRoute() {
-    if (routeFellIds.length < 2) return;
+    if (routePoints.length < 2) return;
 
     const name = prompt("Name this route:");
     if (!name) return;
@@ -165,13 +187,14 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
       ...current,
       {
         name,
-        fellIds: routeFellIds,
+        points: routePoints,
       },
     ]);
   }
 
-  function loadRoute(fellIds: string[]) {
-    setRouteFellIds(fellIds);
+  function loadRoute(points: RoutePoint[]) {
+    setRoutePoints(points);
+    setIsRouteMode(true);
   }
 
   function deleteRoute(index: number) {
@@ -209,10 +232,12 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <div className="rounded-2xl bg-stone-950 px-5 py-4 text-white shadow-lg">
                 <p className="text-xs uppercase tracking-wide text-stone-300">
-                  Selected
+                  Route points
                 </p>
-                <p className="text-3xl font-black">{routeFellIds.length}</p>
-                <p className="text-sm text-stone-300">fells</p>
+                <p className="text-3xl font-black">{routePoints.length}</p>
+                <p className="text-sm text-stone-300">
+                  {isRouteMode ? "editing" : "selected"}
+                </p>
               </div>
 
               <div className="rounded-2xl bg-white px-5 py-4 shadow-lg">
@@ -223,7 +248,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                 <p className="text-sm text-stone-500">fells</p>
               </div>
 
-              <div className="rounded-2xl bg-emerald-900 px-5 py-4 text-white shadow-lg sm:col-span-1 col-span-2">
+              <div className="col-span-2 rounded-2xl bg-emerald-900 px-5 py-4 text-white shadow-lg sm:col-span-1">
                 <p className="text-xs uppercase tracking-wide text-emerald-200">
                   Saved
                 </p>
@@ -256,7 +281,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
           </div>
 
           <div className="grid gap-3 md:grid-cols-4">
-            <div className="md:col-span-1">
+            <div>
               <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-stone-500">
                 Search
               </label>
@@ -330,93 +355,113 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               fells={filteredFells}
               onSelectFell={setSelectedFellId}
               selectedFell={selectedFell}
-              routeFellIds={routeFellIds}
-              onToggleRouteFell={toggleRouteFell}
+              isRouteMode={isRouteMode}
+              routePoints={routePoints}
+              onAddRoutePoint={addRoutePoint}
+              onRemoveRoutePoint={removeRoutePoint}
             />
           </div>
         </section>
 
-        {routeFells.length > 0 && (
-          <section className="rounded-[1.75rem] border border-emerald-200 bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/20">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-200">
-                  Route builder
-                </p>
+        <section className="rounded-[1.75rem] border border-emerald-200 bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/20">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-200">
+                Route builder
+              </p>
 
-                <h2 className="mt-1 text-2xl font-black">
-                  {routeFells.length} selected fells
-                </h2>
+              <h2 className="mt-1 text-2xl font-black">
+                {routePoints.length} route points
+              </h2>
 
-                <p className="mt-2 max-w-2xl text-sm text-emerald-100">
-                  Add 2+ fells to auto-build a routed walking path. Green = routed
-                  path, blue = fallback straight line.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={clearRoute}
-                  className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20"
-                >
-                  Clear
-                </button>
-
-                <button
-                  onClick={saveCurrentRoute}
-                  disabled={routeFellIds.length < 2}
-                  className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Save route
-                </button>
-              </div>
+              <p className="mt-2 max-w-2xl text-sm text-emerald-100">
+                {isRouteMode
+                  ? "Route mode is on. Click the map or fells to add points. Click a route marker or pill below to remove it."
+                  : "Click Create route, then choose your start point, waypoints, and fells directly on the map."}
+              </p>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-4">
-              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
-                <p className="text-xs text-emerald-100">Estimated time</p>
-                <p className="text-lg font-black">
-                  {formatMinutes(routeStats.minutes)}
-                </p>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setIsRouteMode((current) => !current)}
+                className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50"
+              >
+                {isRouteMode ? "Finish route" : "Create route"}
+              </button>
 
-              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
-                <p className="text-xs text-emerald-100">Distance</p>
-                <p className="text-lg font-black">
-                  {routeStats.distanceKm
-                    ? `${routeStats.distanceKm.toFixed(1)} km`
-                    : "—"}
-                </p>
-              </div>
+              <button
+                onClick={undoRoutePoint}
+                disabled={routePoints.length === 0}
+                className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Undo
+              </button>
 
-              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
-                <p className="text-xs text-emerald-100">Ascent</p>
-                <p className="text-lg font-black">
-                  {routeStats.ascentM ? `${routeStats.ascentM}m` : "—"}
-                </p>
-              </div>
+              <button
+                onClick={clearRoute}
+                disabled={routePoints.length === 0}
+                className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Clear
+              </button>
 
-              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
-                <p className="text-xs text-emerald-100">Descent</p>
-                <p className="text-lg font-black">
-                  {routeStats.descentM ? `${routeStats.descentM}m` : "—"}
-                </p>
-              </div>
+              <button
+                onClick={saveCurrentRoute}
+                disabled={routePoints.length < 2}
+                className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Save route
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-4">
+            <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+              <p className="text-xs text-emerald-100">Estimated time</p>
+              <p className="text-lg font-black">
+                {formatMinutes(routeStats.minutes)}
+              </p>
             </div>
 
+            <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+              <p className="text-xs text-emerald-100">Distance</p>
+              <p className="text-lg font-black">
+                {routeStats.distanceKm
+                  ? `${routeStats.distanceKm.toFixed(1)} km`
+                  : "—"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+              <p className="text-xs text-emerald-100">Ascent</p>
+              <p className="text-lg font-black">
+                {routeStats.ascentM ? `${routeStats.ascentM}m` : "—"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+              <p className="text-xs text-emerald-100">Descent</p>
+              <p className="text-lg font-black">
+                {routeStats.descentM ? `${routeStats.descentM}m` : "—"}
+              </p>
+            </div>
+          </div>
+
+          {routePoints.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
-              {routeFells.map((fell, index) => (
+              {routePoints.map((point, index) => (
                 <button
-                  key={fell.id}
-                  onClick={() => setSelectedFellId(fell.id)}
-                  className="rounded-full bg-white/15 px-4 py-2 text-sm font-bold text-white ring-1 ring-white/20 hover:bg-white/25"
+                  key={point.id}
+                  onClick={() => removeRoutePoint(point.id)}
+                  className="rounded-full bg-white/15 px-4 py-2 text-sm font-bold text-white ring-1 ring-white/20 hover:bg-red-500/40"
+                  title="Click to remove"
                 >
-                  {index + 1}. {fell.name}
+                  {index + 1}. {point.name} ×
                 </button>
               ))}
             </div>
-          </section>
-        )}
+          )}
+        </section>
 
         {savedRoutes.length > 0 && (
           <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-lg shadow-stone-200/60 backdrop-blur">
@@ -431,12 +476,12 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                   className="flex items-center justify-between rounded-2xl border border-stone-200 bg-stone-50 p-4"
                 >
                   <button
-                    onClick={() => loadRoute(route.fellIds)}
+                    onClick={() => loadRoute(route.points)}
                     className="text-left font-bold text-stone-950 hover:text-emerald-800"
                   >
                     {route.name}
                     <span className="block text-sm font-medium text-stone-500">
-                      {route.fellIds.length} fells
+                      {route.points.length} points
                     </span>
                   </button>
 
@@ -528,12 +573,22 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               </button>
 
               <button
-                onClick={() => toggleRouteFell(selectedFell.id)}
-                className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 font-bold text-blue-900 hover:bg-blue-100"
+                onClick={() =>
+                  addRoutePoint({
+                    type: "fell",
+                    fellId: selectedFell.id,
+                    lat: selectedFell.latitude,
+                    lng: selectedFell.longitude,
+                    name: selectedFell.name,
+                  })
+                }
+                disabled={
+                  typeof selectedFell.latitude !== "number" ||
+                  typeof selectedFell.longitude !== "number"
+                }
+                className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 font-bold text-blue-900 hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {routeFellIds.includes(selectedFell.id)
-                  ? "Remove from route"
-                  : "Add to route"}
+                Add to route
               </button>
             </div>
           </aside>
