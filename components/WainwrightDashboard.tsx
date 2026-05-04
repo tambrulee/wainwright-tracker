@@ -110,193 +110,262 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   }
 
   return (
-    <div className="space-y-6">
-      <ProgressStats fells={mergedFells} />
+    <div className="min-h-screen bg-gradient-to-br from-stone-100 via-emerald-50 to-slate-100 px-4 py-6 text-stone-950">
+      <div className="mx-auto max-w-7xl space-y-6">
 
-      <div className="grid gap-3 rounded-2xl bg-white p-4 shadow-sm md:grid-cols-2">
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search fells..."
-          className="rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-400"
-        />
-
-        <select
-          value={section}
-          onChange={(e) => setSection(e.target.value)}
-          className="rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-400"
-        >
-          {sections.map((sectionName) => (
-            <option key={sectionName} value={sectionName}>
-              {sectionName}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-        <FellList fells={filteredFells} onSelectFell={setSelectedFellId} />
-
-        <MapWrapper
-          fells={filteredFells}
-          onSelectFell={setSelectedFellId}
-          selectedFell={selectedFell}
-          routeFellIds={routeFellIds}
-          onToggleRouteFell={toggleRouteFell}
-        />
-      </div>
-
-      {routeFells.length > 0 && (
-        <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
-          <div className="flex items-start justify-between gap-4">
+        {/* HERO */}
+        <section className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-200/70 backdrop-blur md:p-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-medium uppercase tracking-wide text-stone-700">
-                Route builder
+              <p className="text-sm font-bold uppercase tracking-[0.25em] text-emerald-800">
+                214 Wainwright Planner
               </p>
 
-              <h2 className="text-2xl font-bold text-stone-950">
-                Selected fells
-              </h2>
+              <h1 className="mt-2 text-4xl font-black tracking-tight text-stone-950 md:text-5xl">
+                Your fell-bagging command centre
+              </h1>
+
+              <p className="mt-3 max-w-2xl text-base leading-7 text-stone-700">
+                Track completed fells, build walking routes, save ideas, and plan your way
+                through the Lakes without faffing around in ten different apps.
+              </p>
             </div>
 
-            <button
-              onClick={clearRoute}
-              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-900 hover:bg-stone-100"
-            >
-              Clear route
-            </button>
-            <button
-              onClick={saveCurrentRoute}
-              className="mt-4 rounded-xl bg-stone-900 px-4 py-2 font-semibold text-white hover:bg-stone-800"
-            >
-              Save route
-            </button>
+            <div className="rounded-2xl bg-stone-950 px-5 py-4 text-white shadow-lg">
+              <p className="text-xs uppercase tracking-wide text-stone-300">
+                Route selected
+              </p>
+              <p className="text-3xl font-black">{routeFellIds.length}</p>
+              <p className="text-sm text-stone-300">fells</p>
+            </div>
           </div>
-
-
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {routeFells.map((fell, index) => (
-              <button
-                key={fell.id}
-                onClick={() => setSelectedFellId(fell.id)}
-                className="rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-900 hover:bg-blue-100"
-              >
-                {index + 1}. {fell.name}
-              </button>
-            ))}
-          </div>
-
-          <p className="mt-4 text-sm font-medium text-stone-700">
-            Add 2+ fells to auto-build a routed walking path. Green = routed path,
-            blue = fallback straight line.
-          </p>
         </section>
-      )}
 
-      {savedRoutes.length > 0 && (
-        <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-bold text-stone-950 mb-3">
-            Saved routes
-          </h2>
+        <ProgressStats fells={mergedFells} />
 
-          <div className="space-y-2">
-            {savedRoutes.map((route, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between rounded-xl border border-stone-200 p-3"
+        {/* SEARCH / FILTERS */}
+        <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-4 shadow-lg shadow-stone-200/60 backdrop-blur">
+          <div className="grid gap-3 md:grid-cols-[1fr_260px]">
+            <div>
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-stone-500">
+                Search fells
+              </label>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Try Haystacks, Catbells, Helvellyn..."
+                className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-950 shadow-inner outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-stone-500">
+                Area
+              </label>
+              <select
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
+                className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-950 shadow-inner outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               >
+                {sections.map((sectionName) => (
+                  <option key={sectionName} value={sectionName}>
+                    {sectionName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </section>
+
+        {/* MAIN APP */}
+        <section className="grid gap-6 lg:grid-cols-[380px_1fr]">
+          <div className="rounded-[1.75rem] border border-white/80 bg-white/80 p-3 shadow-lg shadow-stone-200/60 backdrop-blur">
+            <div className="mb-3 flex items-center justify-between px-2">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-stone-500">
+                  Fell list
+                </p>
+                <p className="text-sm font-semibold text-stone-800">
+                  {filteredFells.length} showing
+                </p>
+              </div>
+            </div>
+
+            <FellList fells={filteredFells} onSelectFell={setSelectedFellId} />
+          </div>
+
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/80 bg-white/80 p-3 shadow-lg shadow-stone-200/60 backdrop-blur">
+            <MapWrapper
+              fells={filteredFells}
+              onSelectFell={setSelectedFellId}
+              selectedFell={selectedFell}
+              routeFellIds={routeFellIds}
+              onToggleRouteFell={toggleRouteFell}
+            />
+          </div>
+        </section>
+
+        {/* ROUTE BUILDER */}
+        {routeFells.length > 0 && (
+          <section className="rounded-[1.75rem] border border-emerald-200 bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/20">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-200">
+                  Route builder
+                </p>
+
+                <h2 className="mt-1 text-2xl font-black">
+                  {routeFells.length} selected fells
+                </h2>
+
+                <p className="mt-2 max-w-2xl text-sm text-emerald-100">
+                  Add 2+ fells to auto-build a routed walking path. Green = routed path,
+                  blue = fallback straight line.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => loadRoute(route.fellIds)}
-                  className="font-semibold text-stone-900 hover:underline"
+                  onClick={clearRoute}
+                  className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20"
                 >
-                  {route.name}
+                  Clear
                 </button>
 
                 <button
-                  onClick={() => deleteRoute(index)}
-                  className="text-sm text-red-600 hover:underline"
+                  onClick={saveCurrentRoute}
+                  className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50"
                 >
-                  Delete
+                  Save route
                 </button>
               </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {selectedFell && (
-        <aside className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-stone-700">
-                {selectedFell.section}
-              </p>
-
-              <h2 className="text-2xl font-bold text-stone-950">
-                {selectedFell.name}
-              </h2>
-
-              <p className="mt-1 font-medium text-stone-800">
-                {selectedFell.heightM}m / {selectedFell.heightFt}ft
-              </p>
-
-              <p className="text-sm text-stone-700">
-                Grid ref: {selectedFell.osGridReference}
-              </p>
             </div>
 
-            <button
-              onClick={() => setSelectedFellId(null)}
-              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-900 hover:bg-stone-100"
-            >
-              Close
-            </button>
-          </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {routeFells.map((fell, index) => (
+                <button
+                  key={fell.id}
+                  onClick={() => setSelectedFellId(fell.id)}
+                  className="rounded-full bg-white/15 px-4 py-2 text-sm font-bold text-white ring-1 ring-white/20 hover:bg-white/25"
+                >
+                  {index + 1}. {fell.name}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
 
-          <div className="mt-5 flex flex-wrap gap-3">
-            <button
-              onClick={() => toggleCompleted(selectedFell)}
-              className="rounded-xl bg-green-700 px-4 py-2 font-semibold text-white hover:bg-green-800"
-            >
-              {selectedFell.completed ? "Mark not completed" : "Mark completed"}
-            </button>
+        {/* SAVED ROUTES */}
+        {savedRoutes.length > 0 && (
+          <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-lg shadow-stone-200/60 backdrop-blur">
+            <h2 className="mb-4 text-xl font-black text-stone-950">
+              Saved routes
+            </h2>
 
-            <button
-              onClick={() =>
-                updateFell(selectedFell.id, { planned: !selectedFell.planned })
-              }
-              className="rounded-xl border border-stone-300 bg-white px-4 py-2 font-medium text-stone-900 hover:bg-stone-100"
-            >
-              {selectedFell.planned ? "Remove planned" : "Mark planned"}
-            </button>
+            <div className="grid gap-3 md:grid-cols-2">
+              {savedRoutes.map((route, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded-2xl border border-stone-200 bg-stone-50 p-4"
+                >
+                  <button
+                    onClick={() => loadRoute(route.fellIds)}
+                    className="text-left font-bold text-stone-950 hover:text-emerald-800"
+                  >
+                    {route.name}
+                    <span className="block text-sm font-medium text-stone-500">
+                      {route.fellIds.length} fells
+                    </span>
+                  </button>
 
-            <button
-              onClick={() =>
-                updateFell(selectedFell.id, { priority: !selectedFell.priority })
-              }
-              className="rounded-xl border border-stone-300 bg-white px-4 py-2 font-medium text-stone-900 hover:bg-stone-100"
-            >
-              {selectedFell.priority ? "Remove priority" : "Mark priority"}
-            </button>
+                  <button
+                    onClick={() => deleteRoute(index)}
+                    className="rounded-xl px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-50"
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
-            <button
-              onClick={() => toggleRouteFell(selectedFell.id)}
-              className="rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 font-medium text-blue-900 hover:bg-blue-100"
-            >
-              {routeFellIds.includes(selectedFell.id)
-                ? "Remove from route"
-                : "Add to route"}
-            </button>
-          </div>
+        {/* SELECTED FELL PANEL */}
+        {selectedFell && (
+          <aside className="sticky bottom-4 z-20 rounded-[1.75rem] border border-stone-200 bg-white/95 p-5 shadow-2xl shadow-stone-400/30 backdrop-blur">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+                  {selectedFell.section}
+                </p>
 
-          {selectedFell.completedDate && (
-            <p className="mt-4 text-sm font-medium text-stone-700">
-              Completed on {selectedFell.completedDate}
-            </p>
-          )}
-        </aside>
-      )}
+                <h2 className="mt-1 text-3xl font-black tracking-tight text-stone-950">
+                  {selectedFell.name}
+                </h2>
+
+                <div className="mt-3 flex flex-wrap gap-2 text-sm font-semibold">
+                  <span className="rounded-full bg-stone-100 px-3 py-1">
+                    {selectedFell.heightM}m / {selectedFell.heightFt}ft
+                  </span>
+
+                  <span className="rounded-full bg-stone-100 px-3 py-1">
+                    Grid ref: {selectedFell.osGridReference}
+                  </span>
+
+                  {selectedFell.completedDate && (
+                    <span className="rounded-full bg-green-100 px-3 py-1 text-green-800">
+                      Completed {selectedFell.completedDate}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSelectedFellId(null)}
+                className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm font-bold text-stone-900 hover:bg-stone-100"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button
+                onClick={() => toggleCompleted(selectedFell)}
+                className="rounded-xl bg-green-700 px-4 py-2 font-bold text-white shadow-md hover:bg-green-800"
+              >
+                {selectedFell.completed ? "Mark not completed" : "Mark completed"}
+              </button>
+
+              <button
+                onClick={() =>
+                  updateFell(selectedFell.id, { planned: !selectedFell.planned })
+                }
+                className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-2 font-bold text-stone-900 hover:bg-stone-100"
+              >
+                {selectedFell.planned ? "Remove planned" : "Mark planned"}
+              </button>
+
+              <button
+                onClick={() =>
+                  updateFell(selectedFell.id, { priority: !selectedFell.priority })
+                }
+                className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-2 font-bold text-stone-900 hover:bg-stone-100"
+              >
+                {selectedFell.priority ? "Remove priority" : "Mark priority"}
+              </button>
+
+              <button
+                onClick={() => toggleRouteFell(selectedFell.id)}
+                className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 font-bold text-blue-900 hover:bg-blue-100"
+              >
+                {routeFellIds.includes(selectedFell.id)
+                  ? "Remove from route"
+                  : "Add to route"}
+              </button>
+            </div>
+          </aside>
+        )}
+      </div>
     </div>
   );
 }
