@@ -6,9 +6,10 @@ import type { Wainwright } from "@/types/wainwright";
 
 type Props = {
   fells: Wainwright[];
+  onSelectFell: (fellId: string) => void;
 };
 
-export default function WainwrightMap({ fells }: Props) {
+export default function WainwrightMap({ fells, onSelectFell }: Props) {
   return (
     <div className="h-[75vh] w-full overflow-hidden rounded-2xl border">
       <MapContainer
@@ -22,11 +23,16 @@ export default function WainwrightMap({ fells }: Props) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {fells.map((fell) => (
+        {fells
+          .filter((fell) => typeof fell.latitude === "number" && typeof fell.longitude === "number")
+          .map((fell) => (
           <CircleMarker
             key={fell.id}
             center={[fell.latitude, fell.longitude]}
             radius={fell.completed ? 7 : 5}
+            eventHandlers={{
+              click: () => onSelectFell(fell.id),
+            }}
             pathOptions={{
               color: fell.completed ? "green" : fell.priority ? "orange" : "gray",
               fillColor: fell.completed ? "green" : fell.priority ? "orange" : "gray",
