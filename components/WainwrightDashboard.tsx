@@ -1,5 +1,8 @@
 "use client";
 
+// This is the main dashboard component for the Wainwright Tracker app. It manages the overall state of the application, including the list of fells, user progress, search and filter settings, selected fell details, and route building functionality. It also handles saving progress and routes to localStorage for persistence across sessions.
+
+// Imports React hooks for state and effect management, as well as type definitions for Wainwright fells and user progress. It also imports child components for displaying progress stats, the map, and the list of fells.
 import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import type { FellProgress } from "@/types/progress";
@@ -7,14 +10,17 @@ import ProgressStats from "@/components/ProgressStats";
 import MapWrapper from "@/components/MapWrapper";
 import FellList from "@/components/FellList";
 
+// Defines the shape of the progress state, which is a record mapping fell IDs to their progress details (completed, planned, priority, etc.).
 type ProgressState = Record<string, FellProgress>;
 
+// The main dashboard component that takes in a list of Wainwright fells as a prop and manages the state and interactions for the app.
 export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) {
   const [search, setSearch] = useState("");
   const [section, setSection] = useState("All");
   const [selectedFellId, setSelectedFellId] = useState<string | null>(null);
   const [routeFellIds, setRouteFellIds] = useState<string[]>([]);
 
+  // Initialize progress state from localStorage if available, otherwise start with an empty object. This allows the app to remember which fells have been completed, planned, or marked as priority across sessions.
   const [progress, setProgress] = useState<ProgressState>(() => {
     if (typeof window === "undefined") return {};
     const saved = localStorage.getItem("wainwright-progress");
@@ -30,11 +36,13 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     [fells, progress]
   );
 
+  // Generate a list of unique sections from the fells data for the area filter dropdown. This includes an "All" option to show all fells regardless of section.
   const sections = useMemo(
     () => ["All", ...Array.from(new Set(fells.map((fell) => fell.section))).sort()],
     [fells]
   );
 
+  // Filter the list of fells based on the search query and selected section. This allows users to quickly find specific fells or narrow down the list by area.
   const filteredFells = mergedFells.filter((fell) => {
     return (
       fell.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -42,6 +50,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     );
   });
 
+  // Find the currently selected fell based on the selectedFellId. This is used to display details and actions for the selected fell in the side panel.
   const selectedFell = mergedFells.find((fell) => fell.id === selectedFellId);
 
   const routeFells = routeFellIds
@@ -76,6 +85,8 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setRouteFellIds([]);
   }
 
+  // Initialize saved routes from localStorage, allowing users to save and load their planned routes. Each route consists of a name and an array of fell IDs that are part of that route.
+
   const [savedRoutes, setSavedRoutes] = useState<
   { name: string; fellIds: string[] }[]
   >(() => {
@@ -108,6 +119,8 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   function deleteRoute(index: number) {
     setSavedRoutes((current) => current.filter((_, i) => i !== index));
   }
+
+  // The return statement renders the main dashboard UI, including the hero section, progress stats, search and filter controls, the main app area with the fell list and map, the route builder section, saved routes, and the selected fell details panel. The UI is styled with Tailwind CSS classes for a clean and modern look.
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-100 via-emerald-50 to-slate-100 px-4 py-6 text-stone-950">
