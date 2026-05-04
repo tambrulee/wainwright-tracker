@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Popup,
+  Polyline,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Wainwright } from "@/types/wainwright";
 
@@ -30,6 +37,17 @@ export default function WainwrightMap({
   routeFellIds,
   onToggleRouteFell,
 }: Props) {
+
+  const routePositions = routeFellIds
+  .map((id) => fells.find((fell) => fell.id === id))
+  .filter(
+    (fell): fell is Wainwright =>
+      !!fell &&
+      typeof fell.latitude === "number" &&
+      typeof fell.longitude === "number"
+  )
+  .map((fell) => [fell.latitude, fell.longitude] as [number, number]);
+
   return (
     <div className="h-[75vh] w-full overflow-hidden rounded-2xl border border-stone-300">
       <MapContainer
@@ -38,6 +56,16 @@ export default function WainwrightMap({
         scrollWheelZoom
         className="h-full w-full"
       >
+        {routePositions.length > 1 && (
+          <Polyline
+            positions={routePositions}
+            pathOptions={{
+              color: "#2563eb",
+              weight: 4,
+              opacity: 0.8,
+            }}
+          />
+        )}
         {selectedFell &&
           typeof selectedFell.latitude === "number" &&
           typeof selectedFell.longitude === "number" && (
@@ -101,7 +129,7 @@ export default function WainwrightMap({
                   <br />
                   <button
                     onClick={() => onToggleRouteFell(fell.id)}
-                    className="mt-2 rounded bg-stone-900 px-2 py-1 text-white"
+                    className="mt-2 rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-900 hover:bg-blue-100"
                   >
                     {isInRoute ? "Remove from route" : "Add to route"}
                   </button>
