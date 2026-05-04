@@ -1,6 +1,7 @@
 import wainwrights from "@/data/wainwrights.json";
 import type { Wainwright } from "@/types/wainwright";
 import MapWrapper from "@/components/MapWrapper";
+import ProgressStats from "@/components/ProgressStats";
 
 export default function Home() {
   const fells = wainwrights as Wainwright[];
@@ -23,6 +24,7 @@ export default function Home() {
           </p>
         </header>
 
+        <ProgressStats fells={fells} />
         <MapWrapper fells={fells} />
       </div>
     </main>
