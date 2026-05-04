@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import { getWalkingRoute, type WalkingRoute } from "@/lib/getWalkingRoute";
+import ElevationProfile from "@/components/ElevationProfile";
 
 const WainwrightMap = dynamic(() => import("@/components/WainwrightMap"), {
   ssr: false,
@@ -73,6 +74,7 @@ export default function MapWrapper({
         walkingRoute={walkingRoute}
       />
 
+
       {(routeLoading || routeError || walkingRoute) && (
         <div className="absolute bottom-4 left-4 z-[1000] rounded-xl bg-white px-4 py-3 text-sm font-semibold text-stone-900 shadow-lg">
           {routeLoading && "Building walking route..."}
@@ -83,6 +85,11 @@ export default function MapWrapper({
               {walkingRoute.durationHours.toFixed(1)} hrs
             </span>
           )}
+        </div>
+      )}
+      {walkingRoute && (
+        <div className="mt-6">
+          <ElevationProfile route={walkingRoute} />
         </div>
       )}
     </div>
