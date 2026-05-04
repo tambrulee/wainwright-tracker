@@ -76,6 +76,39 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setRouteFellIds([]);
   }
 
+  const [savedRoutes, setSavedRoutes] = useState<
+  { name: string; fellIds: string[] }[]
+  >(() => {
+    if (typeof window === "undefined") return [];
+
+    const saved = localStorage.getItem("wainwright-saved-routes");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("wainwright-saved-routes", JSON.stringify(savedRoutes));
+  }, [savedRoutes]);
+
+  function saveCurrentRoute() {
+    if (routeFellIds.length < 2) return;
+
+    const name = prompt("Name this route:");
+    if (!name) return;
+
+    setSavedRoutes((current) => [
+      ...current,
+      { name, fellIds: routeFellIds },
+    ]);
+  }
+
+  function loadRoute(fellIds: string[]) {
+    setRouteFellIds(fellIds);
+  }
+
+  function deleteRoute(index: number) {
+    setSavedRoutes((current) => current.filter((_, i) => i !== index));
+  }
+
   return (
     <div className="space-y-6">
       <ProgressStats fells={mergedFells} />
@@ -132,7 +165,15 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             >
               Clear route
             </button>
+            <button
+              onClick={saveCurrentRoute}
+              className="mt-4 rounded-xl bg-stone-900 px-4 py-2 font-semibold text-white hover:bg-stone-800"
+            >
+              Save route
+            </button>
           </div>
+
+
 
           <div className="mt-4 flex flex-wrap gap-2">
             {routeFells.map((fell, index) => (
@@ -150,6 +191,37 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             Add 2+ fells to auto-build a routed walking path. Green = routed path,
             blue = fallback straight line.
           </p>
+        </section>
+      )}
+
+      {savedRoutes.length > 0 && (
+        <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+          <h2 className="text-xl font-bold text-stone-950 mb-3">
+            Saved routes
+          </h2>
+
+          <div className="space-y-2">
+            {savedRoutes.map((route, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between rounded-xl border border-stone-200 p-3"
+              >
+                <button
+                  onClick={() => loadRoute(route.fellIds)}
+                  className="font-semibold text-stone-900 hover:underline"
+                >
+                  {route.name}
+                </button>
+
+                <button
+                  onClick={() => deleteRoute(index)}
+                  className="text-sm text-red-600 hover:underline"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
