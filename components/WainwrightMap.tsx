@@ -11,6 +11,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Wainwright } from "@/types/wainwright";
+import type { WalkingRoute } from "@/lib/getWalkingRoute";
 
 type Props = {
   fells: Wainwright[];
@@ -18,6 +19,7 @@ type Props = {
   selectedFell?: Wainwright | null;
   routeFellIds: string[];
   onToggleRouteFell: (fellId: string) => void;
+  walkingRoute?: WalkingRoute | null;
 };
 
 function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
@@ -36,17 +38,19 @@ export default function WainwrightMap({
   selectedFell,
   routeFellIds,
   onToggleRouteFell,
+  walkingRoute,
 }: Props) {
+  const straightRoutePositions = routeFellIds
+    .map((id) => fells.find((fell) => fell.id === id))
+    .filter(
+      (fell): fell is Wainwright =>
+        !!fell &&
+        typeof fell.latitude === "number" &&
+        typeof fell.longitude === "number"
+    )
+    .map((fell) => [fell.latitude, fell.longitude] as [number, number]);
 
-  const routePositions = routeFellIds
-  .map((id) => fells.find((fell) => fell.id === id))
-  .filter(
-    (fell): fell is Wainwright =>
-      !!fell &&
-      typeof fell.latitude === "number" &&
-      typeof fell.longitude === "number"
-  )
-  .map((fell) => [fell.latitude, fell.longitude] as [number, number]);
+  const displayedRoute = walkingRoute?.coordinates ?? straightRoutePositions;
 
   return (
     <div className="h-[75vh] w-full overflow-hidden rounded-2xl border border-stone-300">
@@ -56,20 +60,24 @@ export default function WainwrightMap({
         scrollWheelZoom
         className="h-full w-full"
       >
-        {routePositions.length > 1 && (
+        {displayedRoute.length > 1 && (
           <Polyline
-            positions={routePositions}
+            positions={displayedRoute}
             pathOptions={{
-              color: "#2563eb",
+              color: walkingRoute ? "#16a34a" : "#2563eb",
               weight: 4,
-              opacity: 0.8,
+              opacity: 0.9,
             }}
           />
         )}
+
         {selectedFell &&
           typeof selectedFell.latitude === "number" &&
           typeof selectedFell.longitude === "number" && (
-            <FlyToFell lat={selectedFell.latitude} lng={selectedFell.longitude} />
+            <FlyToFell
+              lat={selectedFell.latitude}
+              lng={selectedFell.longitude}
+            />
           )}
 
         <TileLayer
@@ -99,21 +107,21 @@ export default function WainwrightMap({
                   color: isSelected
                     ? "#1c1917"
                     : isInRoute
-                    ? "#2563eb"
-                    : fell.completed
-                    ? "#15803d"
-                    : fell.priority
-                    ? "#f97316"
-                    : "#57534e",
+                      ? "#2563eb"
+                      : fell.completed
+                        ? "#15803d"
+                        : fell.priority
+                          ? "#f97316"
+                          : "#57534e",
                   fillColor: isSelected
                     ? "#1c1917"
                     : isInRoute
-                    ? "#2563eb"
-                    : fell.completed
-                    ? "#22c55e"
-                    : fell.priority
-                    ? "#fb923c"
-                    : "#a8a29e",
+                      ? "#2563eb"
+                      : fell.completed
+                        ? "#22c55e"
+                        : fell.priority
+                          ? "#fb923c"
+                          : "#a8a29e",
                   fillOpacity: 0.9,
                   weight: isSelected ? 4 : 2,
                 }}

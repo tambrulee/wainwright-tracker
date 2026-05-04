@@ -17,7 +17,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
   const [progress, setProgress] = useState<ProgressState>(() => {
     if (typeof window === "undefined") return {};
-
     const saved = localStorage.getItem("wainwright-progress");
     return saved ? JSON.parse(saved) : {};
   });
@@ -27,11 +26,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   }, [progress]);
 
   const mergedFells = useMemo(
-    () =>
-      fells.map((fell) => ({
-        ...fell,
-        ...progress[fell.id],
-      })),
+    () => fells.map((fell) => ({ ...fell, ...progress[fell.id] })),
     [fells, progress]
   );
 
@@ -41,9 +36,10 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   );
 
   const filteredFells = mergedFells.filter((fell) => {
-    const matchesSearch = fell.name.toLowerCase().includes(search.toLowerCase());
-    const matchesSection = section === "All" || fell.section === section;
-    return matchesSearch && matchesSection;
+    return (
+      fell.name.toLowerCase().includes(search.toLowerCase()) &&
+      (section === "All" || fell.section === section)
+    );
   });
 
   const selectedFell = mergedFells.find((fell) => fell.id === selectedFellId);
@@ -55,10 +51,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => ({
       ...current,
-      [fellId]: {
-        ...current[fellId],
-        ...updates,
-      },
+      [fellId]: { ...current[fellId], ...updates },
     }));
   }
 
@@ -77,6 +70,10 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         ? current.filter((id) => id !== fellId)
         : [...current, fellId]
     );
+  }
+
+  function clearRoute() {
+    setRouteFellIds([]);
   }
 
   return (
@@ -130,8 +127,8 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             </div>
 
             <button
-              onClick={() => setRouteFellIds([])}
-              className="rounded-xl border border-stone-300 px-4 py-2 text-sm font-medium text-stone-900"
+              onClick={clearRoute}
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-900 hover:bg-stone-100"
             >
               Clear route
             </button>
@@ -142,15 +139,16 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               <button
                 key={fell.id}
                 onClick={() => setSelectedFellId(fell.id)}
-                className="rounded-full bg-stone-100 px-4 py-2 text-sm font-semibold text-stone-900"
+                className="rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-900 hover:bg-blue-100"
               >
                 {index + 1}. {fell.name}
               </button>
             ))}
           </div>
 
-          <p className="mt-4 text-sm text-stone-700">
-            Next step: draw a line between these fells, then hook it into a walking route API.
+          <p className="mt-4 text-sm font-medium text-stone-700">
+            Add 2+ fells to auto-build a routed walking path. Green = routed path,
+            blue = fallback straight line.
           </p>
         </section>
       )}
@@ -178,7 +176,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
             <button
               onClick={() => setSelectedFellId(null)}
-              className="rounded-xl border border-stone-300 px-4 py-2 text-sm font-medium text-stone-900"
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-900 hover:bg-stone-100"
             >
               Close
             </button>
@@ -196,7 +194,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               onClick={() =>
                 updateFell(selectedFell.id, { planned: !selectedFell.planned })
               }
-              className="rounded-xl border border-stone-300 px-4 py-2 font-medium text-stone-900"
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 font-medium text-stone-900 hover:bg-stone-100"
             >
               {selectedFell.planned ? "Remove planned" : "Mark planned"}
             </button>
@@ -205,14 +203,14 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               onClick={() =>
                 updateFell(selectedFell.id, { priority: !selectedFell.priority })
               }
-              className="rounded-xl border border-stone-300 px-4 py-2 font-medium text-stone-900"
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 font-medium text-stone-900 hover:bg-stone-100"
             >
               {selectedFell.priority ? "Remove priority" : "Mark priority"}
             </button>
 
             <button
               onClick={() => toggleRouteFell(selectedFell.id)}
-              className="rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 font-medium text-blue-900"
+              className="rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 font-medium text-blue-900 hover:bg-blue-100"
             >
               {routeFellIds.includes(selectedFell.id)
                 ? "Remove from route"
