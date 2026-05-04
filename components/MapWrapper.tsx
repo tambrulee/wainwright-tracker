@@ -27,6 +27,10 @@ type Props = {
   routePoints: RoutePoint[];
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
+  onRouteSummaryChange?: (summary: {
+    distanceKm: number;
+    durationHours: number;
+  } | null) => void;
 };
 
 export default function MapWrapper({
@@ -37,6 +41,7 @@ export default function MapWrapper({
   routePoints,
   onAddRoutePoint,
   onRemoveRoutePoint,
+  onRouteSummaryChange,
 }: Props) {
   const [walkingRoute, setWalkingRoute] = useState<WalkingRoute | null>(null);
   const [routeLoading, setRouteLoading] = useState(false);
@@ -47,6 +52,7 @@ export default function MapWrapper({
       if (routePoints.length < 2) {
         setWalkingRoute(null);
         setRouteError(null);
+        onRouteSummaryChange?.(null);
         return;
       }
 
@@ -63,16 +69,22 @@ export default function MapWrapper({
 
         const route = await getWalkingRoute(routeInputs);
         setWalkingRoute(route);
+        onRouteSummaryChange?.({
+          distanceKm: route.distanceKm,
+          durationHours: route.durationHours,
+        });
       } catch (error) {
         console.error(error);
         setWalkingRoute(null);
         setRouteError("Could not snap route to paths.");
+        onRouteSummaryChange?.(null);
       } finally {
         setRouteLoading(false);
       }
     }
 
     buildRoute();
+    
   }, [routePoints]);
 
   return (

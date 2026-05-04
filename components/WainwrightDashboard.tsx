@@ -23,8 +23,14 @@ type SavedRoute = {
   points: RoutePoint[];
 };
 
+type RouteSummary = {
+  distanceKm: number;
+  durationHours: number;
+};
+
 type SortOption = "name" | "height-high" | "height-low" | "section";
 type StatusFilter = "All" | "Not completed" | "Completed" | "Planned" | "Priority";
+
 
 function readFromStorage<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -135,6 +141,8 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
       { minutes: 0, distanceKm: 0, ascentM: 0, descentM: 0 }
     );
   }, [routeFells]);
+
+  const [routeSummary, setRouteSummary] = useState<RouteSummary | null>(null);
 
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => ({
@@ -359,6 +367,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               routePoints={routePoints}
               onAddRoutePoint={addRoutePoint}
               onRemoveRoutePoint={removeRoutePoint}
+              onRouteSummaryChange={setRouteSummary}
             />
           </div>
         </section>
@@ -384,7 +393,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setIsRouteMode((current) => !current)}
-                className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50"
+                className="rounded-xl bg-white px-4 py-2 text-sm font-black !text-emerald-950 hover:bg-emerald-50"
               >
                 {isRouteMode ? "Finish route" : "Create route"}
               </button>
@@ -408,7 +417,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               <button
                 onClick={saveCurrentRoute}
                 disabled={routePoints.length < 2}
-                className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-xl bg-white px-4 py-2 text-sm font-black !text-emerald-950 hover:bg-emerald-50"
               >
                 Save route
               </button>
@@ -419,16 +428,14 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
               <p className="text-xs text-emerald-100">Estimated time</p>
               <p className="text-lg font-black">
-                {formatMinutes(routeStats.minutes)}
+                {routeSummary ? `${routeSummary.durationHours.toFixed(1)} hrs` : "—"}
               </p>
             </div>
 
             <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
               <p className="text-xs text-emerald-100">Distance</p>
               <p className="text-lg font-black">
-                {routeStats.distanceKm
-                  ? `${routeStats.distanceKm.toFixed(1)} km`
-                  : "—"}
+                {routeSummary ? `${routeSummary.distanceKm.toFixed(1)} km` : "—"}
               </p>
             </div>
 
