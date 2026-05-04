@@ -19,4 +19,9 @@ export type Wainwright = {
   y: number;
   latitude: number;
   longitude: number;
+  estimatedMinutes?: number;
+  distanceKm?: number;
+  ascentM?: number;
+  descentM?: number;
+  difficulty?: "Easy" | "Moderate" | "Hard" | "Spicy";
 };

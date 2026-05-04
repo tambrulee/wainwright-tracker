@@ -1,8 +1,5 @@
 "use client";
 
-// This is the main dashboard component for the Wainwright Tracker app. It manages the overall state of the application, including the list of fells, user progress, search and filter settings, selected fell details, and route building functionality. It also handles saving progress and routes to localStorage for persistence across sessions.
-
-// Imports React hooks for state and effect management, as well as type definitions for Wainwright fells and user progress. It also imports child components for displaying progress stats, the map, and the list of fells.
 import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import type { FellProgress } from "@/types/progress";
@@ -10,57 +7,130 @@ import ProgressStats from "@/components/ProgressStats";
 import MapWrapper from "@/components/MapWrapper";
 import FellList from "@/components/FellList";
 
-// Defines the shape of the progress state, which is a record mapping fell IDs to their progress details (completed, planned, priority, etc.).
 type ProgressState = Record<string, FellProgress>;
 
-// The main dashboard component that takes in a list of Wainwright fells as a prop and manages the state and interactions for the app.
+type SavedRoute = {
+  name: string;
+  fellIds: string[];
+};
+
+type SortOption = "name" | "height-high" | "height-low" | "section";
+type StatusFilter = "All" | "Not completed" | "Completed" | "Planned" | "Priority";
+
+function readFromStorage<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function formatMinutes(minutes: number) {
+  if (!minutes) return "—";
+
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  if (hours === 0) return `${mins}m`;
+  if (mins === 0) return `${hours}h`;
+
+  return `${hours}h ${mins}m`;
+}
+
 export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) {
   const [search, setSearch] = useState("");
   const [section, setSection] = useState("All");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
+  const [sortBy, setSortBy] = useState<SortOption>("name");
+
   const [selectedFellId, setSelectedFellId] = useState<string | null>(null);
   const [routeFellIds, setRouteFellIds] = useState<string[]>([]);
 
-  // Initialize progress state from localStorage if available, otherwise start with an empty object. This allows the app to remember which fells have been completed, planned, or marked as priority across sessions.
-  const [progress, setProgress] = useState<ProgressState>(() => {
-    if (typeof window === "undefined") return {};
-    const saved = localStorage.getItem("wainwright-progress");
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [progress, setProgress] = useState<ProgressState>(() =>
+    readFromStorage("wainwright-progress", {})
+  );
+
+  const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>(() =>
+    readFromStorage("wainwright-saved-routes", [])
+  );
 
   useEffect(() => {
     localStorage.setItem("wainwright-progress", JSON.stringify(progress));
   }, [progress]);
+
+  useEffect(() => {
+    localStorage.setItem("wainwright-saved-routes", JSON.stringify(savedRoutes));
+  }, [savedRoutes]);
 
   const mergedFells = useMemo(
     () => fells.map((fell) => ({ ...fell, ...progress[fell.id] })),
     [fells, progress]
   );
 
-  // Generate a list of unique sections from the fells data for the area filter dropdown. This includes an "All" option to show all fells regardless of section.
   const sections = useMemo(
     () => ["All", ...Array.from(new Set(fells.map((fell) => fell.section))).sort()],
     [fells]
   );
 
-  // Filter the list of fells based on the search query and selected section. This allows users to quickly find specific fells or narrow down the list by area.
-  const filteredFells = mergedFells.filter((fell) => {
-    return (
-      fell.name.toLowerCase().includes(search.toLowerCase()) &&
-      (section === "All" || fell.section === section)
-    );
-  });
+  const filteredFells = useMemo(() => {
+    return mergedFells
+      .filter((fell) => {
+        const matchesSearch = fell.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
-  // Find the currently selected fell based on the selectedFellId. This is used to display details and actions for the selected fell in the side panel.
+        const matchesSection = section === "All" || fell.section === section;
+
+        const matchesStatus =
+          statusFilter === "All" ||
+          (statusFilter === "Not completed" && !fell.completed) ||
+          (statusFilter === "Completed" && fell.completed) ||
+          (statusFilter === "Planned" && fell.planned) ||
+          (statusFilter === "Priority" && fell.priority);
+
+        return matchesSearch && matchesSection && matchesStatus;
+      })
+      .sort((a, b) => {
+        if (sortBy === "height-high") return b.heightM - a.heightM;
+        if (sortBy === "height-low") return a.heightM - b.heightM;
+        if (sortBy === "section") return a.section.localeCompare(b.section);
+        return a.name.localeCompare(b.name);
+      });
+  }, [mergedFells, search, section, statusFilter, sortBy]);
+
   const selectedFell = mergedFells.find((fell) => fell.id === selectedFellId);
 
   const routeFells = routeFellIds
     .map((id) => mergedFells.find((fell) => fell.id === id))
     .filter(Boolean) as Wainwright[];
 
+  const routeStats = useMemo(() => {
+    return routeFells.reduce(
+      (total, fell) => ({
+        minutes: total.minutes + (fell.estimatedMinutes ?? 0),
+        distanceKm: total.distanceKm + (fell.distanceKm ?? 0),
+        ascentM: total.ascentM + (fell.ascentM ?? 0),
+        descentM: total.descentM + (fell.descentM ?? 0),
+      }),
+      {
+        minutes: 0,
+        distanceKm: 0,
+        ascentM: 0,
+        descentM: 0,
+      }
+    );
+  }, [routeFells]);
+
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => ({
       ...current,
-      [fellId]: { ...current[fellId], ...updates },
+      [fellId]: {
+        ...current[fellId],
+        ...updates,
+      },
     }));
   }
 
@@ -85,21 +155,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setRouteFellIds([]);
   }
 
-  // Initialize saved routes from localStorage, allowing users to save and load their planned routes. Each route consists of a name and an array of fell IDs that are part of that route.
-
-  const [savedRoutes, setSavedRoutes] = useState<
-  { name: string; fellIds: string[] }[]
-  >(() => {
-    if (typeof window === "undefined") return [];
-
-    const saved = localStorage.getItem("wainwright-saved-routes");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("wainwright-saved-routes", JSON.stringify(savedRoutes));
-  }, [savedRoutes]);
-
   function saveCurrentRoute() {
     if (routeFellIds.length < 2) return;
 
@@ -108,7 +163,10 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
     setSavedRoutes((current) => [
       ...current,
-      { name, fellIds: routeFellIds },
+      {
+        name,
+        fellIds: routeFellIds,
+      },
     ]);
   }
 
@@ -120,13 +178,16 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setSavedRoutes((current) => current.filter((_, i) => i !== index));
   }
 
-  // The return statement renders the main dashboard UI, including the hero section, progress stats, search and filter controls, the main app area with the fell list and map, the route builder section, saved routes, and the selected fell details panel. The UI is styled with Tailwind CSS classes for a clean and modern look.
+  function resetFilters() {
+    setSearch("");
+    setSection("All");
+    setStatusFilter("All");
+    setSortBy("name");
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-100 via-emerald-50 to-slate-100 px-4 py-6 text-stone-950">
       <div className="mx-auto max-w-7xl space-y-6">
-
-        {/* HERO */}
         <section className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-200/70 backdrop-blur md:p-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -139,34 +200,70 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               </h1>
 
               <p className="mt-3 max-w-2xl text-base leading-7 text-stone-700">
-                Track completed fells, build walking routes, save ideas, and plan your way
-                through the Lakes without faffing around in ten different apps.
+                Track completed fells, filter what matters, build routes, save
+                ideas, and plan your way through the Lakes without faffing around
+                in ten different apps.
               </p>
             </div>
 
-            <div className="rounded-2xl bg-stone-950 px-5 py-4 text-white shadow-lg">
-              <p className="text-xs uppercase tracking-wide text-stone-300">
-                Route selected
-              </p>
-              <p className="text-3xl font-black">{routeFellIds.length}</p>
-              <p className="text-sm text-stone-300">fells</p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-stone-950 px-5 py-4 text-white shadow-lg">
+                <p className="text-xs uppercase tracking-wide text-stone-300">
+                  Selected
+                </p>
+                <p className="text-3xl font-black">{routeFellIds.length}</p>
+                <p className="text-sm text-stone-300">fells</p>
+              </div>
+
+              <div className="rounded-2xl bg-white px-5 py-4 shadow-lg">
+                <p className="text-xs uppercase tracking-wide text-stone-500">
+                  Showing
+                </p>
+                <p className="text-3xl font-black">{filteredFells.length}</p>
+                <p className="text-sm text-stone-500">fells</p>
+              </div>
+
+              <div className="rounded-2xl bg-emerald-900 px-5 py-4 text-white shadow-lg sm:col-span-1 col-span-2">
+                <p className="text-xs uppercase tracking-wide text-emerald-200">
+                  Saved
+                </p>
+                <p className="text-3xl font-black">{savedRoutes.length}</p>
+                <p className="text-sm text-emerald-200">routes</p>
+              </div>
             </div>
           </div>
         </section>
 
         <ProgressStats fells={mergedFells} />
 
-        {/* SEARCH / FILTERS */}
         <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-4 shadow-lg shadow-stone-200/60 backdrop-blur">
-          <div className="grid gap-3 md:grid-cols-[1fr_260px]">
+          <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+                Filters
+              </p>
+              <h2 className="text-xl font-black text-stone-950">
+                Find the right fell
+              </h2>
+            </div>
+
+            <button
+              onClick={resetFilters}
+              className="w-fit rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm font-bold text-stone-800 hover:bg-stone-100"
+            >
+              Reset filters
+            </button>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-4">
+            <div className="md:col-span-1">
               <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-stone-500">
-                Search fells
+                Search
               </label>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Try Haystacks, Catbells, Helvellyn..."
+                placeholder="Haystacks, Catbells..."
                 className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-950 shadow-inner outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               />
             </div>
@@ -187,23 +284,44 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                 ))}
               </select>
             </div>
+
+            <div>
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-stone-500">
+                Status
+              </label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+                className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-950 shadow-inner outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+              >
+                <option>All</option>
+                <option>Not completed</option>
+                <option>Completed</option>
+                <option>Planned</option>
+                <option>Priority</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-stone-500">
+                Sort by
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-950 shadow-inner outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+              >
+                <option value="name">Name A-Z</option>
+                <option value="height-high">Highest first</option>
+                <option value="height-low">Lowest first</option>
+                <option value="section">Section</option>
+              </select>
+            </div>
           </div>
         </section>
 
-        {/* MAIN APP */}
         <section className="grid gap-6 lg:grid-cols-[380px_1fr]">
           <div className="rounded-[1.75rem] border border-white/80 bg-white/80 p-3 shadow-lg shadow-stone-200/60 backdrop-blur">
-            <div className="mb-3 flex items-center justify-between px-2">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-stone-500">
-                  Fell list
-                </p>
-                <p className="text-sm font-semibold text-stone-800">
-                  {filteredFells.length} showing
-                </p>
-              </div>
-            </div>
-
             <FellList fells={filteredFells} onSelectFell={setSelectedFellId} />
           </div>
 
@@ -218,7 +336,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
           </div>
         </section>
 
-        {/* ROUTE BUILDER */}
         {routeFells.length > 0 && (
           <section className="rounded-[1.75rem] border border-emerald-200 bg-emerald-950 p-5 text-white shadow-xl shadow-emerald-900/20">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -232,8 +349,8 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                 </h2>
 
                 <p className="mt-2 max-w-2xl text-sm text-emerald-100">
-                  Add 2+ fells to auto-build a routed walking path. Green = routed path,
-                  blue = fallback straight line.
+                  Add 2+ fells to auto-build a routed walking path. Green = routed
+                  path, blue = fallback straight line.
                 </p>
               </div>
 
@@ -247,10 +364,43 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
                 <button
                   onClick={saveCurrentRoute}
-                  className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50"
+                  disabled={routeFellIds.length < 2}
+                  className="rounded-xl bg-white px-4 py-2 text-sm font-black text-emerald-950 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Save route
                 </button>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-4">
+              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                <p className="text-xs text-emerald-100">Estimated time</p>
+                <p className="text-lg font-black">
+                  {formatMinutes(routeStats.minutes)}
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                <p className="text-xs text-emerald-100">Distance</p>
+                <p className="text-lg font-black">
+                  {routeStats.distanceKm
+                    ? `${routeStats.distanceKm.toFixed(1)} km`
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                <p className="text-xs text-emerald-100">Ascent</p>
+                <p className="text-lg font-black">
+                  {routeStats.ascentM ? `${routeStats.ascentM}m` : "—"}
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                <p className="text-xs text-emerald-100">Descent</p>
+                <p className="text-lg font-black">
+                  {routeStats.descentM ? `${routeStats.descentM}m` : "—"}
+                </p>
               </div>
             </div>
 
@@ -268,7 +418,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
           </section>
         )}
 
-        {/* SAVED ROUTES */}
         {savedRoutes.length > 0 && (
           <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-lg shadow-stone-200/60 backdrop-blur">
             <h2 className="mb-4 text-xl font-black text-stone-950">
@@ -278,7 +427,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             <div className="grid gap-3 md:grid-cols-2">
               {savedRoutes.map((route, index) => (
                 <div
-                  key={index}
+                  key={`${route.name}-${index}`}
                   className="flex items-center justify-between rounded-2xl border border-stone-200 bg-stone-50 p-4"
                 >
                   <button
@@ -303,7 +452,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
           </section>
         )}
 
-        {/* SELECTED FELL PANEL */}
         {selectedFell && (
           <aside className="sticky bottom-4 z-20 rounded-[1.75rem] border border-stone-200 bg-white/95 p-5 shadow-2xl shadow-stone-400/30 backdrop-blur">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -324,6 +472,18 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                   <span className="rounded-full bg-stone-100 px-3 py-1">
                     Grid ref: {selectedFell.osGridReference}
                   </span>
+
+                  {selectedFell.estimatedMinutes && (
+                    <span className="rounded-full bg-stone-100 px-3 py-1">
+                      Est. {formatMinutes(selectedFell.estimatedMinutes)}
+                    </span>
+                  )}
+
+                  {selectedFell.distanceKm && (
+                    <span className="rounded-full bg-stone-100 px-3 py-1">
+                      {selectedFell.distanceKm.toFixed(1)} km
+                    </span>
+                  )}
 
                   {selectedFell.completedDate && (
                     <span className="rounded-full bg-green-100 px-3 py-1 text-green-800">
