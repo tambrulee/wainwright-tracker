@@ -26,6 +26,8 @@ type SavedRoute = {
 type RouteSummary = {
   distanceKm: number;
   durationHours: number;
+  ascentM: number;
+  descentM: number;
 };
 
 type SortOption = "name" | "height-high" | "height-low" | "section";
@@ -442,14 +444,14 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
               <p className="text-xs text-emerald-100">Ascent</p>
               <p className="text-lg font-black">
-                {routeStats.ascentM ? `${routeStats.ascentM}m` : "—"}
+                {routeSummary ? `${routeSummary.ascentM}m` : "—"}
               </p>
             </div>
 
             <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
               <p className="text-xs text-emerald-100">Descent</p>
               <p className="text-lg font-black">
-                {routeStats.descentM ? `${routeStats.descentM}m` : "—"}
+                {routeSummary ? `${routeSummary.descentM}m` : "—"}
               </p>
             </div>
           </div>
