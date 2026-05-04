@@ -1,10 +1,6 @@
-import dynamic from "next/dynamic";
 import wainwrights from "@/data/wainwrights.json";
 import type { Wainwright } from "@/types/wainwright";
-
-const WainwrightMap = dynamic(() => import("@/components/WainwrightMap"), {
-  ssr: false,
-});
+import MapWrapper from "@/components/MapWrapper";
 
 export default function Home() {
   const fells = wainwrights as Wainwright[];
@@ -17,15 +13,17 @@ export default function Home() {
           <p className="text-sm uppercase tracking-wide text-stone-500">
             Lake District tracker
           </p>
+
           <h1 className="text-4xl font-bold text-stone-900">
             Wainwright Tracker
           </h1>
+
           <p className="mt-2 text-stone-600">
             {completedCount} / {fells.length} completed
           </p>
         </header>
 
-        <WainwrightMap fells={fells} />
+        <MapWrapper fells={fells} />
       </div>
     </main>
   );
