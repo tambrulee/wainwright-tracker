@@ -72,6 +72,9 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   const [progress, setProgress] = useState<ProgressState>({});
   const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>([]);
 
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [routeName, setRouteName] = useState("");
+
   useEffect(() => {
     const timeout = window.setTimeout(() => {
       setProgress(readFromStorage("wainwright-progress", {}));
@@ -188,18 +191,18 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   }
 
   function saveCurrentRoute() {
-    if (routePoints.length < 2) return;
-
-    const name = prompt("Name this route:");
-    if (!name) return;
+    if (!routeName.trim() || routePoints.length < 2) return;
 
     setSavedRoutes((current) => [
       ...current,
       {
-        name,
+        name: routeName.trim(),
         points: routePoints,
       },
     ]);
+
+    setRouteName("");
+    setIsSaveModalOpen(false);
   }
 
   function loadRoute(points: RoutePoint[]) {
@@ -417,7 +420,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               </button>
 
               <button
-                onClick={saveCurrentRoute}
+                onClick={() => setIsSaveModalOpen(true)}
                 disabled={routePoints.length < 2}
                 className="rounded-xl bg-white px-4 py-2 text-sm font-black !text-emerald-950 hover:bg-emerald-50"
               >
@@ -505,7 +508,46 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
             </div>
           </section>
         )}
+        {isSaveModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/50 px-4 backdrop-blur-sm">
+            <div className="w-full max-w-md rounded-[1.75rem] bg-white p-6 shadow-2xl">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+                Save route
+              </p>
 
+              <h2 className="mt-1 text-2xl font-black text-stone-950">
+                Name this route
+              </h2>
+
+              <input
+                value={routeName}
+                onChange={(e) => setRouteName(e.target.value)}
+                placeholder="e.g. Buttermere big day"
+                className="mt-4 w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              />
+
+              <div className="mt-5 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setRouteName("");
+                    setIsSaveModalOpen(false);
+                  }}
+                  className="rounded-xl border border-stone-200 px-4 py-2 font-bold"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={saveCurrentRoute}
+                  disabled={!routeName.trim()}
+                  className="rounded-xl bg-emerald-900 px-4 py-2 font-black text-white disabled:opacity-40"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {selectedFell && (
           <aside className="sticky bottom-4 z-20 rounded-[1.75rem] border border-stone-200 bg-white/95 p-5 shadow-2xl shadow-stone-400/30 backdrop-blur">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
