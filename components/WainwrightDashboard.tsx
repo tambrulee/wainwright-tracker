@@ -147,7 +147,30 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     );
   }, [routeFells]);
 
+
   const [routeSummary, setRouteSummary] = useState<RouteSummary | null>(null);
+
+  const routeDifficulty = useMemo(() => {
+    const distance = routeSummary?.distanceKm ?? routeStats.distanceKm;
+    const ascent = routeSummary?.ascentM ?? routeStats.ascentM;
+
+    if (distance >= 15 || ascent >= 900) return "Big day";
+    if (distance >= 9 || ascent >= 500) return "Moderate";
+    if (distance > 0) return "Easy";
+    return null;
+  }, [routeSummary, routeStats]);
+
+
+  const suggestedFells = useMemo(() => {
+  return mergedFells
+    .filter((fell) => !fell.completed)
+    .sort((a, b) => {
+      if (a.priority && !b.priority) return -1;
+      if (!a.priority && b.priority) return 1;
+      return a.heightM - b.heightM;
+    })
+    .slice(0, 5);
+}, [mergedFells]);
 
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => ({
@@ -274,6 +297,30 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
         <ProgressStats fells={mergedFells} />
 
+        <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-lg shadow-stone-200/60 backdrop-blur">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+            Suggested next
+          </p>
+
+          <h2 className="mb-4 text-xl font-black text-stone-950">
+            Easy wins / priority fells
+          </h2>
+
+          <div className="grid gap-3 md:grid-cols-5">
+            {suggestedFells.map((fell) => (
+              <button
+                key={fell.id}
+                onClick={() => setSelectedFellId(fell.id)}
+                className="rounded-2xl bg-stone-50 p-4 text-left hover:bg-emerald-50"
+              >
+                <p className="font-black">{fell.name}</p>
+                <p className="text-sm text-stone-500">{fell.section}</p>
+                <p className="text-sm font-bold text-stone-700">{fell.heightM}m</p>
+              </button>
+            ))}
+          </div>
+        </section>
+
         <section className="rounded-[1.75rem] border border-white/80 bg-white/80 p-4 shadow-lg shadow-stone-200/60 backdrop-blur">
           <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
@@ -356,6 +403,28 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
               </select>
             </div>
           </div>
+
+          {(search || section !== "All" || statusFilter !== "All") && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {search && (
+                <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-bold text-emerald-900">
+                  Search: {search}
+                </span>
+              )}
+
+              {section !== "All" && (
+                <span className="rounded-full bg-stone-100 px-3 py-1 text-sm font-bold text-stone-800">
+                  Area: {section}
+                </span>
+              )}
+
+              {statusFilter !== "All" && (
+                <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-bold text-blue-900">
+                  Status: {statusFilter}
+                </span>
+              )}
+            </div>
+          )}
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[380px_1fr]">
@@ -386,6 +455,11 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
               <h2 className="mt-1 text-2xl font-black">
                 {routePoints.length} route points
+                {routeDifficulty && (
+                  <span className="mt-2 inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-black text-white ring-1 ring-white/20">
+                    {routeDifficulty}
+                  </span>
+                )}
               </h2>
 
               <p className="mt-2 max-w-2xl text-sm text-emerald-100">
