@@ -3,35 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import type { FellProgress } from "@/types/progress";
+import type { RoutePoint, SavedRoute, RouteSummary } from "@/types/route";
+import type { SortOption, StatusFilter, DashboardView} from "@/types/dashboard";
 import ProgressStats from "@/components/ProgressStats";
 import MapWrapper from "@/components/MapWrapper";
 import FellList from "@/components/FellList";
 
+
 type ProgressState = Record<string, FellProgress>;
-
-type RoutePoint = {
-  id: string;
-  type: "fell" | "custom";
-  lat: number;
-  lng: number;
-  name: string;
-  fellId?: string;
-};
-
-type SavedRoute = {
-  name: string;
-  points: RoutePoint[];
-};
-
-type RouteSummary = {
-  distanceKm: number;
-  durationHours: number;
-  ascentM: number;
-  descentM: number;
-};
-
-type SortOption = "name" | "height-high" | "height-low" | "section";
-type StatusFilter = "All" | "Not completed" | "Completed" | "Planned" | "Priority";
 
 
 function readFromStorage<T>(key: string, fallback: T): T {
@@ -172,6 +151,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     .slice(0, 5);
 }, [mergedFells]);
 
+
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => ({
       ...current,
@@ -244,29 +224,31 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setSortBy("name");
   }
 
+  
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-100 via-emerald-50 to-slate-100 px-4 py-6 text-stone-950">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <section className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-200/70 backdrop-blur md:p-8">
+    <div className="min-h-screen bg-[#f4f7f2] px-6 py-8 text-stone-950">
+      <div className="mx-auto max-w-[1500px] space-y-8">
+        <section className="overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-8 shadow-sm">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.25em] text-emerald-800">
                 214 Wainwright Planner
               </p>
 
-              <h1 className="mt-2 text-4xl font-black tracking-tight text-stone-950 md:text-5xl">
+              <h1 className="mt-2 max-w-3xl text-4xl font-black leading-[0.95] tracking-tight text-stone-950 md:text-6xl">
                 Your fell-bagging command centre
               </h1>
 
-              <p className="mt-3 max-w-2xl text-base leading-7 text-stone-700">
+              <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-600">
                 Track completed fells, filter what matters, build routes, save
                 ideas, and plan your way through the Lakes without faffing around
                 in ten different apps.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl bg-stone-950 px-5 py-4 text-white shadow-lg">
+            <div className="grid min-w-[420px] grid-cols-3 gap-3">
+              <div className="rounded-3xl bg-stone-950 p-5 text-white shadow-sm">
                 <p className="text-xs uppercase tracking-wide text-stone-300">
                   Route points
                 </p>
@@ -276,7 +258,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white px-5 py-4 shadow-lg">
+              <div className="rounded-3xl border border-stone-200 bg-stone-50 p-5 shadow-sm">
                 <p className="text-xs uppercase tracking-wide text-stone-500">
                   Showing
                 </p>
@@ -284,7 +266,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
                 <p className="text-sm text-stone-500">fells</p>
               </div>
 
-              <div className="col-span-2 rounded-2xl bg-emerald-900 px-5 py-4 text-white shadow-lg sm:col-span-1">
+              <div className="rounded-3xl bg-emerald-900 p-5 text-white shadow-sm">
                 <p className="text-xs uppercase tracking-wide text-emerald-200">
                   Saved
                 </p>
