@@ -65,12 +65,24 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   }, [savedRoutes, hasLoaded]);
 
   const plannedFellIds = useMemo(() => {
-    return new Set(
-      routePoints
-        .filter((point) => point.type === "fell" && point.fellId)
-        .map((point) => point.fellId as string)
-    );
-  }, [routePoints]);
+    const ids = new Set<string>();
+
+    routePoints.forEach((point) => {
+      if (point.type === "fell" && point.fellId) {
+        ids.add(point.fellId);
+      }
+    });
+
+    savedRoutes.forEach((route) => {
+      route.points.forEach((point) => {
+        if (point.type === "fell" && point.fellId) {
+          ids.add(point.fellId);
+        }
+      });
+    });
+
+    return ids;
+  }, [routePoints, savedRoutes]);
 
   const mergedFells = useMemo(
     () =>
@@ -249,26 +261,13 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         onAddRoutePoint={addRoutePoint}
         onRemoveRoutePoint={removeRoutePoint}
         onRouteSummaryChange={setRouteSummary}
-      />
-    )}
-
-    {activeView === "route" && (
-      <RouteBuilderView
-        isRouteMode={isRouteMode}
-        routePoints={routePoints}
         routeSummary={routeSummary}
         routeDifficulty={routeDifficulty}
+        savedRoutes={savedRoutes}
         onToggleRouteMode={() => setIsRouteMode((current) => !current)}
         onUndoRoutePoint={undoRoutePoint}
         onClearRoute={clearRoute}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
-        onRemoveRoutePoint={removeRoutePoint}
-      />
-    )}
-
-    {activeView === "saved" && (
-      <SavedRoutesView
-        savedRoutes={savedRoutes}
         onLoadRoute={loadRoute}
         onDeleteRoute={deleteRoute}
       />
