@@ -130,18 +130,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   }, [routeSummary, routeStats]);
 
 
-  const suggestedFells = useMemo(() => {
-  return mergedFells
-    .filter((fell) => !fell.completed)
-    .sort((a, b) => {
-      if (a.priority && !b.priority) return -1;
-      if (!a.priority && b.priority) return 1;
-      return a.heightM - b.heightM;
-    })
-    .slice(0, 5);
-}, [mergedFells]);
-
-
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => ({
       ...current,
@@ -221,11 +209,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     {activeView === "overview" && (
       <OverviewView
         fells={mergedFells}
-        filteredFellsCount={filteredFells.length}
-        routePointsCount={routePoints.length}
-        savedRoutesCount={savedRoutes.length}
-        isRouteMode={isRouteMode}
-        suggestedFells={suggestedFells}
         onSelectFell={setSelectedFellId}
       />
     )}
@@ -241,6 +224,9 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         selectedFell={selectedFell}
         isRouteMode={isRouteMode}
         routePoints={routePoints}
+        routePointsCount={routePoints.length}
+        filteredFellsCount={filteredFells.length}
+        savedRoutesCount={savedRoutes.length}
         onSearchChange={setSearch}
         onSectionChange={setSection}
         onStatusFilterChange={setStatusFilter}
