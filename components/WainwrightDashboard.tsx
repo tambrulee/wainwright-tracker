@@ -64,9 +64,22 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     localStorage.setItem("wainwright-saved-routes-v2", JSON.stringify(savedRoutes));
   }, [savedRoutes, hasLoaded]);
 
+  const plannedFellIds = useMemo(() => {
+    return new Set(
+      routePoints
+        .filter((point) => point.type === "fell" && point.fellId)
+        .map((point) => point.fellId as string)
+    );
+  }, [routePoints]);
+
   const mergedFells = useMemo(
-    () => fells.map((fell) => ({ ...fell, ...progress[fell.id] })),
-    [fells, progress]
+    () =>
+      fells.map((fell) => ({
+        ...fell,
+        ...progress[fell.id],
+        planned: plannedFellIds.has(fell.id),
+      })),
+    [fells, progress, plannedFellIds]
   );
 
   const sections = useMemo(
@@ -277,9 +290,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         fell={selectedFell}
         onClose={() => setSelectedFellId(null)}
         onToggleCompleted={() => toggleCompleted(selectedFell)}
-        onTogglePlanned={() =>
-          updateFell(selectedFell.id, { planned: !selectedFell.planned })
-        }
         onTogglePriority={() =>
           updateFell(selectedFell.id, { priority: !selectedFell.priority })
         }

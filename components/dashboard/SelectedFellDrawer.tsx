@@ -6,7 +6,6 @@ type Props = {
   fell: Wainwright;
   onClose: () => void;
   onToggleCompleted: () => void;
-  onTogglePlanned: () => void;
   onTogglePriority: () => void;
   onAddToRoute: () => void;
 };
@@ -27,7 +26,6 @@ export default function SelectedFellDrawer({
   fell,
   onClose,
   onToggleCompleted,
-  onTogglePlanned,
   onTogglePriority,
   onAddToRoute,
 }: Props) {
@@ -86,13 +84,6 @@ export default function SelectedFellDrawer({
           className="rounded-xl bg-green-700 px-4 py-2 font-bold text-white shadow-md hover:bg-green-800"
         >
           {fell.completed ? "Mark not completed" : "Mark completed"}
-        </button>
-
-        <button
-          onClick={onTogglePlanned}
-          className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-2 font-bold text-stone-900 hover:bg-stone-100"
-        >
-          {fell.planned ? "Remove planned" : "Mark planned"}
         </button>
 
         <button
