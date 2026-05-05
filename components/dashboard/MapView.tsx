@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import type { RoutePoint, RouteSummary } from "@/types/route";
 import type { SortOption, StatusFilter } from "@/types/dashboard";
@@ -16,6 +17,9 @@ type Props = {
   selectedFell?: Wainwright;
   isRouteMode: boolean;
   routePoints: RoutePoint[];
+  routePointsCount: number;
+  filteredFellsCount: number;
+  savedRoutesCount: number;
   onSearchChange: (value: string) => void;
   onSectionChange: (value: string) => void;
   onStatusFilterChange: (value: StatusFilter) => void;
@@ -25,10 +29,9 @@ type Props = {
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
   onRouteSummaryChange: (summary: RouteSummary | null) => void;
-  routePointsCount: number;
-  filteredFellsCount: number;
-  savedRoutesCount: number;
 };
+
+type SidePanelMode = "recommended" | "fells";
 
 export default function MapView({
   fells,
@@ -53,139 +56,195 @@ export default function MapView({
   onRemoveRoutePoint,
   onRouteSummaryChange,
 }: Props) {
-  
+  const [sidePanelMode, setSidePanelMode] =
+    useState<SidePanelMode>("recommended");
+
+  const recommendedFells = useMemo(() => {
+    return fells
+      .filter((fell) => !fell.completed)
+      .sort((a, b) => {
+        if (a.planned && !b.planned) return -1;
+        if (!a.planned && b.planned) return 1;
+        if (a.priority && !b.priority) return -1;
+        if (!a.priority && b.priority) return 1;
+        return a.heightM - b.heightM;
+      })
+      .slice(0, 12);
+  }, [fells]);
+
   return (
-    <>
-    <section className="grid gap-4 md:grid-cols-3">
-      <div className="rounded-3xl bg-stone-950 p-5 text-white shadow-sm">
-        <p className="text-xs uppercase tracking-wide text-stone-300">
-          Route points
-        </p>
-        <p className="text-3xl font-black">{routePointsCount}</p>
-        <p className="text-sm text-stone-300">
-          {isRouteMode ? "editing" : "selected"}
-        </p>
-      </div>
-
-      <div className="rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
-        <p className="text-xs uppercase tracking-wide text-stone-500">
-          Showing
-        </p>
-        <p className="text-3xl font-black">{filteredFellsCount}</p>
-        <p className="text-sm text-stone-500">fells</p>
-      </div>
-
-      <div className="rounded-3xl bg-emerald-900 p-5 text-white shadow-sm">
-        <p className="text-xs uppercase tracking-wide text-emerald-200">
-          Saved
-        </p>
-        <p className="text-3xl font-black">{savedRoutesCount}</p>
-        <p className="text-sm text-emerald-200">routes</p>
-      </div>
-    </section>
-
-    <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
-            Quick picks
-          </p>
-          <h2 className="text-2xl font-black text-stone-950">
-            Good options from this view
-          </h2>
-        </div>
-      </div>
-
-      <div className="mt-5 grid gap-4 md:grid-cols-5">
-        {fells
-          .filter((fell) => !fell.completed)
-          .slice(0, 5)
-          .map((fell) => (
-            <button
-              key={fell.id}
-              onClick={() => onSelectFell(fell.id)}
-              className="rounded-3xl border border-stone-200 bg-stone-50 p-5 text-left transition hover:border-emerald-300 hover:bg-emerald-50"
-            >
-              <p className="font-black">{fell.name}</p>
-              <p className="text-sm text-stone-500">{fell.section}</p>
-              <p className="text-sm font-bold text-stone-700">
-                {fell.heightM}m
+    <div className="space-y-8">
+      <section className="rounded-[2rem] border border-stone-200 bg-white p-5 shadow-sm">
+        <div className="grid gap-4 lg:grid-cols-[1fr_2fr]">
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl bg-stone-950 p-4 text-white">
+              <p className="text-xs uppercase tracking-wide text-stone-300">
+                Route points
               </p>
-            </button>
-          ))}
-      </div>
-    </section>
-    
-      <section className="rounded-[2rem] border border-stone-200/70 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
-              Filters
-            </p>
-            <h2 className="text-xl font-black text-stone-950">
-              Find the right fell
-            </h2>
+              <p className="text-2xl font-black">{routePointsCount}</p>
+              <p className="text-xs text-stone-300">
+                {isRouteMode ? "editing" : "selected"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4">
+              <p className="text-xs uppercase tracking-wide text-stone-500">
+                Showing
+              </p>
+              <p className="text-2xl font-black">{filteredFellsCount}</p>
+              <p className="text-xs text-stone-500">fells</p>
+            </div>
+
+            <div className="rounded-2xl bg-emerald-900 p-4 text-white">
+              <p className="text-xs uppercase tracking-wide text-emerald-200">
+                Saved
+              </p>
+              <p className="text-2xl font-black">{savedRoutesCount}</p>
+              <p className="text-xs text-emerald-200">routes</p>
+            </div>
           </div>
 
-          <button
-            onClick={onResetFilters}
-            className="w-fit rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm font-bold text-stone-800 hover:bg-stone-100"
-          >
-            Reset filters
-          </button>
-        </div>
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+                  Map filters
+                </p>
+                <h2 className="text-lg font-black text-stone-950">
+                  Find the right fell
+                </h2>
+              </div>
 
-        <div className="grid gap-3 md:grid-cols-4">
-          <input
-            value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Haystacks, Catbells..."
-            className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3"
-          />
+              <button
+                onClick={onResetFilters}
+                className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm font-bold text-stone-800 hover:bg-stone-100"
+              >
+                Reset
+              </button>
+            </div>
 
-          <select
-            value={section}
-            onChange={(e) => onSectionChange(e.target.value)}
-            className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3"
-          >
-            {sections.map((sectionName) => (
-              <option key={sectionName} value={sectionName}>
-                {sectionName}
-              </option>
-            ))}
-          </select>
+            <div className="grid gap-3 md:grid-cols-4">
+              <input
+                value={search}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder="Haystacks, Catbells..."
+                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              />
 
-          <select
-            value={statusFilter}
-            onChange={(e) => onStatusFilterChange(e.target.value as StatusFilter)}
-            className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3"
-          >
-            <option>All</option>
-            <option>Not completed</option>
-            <option>Completed</option>
-            <option>Planned</option>
-            <option>Priority</option>
-          </select>
+              <select
+                value={section}
+                onChange={(e) => onSectionChange(e.target.value)}
+                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              >
+                {sections.map((sectionName) => (
+                  <option key={sectionName} value={sectionName}>
+                    {sectionName}
+                  </option>
+                ))}
+              </select>
 
-          <select
-            value={sortBy}
-            onChange={(e) => onSortByChange(e.target.value as SortOption)}
-            className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3"
-          >
-            <option value="name">Name A-Z</option>
-            <option value="height-high">Highest first</option>
-            <option value="height-low">Lowest first</option>
-            <option value="section">Section</option>
-          </select>
+              <select
+                value={statusFilter}
+                onChange={(e) =>
+                  onStatusFilterChange(e.target.value as StatusFilter)
+                }
+                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              >
+                <option>All</option>
+                <option>Not completed</option>
+                <option>Completed</option>
+                <option>Planned</option>
+                <option>Priority</option>
+              </select>
+
+              <select
+                value={sortBy}
+                onChange={(e) => onSortByChange(e.target.value as SortOption)}
+                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              >
+                <option value="name">Name A-Z</option>
+                <option value="height-high">Highest first</option>
+                <option value="height-low">Lowest first</option>
+                <option value="section">Section</option>
+              </select>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="grid gap-8 lg:grid-cols-[420px_minmax(0,1fr)]">
-        <div className="h-[620px] overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
-          <FellList fells={fells} onSelectFell={onSelectFell} />
+        <div className="h-[680px] overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
+          <div className="mb-4 flex rounded-2xl bg-stone-100 p-1">
+            <button
+              onClick={() => setSidePanelMode("recommended")}
+              className={`flex-1 rounded-xl px-3 py-2 text-sm font-black ${
+                sidePanelMode === "recommended"
+                  ? "bg-white text-emerald-900 shadow-sm"
+                  : "text-stone-600"
+              }`}
+            >
+              Recommended
+            </button>
+
+            <button
+              onClick={() => setSidePanelMode("fells")}
+              className={`flex-1 rounded-xl px-3 py-2 text-sm font-black ${
+                sidePanelMode === "fells"
+                  ? "bg-white text-emerald-900 shadow-sm"
+                  : "text-stone-600"
+              }`}
+            >
+              All fells
+            </button>
+          </div>
+
+          {sidePanelMode === "recommended" ? (
+            <div className="h-[600px] overflow-y-auto pr-2">
+              <p className="mb-3 text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+                Recommended
+              </p>
+
+              <div className="space-y-3">
+                {recommendedFells.map((fell) => (
+                  <button
+                    key={fell.id}
+                    onClick={() => onSelectFell(fell.id)}
+                    className="w-full rounded-2xl border border-stone-200 bg-stone-50 p-4 text-left transition hover:border-emerald-300 hover:bg-emerald-50"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-black text-stone-950">{fell.name}</p>
+                        <p className="text-sm text-stone-500">{fell.section}</p>
+                        <p className="text-sm font-bold text-stone-700">
+                          {fell.heightM}m
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        {fell.planned && (
+                          <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-bold text-blue-800">
+                            Planned
+                          </span>
+                        )}
+                        {fell.priority && (
+                          <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900">
+                            Priority
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="h-[600px] overflow-y-auto">
+              <FellList fells={fells} onSelectFell={onSelectFell} />
+            </div>
+          )}
         </div>
 
-        <div className="h-[620px] overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
+        <div className="h-[680px] overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
           <MapWrapper
             fells={fells}
             onSelectFell={onSelectFell}
@@ -198,6 +257,6 @@ export default function MapView({
           />
         </div>
       </section>
-    </>
+    </div>
   );
 }
