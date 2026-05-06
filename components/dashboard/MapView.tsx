@@ -23,7 +23,6 @@ type Props = {
   routeSummary: RouteSummary | null;
   routeDifficulty: string | null;
   savedRoutes: SavedRoute[];
-
   onSearchChange: (value: string) => void;
   onSectionChange: (value: string) => void;
   onStatusFilterChange: (value: StatusFilter) => void;
@@ -33,7 +32,6 @@ type Props = {
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
   onRouteSummaryChange: (summary: RouteSummary | null) => void;
-
   onStartNewRouteSession: () => void;
   onFinishRouteSession: () => void;
   onUndoRoutePoint: () => void;
@@ -64,7 +62,6 @@ export default function MapView({
   routeSummary,
   routeDifficulty,
   savedRoutes,
-
   onSearchChange,
   onSectionChange,
   onStatusFilterChange,
@@ -74,7 +71,6 @@ export default function MapView({
   onAddRoutePoint,
   onRemoveRoutePoint,
   onRouteSummaryChange,
-
   onStartNewRouteSession,
   onFinishRouteSession,
   onUndoRoutePoint,
@@ -102,6 +98,8 @@ export default function MapView({
       })
       .slice(0, 12);
   }, [fells]);
+
+  const [openRouteMenuId, setOpenRouteMenuId] = useState<string | null>(null);
 
   return (
     <div className="space-y-8">
@@ -334,47 +332,97 @@ export default function MapView({
                   </p>
                 ) : (
                   savedRoutes.map((route, index) => (
-                    <div key={route.id} className="space-y-3 rounded-2xl bg-white p-3">
-                      <div>
-                        <p className="text-lg font-black text-stone-950">{route.name}</p>
-                        <p className="text-sm text-stone-500">{route.points.length} points</p>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
+                    <div
+                      key={route.id}
+                      className="relative rounded-2xl bg-white p-4"
+                    >
+                      <div className="flex items-start justify-between gap-3">
                         <button
                           onClick={() => onLoadRoute(route.points)}
-                          className="rounded-xl bg-emerald-900 px-3 py-2 text-sm font-bold text-white"
+                          className="text-left"
                         >
-                          Load
+                          <p className="text-lg font-black text-stone-950">{route.name}</p>
+                          <p className="text-sm text-stone-500">{route.points.length} points</p>
                         </button>
 
                         <button
-                          onClick={() => {
-                            const newName = window.prompt("Rename route:", route.name);
-                            if (newName?.trim()) {
-                              onUpdateSavedRouteName(route.id, newName.trim());
-                            }
-                          }}
-                          className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-bold"
+                          onClick={() =>
+                            setOpenRouteMenuId((current) =>
+                              current === route.id ? null : route.id
+                            )
+                          }
+                          className="rounded-xl px-3 py-2 text-xl font-black hover:bg-stone-100"
+                          aria-label="Route options"
                         >
-                          Rename
-                        </button>
-
-                        <button
-                          onClick={() => onUpdateSavedRoutePoints(route.id)}
-                          disabled={routePoints.length < 2}
-                          className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-bold disabled:opacity-40"
-                        >
-                          Replace
-                        </button>
-
-                        <button
-                          onClick={() => onDeleteRoute(index)}
-                          className="rounded-xl px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-50"
-                        >
-                          Delete
+                          ⋯
                         </button>
                       </div>
+
+                      {openRouteMenuId === route.id && (
+                        <div className="absolute right-4 top-12 z-30 w-52 rounded-2xl border border-stone-200 bg-white p-2 shadow-xl">
+                          <button
+                            onClick={() => {
+                              onLoadRoute(route.points);
+                              setOpenRouteMenuId(null);
+                            }}
+                            className="block w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-stone-100"
+                          >
+                            Load route
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              onLoadRoute(route.points);
+                              setToolPanel("route");
+                              setOpenRouteMenuId(null);
+                            }}
+                            className="block w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-stone-100"
+                          >
+                            Edit route
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              const newName = window.prompt("Rename route:", route.name);
+                              if (newName?.trim()) {
+                                onUpdateSavedRouteName(route.id, newName.trim());
+                              }
+                              setOpenRouteMenuId(null);
+                            }}
+                            className="block w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-stone-100"
+                          >
+                            Rename
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              onUpdateSavedRoutePoints(route.id);
+                              setOpenRouteMenuId(null);
+                            }}
+                            disabled={routePoints.length < 2}
+                            className="block w-full rounded-xl px-3 py-2 text-left text-sm font-bold hover:bg-stone-100 disabled:opacity-40"
+                          >
+                            Save current route over this
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              const confirmed = window.confirm(
+                                `Delete "${route.name}"? This cannot be undone.`
+                              );
+
+                              if (confirmed) {
+                                onDeleteRoute(index);
+                              }
+
+                              setOpenRouteMenuId(null);
+                            }}
+                            className="block w-full rounded-xl px-3 py-2 text-left text-sm font-bold text-red-600 hover:bg-red-50"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))
                 )}
