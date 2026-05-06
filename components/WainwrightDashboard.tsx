@@ -14,24 +14,11 @@ import {
   loadProgressFromSupabase,
   saveFellProgressToSupabase,
 } from "@/lib/supabase/progress";
-
+import { createClient } from "@/lib/supabase/client";
 
 type ProgressState = Record<string, FellProgress>;
 
-function readFromStorage<T>(key: string, fallback: T): T {
-  if (typeof window === "undefined") return fallback;
-
-  try {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-
 export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) {
-  const [hasLoaded, setHasLoaded] = useState(false);
   const [activeView, setActiveView] = useState<DashboardView>("overview");
   const [search, setSearch] = useState("");
   const [section, setSection] = useState("All");
@@ -46,28 +33,39 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [routeName, setRouteName] = useState("");
 
-  useEffect(() => {
-    const timeout = window.setTimeout(async () => {
-      const localProgress = readFromStorage<ProgressState>("wainwright-progress", {});
+    useEffect(() => {
+    async function loadData() {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setProgress({});
+        setSavedRoutes([]);
+        setRoutePoints([]);
+        return;
+      }
+
       const remoteProgress = await loadProgressFromSupabase();
 
-      setProgress(Object.keys(remoteProgress).length > 0 ? remoteProgress : localProgress);
-      setSavedRoutes(readFromStorage("wainwright-saved-routes-v2", []));
-      setHasLoaded(true);
-    }, 0);
+      setProgress(remoteProgress);
+      setSavedRoutes([]);
+    }
 
-    return () => window.clearTimeout(timeout);
+    loadData();
+
+    const supabase = createClient();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      loadData();
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
-
-  useEffect(() => {
-    if (!hasLoaded) return;
-    localStorage.setItem("wainwright-progress", JSON.stringify(progress));
-  }, [progress, hasLoaded]);
-
-  useEffect(() => {
-    if (!hasLoaded) return;
-    localStorage.setItem("wainwright-saved-routes-v2", JSON.stringify(savedRoutes));
-  }, [savedRoutes, hasLoaded]);
 
   const plannedFellIds = useMemo(() => {
     const ids = new Set<string>();
@@ -91,11 +89,24 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
   const mergedFells = useMemo(
     () =>
-      fells.map((fell) => ({
-        ...fell,
-        ...progress[fell.id],
-        planned: plannedFellIds.has(fell.id),
-      })),
+      fells.map((fell) => {
+        const fellProgress = progress[fell.id];
+
+        return {
+          ...fell,
+
+          // reset all user-owned state by default
+          completed: false,
+          completedDate: null,
+          priority: false,
+
+          // then apply Supabase progress if it exists
+          ...fellProgress,
+
+          // planned is always derived from routes
+          planned: plannedFellIds.has(fell.id),
+        };
+      }),
     [fells, progress, plannedFellIds]
   );
 

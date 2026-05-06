@@ -23,7 +23,6 @@ export default function AuthButton() {
 
   async function signOut() {
     await supabase.auth.signOut();
-    setEmail(null);
     window.location.href = "/login";
   }
 
