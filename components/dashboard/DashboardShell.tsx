@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import type { DashboardView } from "@/types/dashboard";
+import AuthButton from "@/components/AuthButton";
 
 type Props = {
   activeView: DashboardView;
@@ -56,6 +57,7 @@ export default function DashboardShell({
               </button>
             ))}
           </nav>
+          <AuthButton />
         </div>
       </header>
 

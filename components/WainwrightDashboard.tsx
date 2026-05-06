@@ -10,6 +10,10 @@ import OverviewView from "@/components/dashboard/OverviewView";
 import MapView from "@/components/dashboard/MapView";
 import SaveRouteModal from "@/components/dashboard/SaveRouteModal";
 import SelectedFellDrawer from "@/components/dashboard/SelectedFellDrawer";
+import {
+  loadProgressFromSupabase,
+  saveFellProgressToSupabase,
+} from "@/lib/supabase/progress";
 
 
 type ProgressState = Record<string, FellProgress>;
@@ -43,8 +47,11 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   const [routeName, setRouteName] = useState("");
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      setProgress(readFromStorage("wainwright-progress", {}));
+    const timeout = window.setTimeout(async () => {
+      const localProgress = readFromStorage<ProgressState>("wainwright-progress", {});
+      const remoteProgress = await loadProgressFromSupabase();
+
+      setProgress(Object.keys(remoteProgress).length > 0 ? remoteProgress : localProgress);
       setSavedRoutes(readFromStorage("wainwright-saved-routes-v2", []));
       setHasLoaded(true);
     }, 0);
@@ -154,13 +161,19 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
 
   function updateFell(fellId: string, updates: FellProgress) {
-    setProgress((current) => ({
-      ...current,
-      [fellId]: {
-        ...current[fellId],
-        ...updates,
-      },
-    }));
+    setProgress((current) => {
+      const nextProgress = {
+        ...current,
+        [fellId]: {
+          ...current[fellId],
+          ...updates,
+        },
+      };
+
+      saveFellProgressToSupabase(fellId, nextProgress[fellId]);
+
+      return nextProgress;
+    });
   }
 
   function toggleCompleted(fell: Wainwright) {
