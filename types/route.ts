@@ -10,6 +10,7 @@ export type RoutePoint = {
 };
 
 export type SavedRoute = {
+  id: string;
   name: string;
   points: RoutePoint[];
 };

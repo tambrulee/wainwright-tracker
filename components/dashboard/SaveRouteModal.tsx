@@ -18,7 +18,7 @@ export default function SaveRouteModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/50 px-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-md">
       <div className="w-full max-w-md rounded-[1.75rem] bg-white p-6 shadow-2xl">
         <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
           Save route

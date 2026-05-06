@@ -8,8 +8,6 @@ import type { SortOption, StatusFilter, DashboardView} from "@/types/dashboard";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import OverviewView from "@/components/dashboard/OverviewView";
 import MapView from "@/components/dashboard/MapView";
-import RouteBuilderView from "@/components/dashboard/RouteBuilderView";
-import SavedRoutesView from "@/components/dashboard/SavedRoutesView";
 import SaveRouteModal from "@/components/dashboard/SaveRouteModal";
 import SelectedFellDrawer from "@/components/dashboard/SelectedFellDrawer";
 
@@ -202,6 +200,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setSavedRoutes((current) => [
       ...current,
       {
+        id: crypto.randomUUID(),
         name: routeName.trim(),
         points: routePoints,
       },
@@ -213,7 +212,7 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
   function loadRoute(points: RoutePoint[]) {
     setRoutePoints(points);
-    setIsRouteMode(true);
+    setIsRouteMode(false);
   }
 
   function deleteRoute(index: number) {
@@ -227,7 +226,31 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     setSortBy("name");
   }
 
-  
+  function startNewRouteSession() {
+    setRoutePoints([]);
+    setIsRouteMode(true);
+  }
+
+  function finishRouteSession() {
+    setIsRouteMode(false);
+  }
+
+  function updateSavedRouteName(routeId: string, name: string) {
+    setSavedRoutes((current) =>
+      current.map((route) =>
+        route.id === routeId ? { ...route, name } : route
+      )
+    );
+  }
+
+  function updateSavedRoutePoints(routeId: string) {
+    setSavedRoutes((current) =>
+      current.map((route) =>
+        route.id === routeId ? { ...route, points: routePoints } : route
+      )
+    );
+  }
+    
 
   return (
   <DashboardShell activeView={activeView} onChangeView={setActiveView}>
@@ -264,12 +287,15 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         routeSummary={routeSummary}
         routeDifficulty={routeDifficulty}
         savedRoutes={savedRoutes}
-        onToggleRouteMode={() => setIsRouteMode((current) => !current)}
+        onStartNewRouteSession={startNewRouteSession}
+        onFinishRouteSession={finishRouteSession}
         onUndoRoutePoint={undoRoutePoint}
         onClearRoute={clearRoute}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
         onLoadRoute={loadRoute}
         onDeleteRoute={deleteRoute}
+        onUpdateSavedRouteName={updateSavedRouteName}
+        onUpdateSavedRoutePoints={updateSavedRoutePoints}
       />
     )}
 

@@ -7,7 +7,6 @@ import type { SortOption, StatusFilter } from "@/types/dashboard";
 import FellList from "@/components/FellList";
 import MapWrapper from "@/components/MapWrapper";
 
-
 type Props = {
   fells: Wainwright[];
   sections: string[];
@@ -21,6 +20,10 @@ type Props = {
   routePointsCount: number;
   filteredFellsCount: number;
   savedRoutesCount: number;
+  routeSummary: RouteSummary | null;
+  routeDifficulty: string | null;
+  savedRoutes: SavedRoute[];
+
   onSearchChange: (value: string) => void;
   onSectionChange: (value: string) => void;
   onStatusFilterChange: (value: StatusFilter) => void;
@@ -30,21 +33,20 @@ type Props = {
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
   onRouteSummaryChange: (summary: RouteSummary | null) => void;
-  routeSummary: RouteSummary | null;
-  routeDifficulty: string | null;
-  savedRoutes: SavedRoute[];
-  onToggleRouteMode: () => void;
+
+  onStartNewRouteSession: () => void;
+  onFinishRouteSession: () => void;
   onUndoRoutePoint: () => void;
   onClearRoute: () => void;
   onOpenSaveModal: () => void;
   onLoadRoute: (points: RoutePoint[]) => void;
   onDeleteRoute: (index: number) => void;
+  onUpdateSavedRouteName: (routeId: string, name: string) => void;
+  onUpdateSavedRoutePoints: (routeId: string) => void;
 };
 
 type SidePanelMode = "recommended" | "fells";
-
 type ToolPanel = "none" | "route" | "saved";
-
 
 export default function MapView({
   fells,
@@ -62,6 +64,7 @@ export default function MapView({
   routeSummary,
   routeDifficulty,
   savedRoutes,
+
   onSearchChange,
   onSectionChange,
   onStatusFilterChange,
@@ -71,12 +74,16 @@ export default function MapView({
   onAddRoutePoint,
   onRemoveRoutePoint,
   onRouteSummaryChange,
-  onToggleRouteMode,
+
+  onStartNewRouteSession,
+  onFinishRouteSession,
   onUndoRoutePoint,
   onClearRoute,
   onOpenSaveModal,
   onLoadRoute,
   onDeleteRoute,
+  onUpdateSavedRouteName,
+  onUpdateSavedRoutePoints,
 }: Props) {
   const [sidePanelMode, setSidePanelMode] =
     useState<SidePanelMode>("recommended");
@@ -196,13 +203,14 @@ export default function MapView({
         </div>
       </section>
 
-
       <section className="grid gap-8 lg:grid-cols-[420px_minmax(0,1fr)]">
-        <div className="h-[680px] overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
+        <div className="max-h-[680px] overflow-y-auto rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
           <div className="mb-4 grid grid-cols-2 gap-2">
             <button
               onClick={() =>
-                setToolPanel((current) => (current === "route" ? "none" : "route"))
+                setToolPanel((current) =>
+                  current === "route" ? "none" : "route"
+                )
               }
               className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm font-black hover:bg-emerald-50"
             >
@@ -211,7 +219,9 @@ export default function MapView({
 
             <button
               onClick={() =>
-                setToolPanel((current) => (current === "saved" ? "none" : "saved"))
+                setToolPanel((current) =>
+                  current === "saved" ? "none" : "saved"
+                )
               }
               className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm font-black hover:bg-emerald-50"
             >
@@ -220,122 +230,157 @@ export default function MapView({
           </div>
 
           {toolPanel === "route" && (
-          <div className="mb-4 rounded-3xl bg-emerald-950 p-4 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-200">
-              Route builder
-            </p>
+            <div className="mb-4 rounded-3xl bg-emerald-950 p-4 text-white">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-200">
+                Route builder
+              </p>
 
-            <div className="mt-2 flex items-center justify-between gap-3">
-              <div>
-                <p className="text-2xl font-black">{routePoints.length} points</p>
-                {routeDifficulty && (
-                  <p className="text-sm text-emerald-100">{routeDifficulty}</p>
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-2xl font-black">
+                    {routePoints.length} points
+                  </p>
+                  {routeDifficulty && (
+                    <p className="text-sm text-emerald-100">
+                      {routeDifficulty}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  onClick={
+                    isRouteMode
+                      ? onFinishRouteSession
+                      : onStartNewRouteSession
+                  }
+                  className="rounded-xl bg-white px-3 py-2 text-sm font-black !text-emerald-950"
+                >
+                  {isRouteMode ? "Finish" : "New route"}
+                </button>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-2xl bg-white/10 p-3">
+                  <p className="text-emerald-100">Estimated time</p>
+                  <p className="font-black">
+                    {routeSummary
+                      ? `${routeSummary.durationHours.toFixed(1)} hrs`
+                      : "—"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-white/10 p-3">
+                  <p className="text-emerald-100">Distance</p>
+                  <p className="font-black">
+                    {routeSummary
+                      ? `${routeSummary.distanceKm.toFixed(1)} km`
+                      : "—"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-white/10 p-3">
+                  <p className="text-emerald-100">Ascent</p>
+                  <p className="font-black">
+                    {routeSummary ? `${routeSummary.ascentM}m` : "—"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-white/10 p-3">
+                  <p className="text-emerald-100">Descent</p>
+                  <p className="font-black">
+                    {routeSummary ? `${routeSummary.descentM}m` : "—"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  onClick={onUndoRoutePoint}
+                  disabled={routePoints.length === 0}
+                  className="rounded-xl bg-white/10 px-3 py-2 text-sm font-bold disabled:opacity-40"
+                >
+                  Undo
+                </button>
+
+                <button
+                  onClick={onClearRoute}
+                  disabled={routePoints.length === 0}
+                  className="rounded-xl bg-white/10 px-3 py-2 text-sm font-bold disabled:opacity-40"
+                >
+                  Clear
+                </button>
+
+                <button
+                  onClick={onOpenSaveModal}
+                  disabled={routePoints.length < 2}
+                  className="rounded-xl bg-white px-3 py-2 text-sm font-black !text-emerald-950 disabled:opacity-40"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          )}
+
+          {toolPanel === "saved" && (
+            <div className="mb-4 rounded-3xl border border-stone-200 bg-stone-50 p-4">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
+                Saved routes
+              </p>
+
+              <div className="mt-3 space-y-2">
+                {savedRoutes.length === 0 ? (
+                  <p className="text-sm text-stone-600">
+                    No saved routes yet.
+                  </p>
+                ) : (
+                  savedRoutes.map((route, index) => (
+                    <div key={route.id} className="space-y-3 rounded-2xl bg-white p-3">
+                      <div>
+                        <p className="text-lg font-black text-stone-950">{route.name}</p>
+                        <p className="text-sm text-stone-500">{route.points.length} points</p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => onLoadRoute(route.points)}
+                          className="rounded-xl bg-emerald-900 px-3 py-2 text-sm font-bold text-white"
+                        >
+                          Load
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const newName = window.prompt("Rename route:", route.name);
+                            if (newName?.trim()) {
+                              onUpdateSavedRouteName(route.id, newName.trim());
+                            }
+                          }}
+                          className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-bold"
+                        >
+                          Rename
+                        </button>
+
+                        <button
+                          onClick={() => onUpdateSavedRoutePoints(route.id)}
+                          disabled={routePoints.length < 2}
+                          className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-bold disabled:opacity-40"
+                        >
+                          Replace
+                        </button>
+
+                        <button
+                          onClick={() => onDeleteRoute(index)}
+                          className="rounded-xl px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-50"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
                 )}
               </div>
-
-              <button
-                onClick={onToggleRouteMode}
-                className="rounded-xl bg-white px-3 py-2 text-sm font-black !text-emerald-950"
-              >
-                {isRouteMode ? "Finish" : "Create"}
-              </button>
             </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-              <div className="rounded-2xl bg-white/10 p-3">
-                <p className="text-emerald-100">Estimated time</p>
-                <p className="font-black">
-                  {routeSummary ? `${routeSummary.durationHours.toFixed(1)} hrs` : "—"}
-                </p>
-              </div>
-
-              <div className="rounded-2xl bg-white/10 p-3">
-                <p className="text-emerald-100">Distance</p>
-                <p className="font-black">
-                  {routeSummary ? `${routeSummary.distanceKm.toFixed(1)} km` : "—"}
-                </p>
-              </div>
-
-              <div className="rounded-2xl bg-white/10 p-3">
-                <p className="text-emerald-100">Ascent</p>
-                <p className="font-black">
-                  {routeSummary ? `${routeSummary.ascentM}m` : "—"}
-                </p>
-              </div>
-
-              <div className="rounded-2xl bg-white/10 p-3">
-                <p className="text-emerald-100">Descent</p>
-                <p className="font-black">
-                  {routeSummary ? `${routeSummary.descentM}m` : "—"}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <button
-                onClick={onUndoRoutePoint}
-                disabled={routePoints.length === 0}
-                className="rounded-xl bg-white/10 px-3 py-2 text-sm font-bold disabled:opacity-40"
-              >
-                Undo
-              </button>
-
-              <button
-                onClick={onClearRoute}
-                disabled={routePoints.length === 0}
-                className="rounded-xl bg-white/10 px-3 py-2 text-sm font-bold disabled:opacity-40"
-              >
-                Clear
-              </button>
-
-              <button
-                onClick={onOpenSaveModal}
-                disabled={routePoints.length < 2}
-                className="rounded-xl bg-white px-3 py-2 text-sm font-black !text-emerald-950 disabled:opacity-40"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        )}
-
-        {toolPanel === "saved" && (
-        <div className="mb-4 rounded-3xl border border-stone-200 bg-stone-50 p-4">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
-            Saved routes
-          </p>
-
-          <div className="mt-3 space-y-2">
-            {savedRoutes.length === 0 ? (
-              <p className="text-sm text-stone-600">No saved routes yet.</p>
-            ) : (
-              savedRoutes.map((route, index) => (
-                <div
-                  key={`${route.name}-${index}`}
-                  className="flex items-center justify-between gap-3 rounded-2xl bg-white p-3"
-                >
-                  <button
-                    onClick={() => onLoadRoute(route.points)}
-                    className="text-left"
-                  >
-                    <p className="font-black text-stone-950">{route.name}</p>
-                    <p className="text-sm text-stone-500">
-                      {route.points.length} points
-                    </p>
-                  </button>
-
-                  <button
-                    onClick={() => onDeleteRoute(index)}
-                    className="text-sm font-bold text-red-600"
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
+          )}
 
           <div className="mb-4 flex rounded-2xl bg-stone-100 p-1">
             <button
@@ -362,7 +407,7 @@ export default function MapView({
           </div>
 
           {sidePanelMode === "recommended" ? (
-            <div className="h-[600px] overflow-y-auto pr-2">
+            <div className="space-y-3 pr-2">
               <p className="mb-3 text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
                 Recommended
               </p>
@@ -376,8 +421,12 @@ export default function MapView({
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-black text-stone-950">{fell.name}</p>
-                        <p className="text-sm text-stone-500">{fell.section}</p>
+                        <p className="font-black text-stone-950">
+                          {fell.name}
+                        </p>
+                        <p className="text-sm text-stone-500">
+                          {fell.section}
+                        </p>
                         <p className="text-sm font-bold text-stone-700">
                           {fell.heightM}m
                         </p>
@@ -401,13 +450,13 @@ export default function MapView({
               </div>
             </div>
           ) : (
-            <div className="h-[600px] overflow-y-auto">
+            <div>
               <FellList fells={fells} onSelectFell={onSelectFell} />
             </div>
           )}
         </div>
 
-        <div className="h-[680px] overflow-hidden rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
+        <div className="min-h-[680px] overflow-visible rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
           <MapWrapper
             fells={fells}
             onSelectFell={onSelectFell}

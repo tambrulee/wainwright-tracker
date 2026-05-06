@@ -21,7 +21,7 @@ export default function DashboardShell({
 }: Props) {
   return (
     <div className="min-h-screen bg-[#f4f7f2] text-stone-950">
-      <header className="sticky top-0 z-50 border-b border-stone-200 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-[9999] border-b border-stone-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1500px] items-center justify-between px-6 py-4">
           <button
             onClick={() => onChangeView("overview")}
