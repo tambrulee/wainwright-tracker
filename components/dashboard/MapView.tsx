@@ -506,6 +506,7 @@ export default function MapView({
 
         <div className="min-h-[680px] overflow-visible rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
           <MapWrapper
+            key={`map-${section}-${statusFilter}-${sortBy}`}
             fells={fells}
             onSelectFell={onSelectFell}
             selectedFell={selectedFell}

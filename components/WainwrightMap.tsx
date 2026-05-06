@@ -12,6 +12,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import type { Wainwright } from "@/types/wainwright";
 import type { WalkingRoute } from "@/lib/getWalkingRoute";
 
@@ -68,6 +69,22 @@ function RouteClickHandler({
   return null;
 }
 
+const RoutePointIcon = L.divIcon({
+  className: "",
+  html: `
+    <div style="
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      background: #2563eb;
+      border: 3px solid white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    "></div>
+  `,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
 export default function WainwrightMap({
   fells,
   onSelectFell,
@@ -117,6 +134,7 @@ export default function WainwrightMap({
           <Marker
             key={point.id}
             position={[point.lat, point.lng]}
+            icon={RoutePointIcon}
             eventHandlers={{
               click: () => {
                 if (isRouteMode) onRemoveRoutePoint(point.id);

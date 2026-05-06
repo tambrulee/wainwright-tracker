@@ -30,7 +30,7 @@ export default function SelectedFellDrawer({
   onAddToRoute,
 }: Props) {
   return (
-    <aside className="sticky bottom-4 z-20 rounded-[1.75rem] border border-stone-200 bg-white/95 p-5 shadow-2xl shadow-stone-400/30 backdrop-blur">
+    <aside className="fixed inset-x-6 bottom-6 z-[1000] mx-auto max-w-[1400px] rounded-[1.75rem] border border-stone-200 bg-white/95 p-5 shadow-2xl shadow-stone-400/30 backdrop-blur">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
