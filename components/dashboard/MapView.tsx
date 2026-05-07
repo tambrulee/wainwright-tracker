@@ -43,6 +43,8 @@ type Props = {
   onUpdateSavedRoutePoints: (routeId: string) => void;
   onToggleCompleted: (fell: Wainwright) => void;
   onTogglePriority: (fell: Wainwright) => void;
+  completedFellsCount: number;
+  plannedFellsCount: number;
 };
 
 type SidePanelMode = "recommended" | "fells";
@@ -84,6 +86,8 @@ export default function MapView({
   onUpdateSavedRoutePoints,
   onToggleCompleted,
   onTogglePriority,
+  completedFellsCount,
+  plannedFellsCount,
 }: Props) {
   const [sidePanelMode, setSidePanelMode] =
     useState<SidePanelMode>("recommended");
@@ -109,15 +113,13 @@ export default function MapView({
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-5 shadow-sm">
         <div className="grid gap-4 lg:grid-cols-[1fr_2fr]">
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl bg-stone-950 p-4 text-white">
-              <p className="text-xs uppercase tracking-wide text-stone-300">
-                Route points
+          <div className="grid gap-3 sm:grid-cols-4">
+            <div className="rounded-2xl bg-emerald-900 p-4 text-white">
+              <p className="text-xs uppercase tracking-wide text-emerald-200">
+                Completed
               </p>
-              <p className="text-2xl font-black">{routePointsCount}</p>
-              <p className="text-xs text-stone-300">
-                {isRouteMode ? "editing" : "selected"}
-              </p>
+              <p className="text-2xl font-black">{completedFellsCount}</p>
+              <p className="text-xs text-emerald-200">Wainwrights</p>
             </div>
 
             <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4">
@@ -135,6 +137,8 @@ export default function MapView({
               <p className="text-2xl font-black">{savedRoutesCount}</p>
               <p className="text-xs text-emerald-200">routes</p>
             </div>
+
+            
           </div>
 
           <div>

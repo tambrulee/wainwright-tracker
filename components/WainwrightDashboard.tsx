@@ -27,7 +27,19 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
   const [isRouteMode, setIsRouteMode] = useState(false);
   const [routePoints, setRoutePoints] = useState<RoutePoint[]>([]);
   const [progress, setProgress] = useState<ProgressState>({});
-  const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>([]);
+  const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>(() => {
+    if (typeof window === "undefined") return [];
+
+    const saved = localStorage.getItem("wainwright-saved-routes");
+
+    if (!saved) return [];
+
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [];
+    }
+  });
 
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [routeName, setRouteName] = useState("");
@@ -42,7 +54,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
       if (!user) {
         setProgress({});
-        setSavedRoutes([]);
         setRoutePoints([]);
         return;
       }
@@ -65,6 +76,13 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
 
     return () => subscription.unsubscribe();
   }, []);
+
+
+useEffect(() => {
+  localStorage.setItem("wainwright-saved-routes", JSON.stringify(savedRoutes));
+}, [savedRoutes]);
+
+  
 
   const plannedFellIds = useMemo(() => {
     const ids = new Set<string>();
@@ -168,6 +186,10 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
     if (distance > 0) return "Easy";
     return null;
   }, [routeSummary, routeStats]);
+
+  const completedCount = mergedFells.filter((fell) => fell.completed).length;
+
+  const plannedCount = mergedFells.filter((fell) => fell.planned).length;
 
 
   function updateFell(fellId: string, updates: FellProgress) {
@@ -323,6 +345,8 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         onTogglePriority={(fell) =>
           updateFell(fell.id, { priority: !fell.priority })
         }
+        completedFellsCount={completedCount}
+        plannedFellsCount={plannedCount}
       />
     )}
 
