@@ -35,6 +35,8 @@ type Props = {
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
   onRouteSummaryChange?: (summary: RouteSummary | null) => void;
+  onToggleCompleted: (fell: Wainwright) => void;
+  onTogglePriority: (fell: Wainwright) => void;
 };
 
 function calculateElevationTotals(
@@ -70,6 +72,8 @@ export default function MapWrapper({
   onAddRoutePoint,
   onRemoveRoutePoint,
   onRouteSummaryChange,
+  onToggleCompleted,
+  onTogglePriority,
 }: Props) {
   const [walkingRoute, setWalkingRoute] = useState<WalkingRoute | null>(null);
   const [routeLoading, setRouteLoading] = useState(false);
@@ -133,6 +137,8 @@ export default function MapWrapper({
         walkingRoute={walkingRoute}
         onAddRoutePoint={onAddRoutePoint}
         onRemoveRoutePoint={onRemoveRoutePoint}
+        onToggleCompleted={onToggleCompleted}
+        onTogglePriority={onTogglePriority}
       />
 
       {(routeLoading || routeError || walkingRoute || isRouteMode) && (

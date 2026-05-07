@@ -41,6 +41,8 @@ type Props = {
   onDeleteRoute: (index: number) => void;
   onUpdateSavedRouteName: (routeId: string, name: string) => void;
   onUpdateSavedRoutePoints: (routeId: string) => void;
+  onToggleCompleted: (fell: Wainwright) => void;
+  onTogglePriority: (fell: Wainwright) => void;
 };
 
 type SidePanelMode = "recommended" | "fells";
@@ -80,6 +82,8 @@ export default function MapView({
   onDeleteRoute,
   onUpdateSavedRouteName,
   onUpdateSavedRoutePoints,
+  onToggleCompleted,
+  onTogglePriority,
 }: Props) {
   const [sidePanelMode, setSidePanelMode] =
     useState<SidePanelMode>("recommended");
@@ -506,7 +510,6 @@ export default function MapView({
 
         <div className="min-h-[680px] overflow-visible rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
           <MapWrapper
-            key={`map-${section}-${statusFilter}-${sortBy}`}
             fells={fells}
             onSelectFell={onSelectFell}
             selectedFell={selectedFell}
@@ -515,6 +518,8 @@ export default function MapView({
             onAddRoutePoint={onAddRoutePoint}
             onRemoveRoutePoint={onRemoveRoutePoint}
             onRouteSummaryChange={onRouteSummaryChange}
+            onToggleCompleted={onToggleCompleted}
+            onTogglePriority={onTogglePriority}
           />
         </div>
       </section>

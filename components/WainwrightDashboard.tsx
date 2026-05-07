@@ -9,7 +9,6 @@ import DashboardShell from "@/components/dashboard/DashboardShell";
 import OverviewView from "@/components/dashboard/OverviewView";
 import MapView from "@/components/dashboard/MapView";
 import SaveRouteModal from "@/components/dashboard/SaveRouteModal";
-import SelectedFellDrawer from "@/components/dashboard/SelectedFellDrawer";
 import {
   loadProgressFromSupabase,
   saveFellProgressToSupabase,
@@ -320,6 +319,10 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
         onDeleteRoute={deleteRoute}
         onUpdateSavedRouteName={updateSavedRouteName}
         onUpdateSavedRoutePoints={updateSavedRoutePoints}
+        onToggleCompleted={toggleCompleted}
+        onTogglePriority={(fell) =>
+          updateFell(fell.id, { priority: !fell.priority })
+        }
       />
     )}
 
@@ -334,25 +337,6 @@ export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) 
       onSave={saveCurrentRoute}
     />
 
-    {selectedFell && (
-      <SelectedFellDrawer
-        fell={selectedFell}
-        onClose={() => setSelectedFellId(null)}
-        onToggleCompleted={() => toggleCompleted(selectedFell)}
-        onTogglePriority={() =>
-          updateFell(selectedFell.id, { priority: !selectedFell.priority })
-        }
-        onAddToRoute={() =>
-          addRoutePoint({
-            type: "fell",
-            fellId: selectedFell.id,
-            lat: selectedFell.latitude,
-            lng: selectedFell.longitude,
-            name: selectedFell.name,
-          })
-        }
-      />
-    )}
   </DashboardShell>
 );
 }

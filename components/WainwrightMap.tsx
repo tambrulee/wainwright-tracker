@@ -34,6 +34,8 @@ type Props = {
   walkingRoute?: WalkingRoute | null;
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
+  onToggleCompleted: (fell: Wainwright) => void;
+  onTogglePriority: (fell: Wainwright) => void;
 };
 
 function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
@@ -94,6 +96,8 @@ export default function WainwrightMap({
   walkingRoute,
   onAddRoutePoint,
   onRemoveRoutePoint,
+  onToggleCompleted,
+  onTogglePriority,
 }: Props) {
   const fallbackRoutePositions = routePoints.map(
     (point) => [point.lat, point.lng] as [number, number]
@@ -189,7 +193,6 @@ export default function WainwrightMap({
                         lng: fell.longitude,
                         name: fell.name,
                       });
-
                       return;
                     }
 
@@ -220,21 +223,39 @@ export default function WainwrightMap({
                 }}
               >
                 <Popup>
-                  <strong>{fell.name}</strong>
-                  <br />
-                  {fell.heightM}m / {fell.heightFt}ft
-                  <br />
-                  {fell.section}
-                  <br />
-                  Completed: {fell.completed ? "Yes" : "No"}
-                  <br />
-                  {isRouteMode ? (
-                    <span className="text-sm font-semibold">
-                      Click marker to add to route
-                    </span>
-                  ) : (
-                    <span className="text-sm">Click marker to view details</span>
-                  )}
+                  <div className="space-y-3">
+                    <div>
+                      <strong>{fell.name}</strong>
+                      <br />
+                      {fell.heightM}m / {fell.heightFt}ft
+                      <br />
+                      {fell.section}
+                      <br />
+                      Completed: {fell.completed ? "Yes" : "No"}
+                    </div>
+
+                    {isRouteMode ? (
+                      <p className="text-sm font-bold text-emerald-800">
+                        Click this fell to add it to your route
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => onToggleCompleted(fell)}
+                          className="rounded-lg bg-emerald-900 px-3 py-2 text-sm font-bold !text-white"
+                        >
+                          {fell.completed ? "Mark not done" : "Mark completed"}
+                        </button>
+
+                        <button
+                          onClick={() => onTogglePriority(fell)}
+                          className="rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm font-bold text-stone-900"
+                        >
+                          {fell.priority ? "Remove priority" : "Mark priority"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </Popup>
               </CircleMarker>
             );
