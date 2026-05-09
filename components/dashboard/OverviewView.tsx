@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
-import ProgressStats from "@/components/ProgressStats";
+import WeatherPanel from "@/components/dashboard/WeatherPanel";
 
 type Props = {
   fells: Wainwright[];
@@ -115,6 +115,8 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
           </div>
         </div>
       </section>
+
+      <WeatherPanel />
 
       <section className="grid gap-8 lg:grid-cols-[1fr_420px]">
         <div className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
