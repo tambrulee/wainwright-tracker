@@ -1,6 +1,6 @@
 [
   {
-    "id": "scafell-pike",
+    "id": "1",
     "heightRank": 1,
     "name": "Scafell Pike",
     "classification": "Ma,F,Sim,Hew,N,W,B,Sy,Fel,CoH,CoU,CoA",
@@ -11,10 +11,10 @@
     "url": "https://en.wikipedia.org/wiki/Scafell_Pike",
     "osGridReference": "NY2150007200",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 2992,
     "prominenceM": 912,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 321500,
     "y": 507200,
@@ -22,7 +22,7 @@
     "longitude": -3.2122852
   },
   {
-    "id": "scafell",
+    "id": "2",
     "heightRank": 2,
     "name": "Scafell",
     "classification": "Hu,F,Sim,Hew,N,W,B,Sy,Fel",
@@ -33,10 +33,10 @@
     "url": "https://en.wikipedia.org/wiki/Scafell",
     "osGridReference": "NY2060006400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 434,
     "prominenceM": 132,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 320600,
     "y": 506400,
@@ -44,7 +44,7 @@
     "longitude": -3.2259484
   },
   {
-    "id": "helvellyn",
+    "id": "3",
     "heightRank": 3,
     "name": "Helvellyn",
     "classification": "Ma,F,Sim,Hew,N,W,B,Sy,Fel,CoH",
@@ -55,7 +55,7 @@
     "url": "https://en.wikipedia.org/wiki/Helvellyn",
     "osGridReference": "NY3420015100",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 2336,
     "prominenceM": 712,
     "section": "Eastern Fells",
@@ -66,7 +66,7 @@
     "longitude": -3.0182022
   },
   {
-    "id": "skiddaw",
+    "id": "4",
     "heightRank": 4,
     "name": "Skiddaw",
     "classification": "Ma,F,Sim,Hew,N,W,B,Sy,Fel",
@@ -77,7 +77,7 @@
     "url": "https://en.wikipedia.org/wiki/Skiddaw",
     "osGridReference": "NY2600029000",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 2326,
     "prominenceM": 709,
     "section": "Northern Fells",
@@ -88,7 +88,7 @@
     "longitude": -3.1483845
   },
   {
-    "id": "great-end",
+    "id": "5",
     "heightRank": 5,
     "name": "Great End",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -102,7 +102,7 @@
     "priority": false,
     "prominenceFt": 184,
     "prominenceM": 56,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 322600,
     "y": 508300,
@@ -110,7 +110,7 @@
     "longitude": -3.1956112
   },
   {
-    "id": "bowfell",
+    "id": "6",
     "heightRank": 6,
     "name": "Bowfell",
     "classification": "Hu,Sim,Hew,N,sMa,W,B,Sy,Fel",
@@ -124,7 +124,7 @@
     "priority": false,
     "prominenceFt": 486,
     "prominenceM": 148,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 324400,
     "y": 506400,
@@ -132,7 +132,7 @@
     "longitude": -3.1673618
   },
   {
-    "id": "great-gable",
+    "id": "7",
     "heightRank": 7,
     "name": "Great Gable",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -143,10 +143,10 @@
     "url": "https://en.wikipedia.org/wiki/Great_Gable",
     "osGridReference": "NY2110010300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 1394,
     "prominenceM": 425,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 321100,
     "y": 510300,
@@ -154,7 +154,7 @@
     "longitude": -3.2192814
   },
   {
-    "id": "pillar",
+    "id": "8",
     "heightRank": 8,
     "name": "Pillar",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -168,7 +168,7 @@
     "priority": false,
     "prominenceFt": 1142,
     "prominenceM": 348,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 317100,
     "y": 512100,
@@ -176,7 +176,7 @@
     "longitude": -3.281508
   },
   {
-    "id": "nethermost-pike",
+    "id": "9",
     "heightRank": 9,
     "name": "Nethermost Pike",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -198,9 +198,9 @@
     "longitude": -3.0164565
   },
   {
-    "id": "catstye-cam",
+    "id": "10",
     "heightRank": 10,
-    "name": "Catstye Cam",
+    "name": "Catstye",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
@@ -220,7 +220,7 @@
     "longitude": -3.0090883
   },
   {
-    "id": "esk-pike",
+    "id": "11",
     "heightRank": 11,
     "name": "Esk Pike",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -234,7 +234,7 @@
     "priority": false,
     "prominenceFt": 367,
     "prominenceM": 112,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 323600,
     "y": 507500,
@@ -242,7 +242,7 @@
     "longitude": -3.1799803
   },
   {
-    "id": "raise",
+    "id": "12",
     "heightRank": 12,
     "name": "Raise",
     "classification": "Sim,Hew,N,sHu,W,B,Sy,Fel",
@@ -264,7 +264,7 @@
     "longitude": -3.018717
   },
   {
-    "id": "fairfield",
+    "id": "13",
     "heightRank": 13,
     "name": "Fairfield",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -286,7 +286,7 @@
     "longitude": -2.9927432
   },
   {
-    "id": "blencathra",
+    "id": "14",
     "heightRank": 14,
     "name": "Blencathra",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -297,7 +297,7 @@
     "url": "https://en.wikipedia.org/wiki/Blencathra",
     "osGridReference": "NY3230027700",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 1512,
     "prominenceM": 461,
     "section": "Northern Fells",
@@ -308,7 +308,7 @@
     "longitude": -3.0504636
   },
   {
-    "id": "skiddaw-little-man",
+    "id": "15",
     "heightRank": 15,
     "name": "Skiddaw Little Man",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -319,7 +319,7 @@
     "url": "https://en.wikipedia.org/wiki/Skiddaw_Little_Man",
     "osGridReference": "NY2660027700",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 200,
     "prominenceM": 61,
     "section": "Northern Fells",
@@ -330,7 +330,7 @@
     "longitude": -3.138761
   },
   {
-    "id": "white-side",
+    "id": "16",
     "heightRank": 16,
     "name": "White Side",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -352,7 +352,7 @@
     "longitude": -3.0262647
   },
   {
-    "id": "crinkle-crags",
+    "id": "17",
     "heightRank": 17,
     "name": "Crinkle Crags",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -366,7 +366,7 @@
     "priority": false,
     "prominenceFt": 456,
     "prominenceM": 139,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 324800,
     "y": 504800,
@@ -374,7 +374,7 @@
     "longitude": -3.160788
   },
   {
-    "id": "dollywaggon-pike",
+    "id": "18",
     "heightRank": 18,
     "name": "Dollywaggon Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -385,7 +385,7 @@
     "url": "https://en.wikipedia.org/wiki/Dollywaggon_Pike",
     "osGridReference": "NY3460013000",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 164,
     "prominenceM": 50,
     "section": "Eastern Fells",
@@ -396,7 +396,7 @@
     "longitude": -3.0115563
   },
   {
-    "id": "great-dodd",
+    "id": "19",
     "heightRank": 19,
     "name": "Great Dodd",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -407,7 +407,7 @@
     "url": "https://en.wikipedia.org/wiki/Great_Dodd",
     "osGridReference": "NY3420020500",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 358,
     "prominenceM": 109,
     "section": "Eastern Fells",
@@ -418,7 +418,7 @@
     "longitude": -3.0194118
   },
   {
-    "id": "grasmoor",
+    "id": "20",
     "heightRank": 20,
     "name": "Grasmoor",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -429,10 +429,10 @@
     "url": "https://en.wikipedia.org/wiki/Grasmoor",
     "osGridReference": "NY1740020300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 1703,
     "prominenceM": 519,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 317400,
     "y": 520300,
@@ -440,7 +440,7 @@
     "longitude": -3.2791796
   },
   {
-    "id": "stybarrow-dodd",
+    "id": "21",
     "heightRank": 21,
     "name": "Stybarrow Dodd",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -462,7 +462,7 @@
     "longitude": -3.0175069
   },
   {
-    "id": "scoat-fell",
+    "id": "22",
     "heightRank": 22,
     "name": "Scoat Fell",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -476,7 +476,7 @@
     "priority": false,
     "prominenceFt": 282,
     "prominenceM": 86,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 315900,
     "y": 511300,
@@ -484,7 +484,7 @@
     "longitude": -3.2998029
   },
   {
-    "id": "st-sunday-crag",
+    "id": "23",
     "heightRank": 23,
     "name": "St Sunday Crag",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -506,21 +506,21 @@
     "longitude": -2.9761049
   },
   {
-    "id": "crag-hilleel-crag",
+    "id": "24",
     "heightRank": 24,
-    "name": "Crag Hill�[Eel Crag]",
+    "name": "Crag Hill [Eel Crag]",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 2753,
     "heightM": 839,
-    "url": "https://en.wikipedia.org/wiki/Crag_Hill�[Eel Crag]",
+    "url": "https://en.wikipedia.org/wiki/Crag_HillÊ[Eel Crag]",
     "osGridReference": "NY1920020300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 384,
     "prominenceM": 117,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319200,
     "y": 520300,
@@ -528,7 +528,7 @@
     "longitude": -3.2513445
   },
   {
-    "id": "high-street",
+    "id": "25",
     "heightRank": 25,
     "name": "High Street",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -542,7 +542,7 @@
     "priority": false,
     "prominenceFt": 1224,
     "prominenceM": 373,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 344000,
     "y": 511000,
@@ -550,9 +550,9 @@
     "longitude": -2.8660214
   },
   {
-    "id": "red-pike-wasdale",
+    "id": "26",
     "heightRank": 26,
-    "name": "Red Pike (Wasdale)",
+    "name": "Red Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
@@ -561,10 +561,10 @@
     "url": "https://en.wikipedia.org/wiki/Red_Pike_(Wasdale)",
     "osGridReference": "NY1650010600",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 203,
     "prominenceM": 62,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 316500,
     "y": 510600,
@@ -572,7 +572,7 @@
     "longitude": -3.2903449
   },
   {
-    "id": "hart-crag",
+    "id": "27",
     "heightRank": 27,
     "name": "Hart Crag",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -594,7 +594,7 @@
     "longitude": -2.9756552
   },
   {
-    "id": "steeple",
+    "id": "28",
     "heightRank": 28,
     "name": "Steeple",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -608,7 +608,7 @@
     "priority": false,
     "prominenceFt": 79,
     "prominenceM": 24,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 315700,
     "y": 511600,
@@ -616,7 +616,7 @@
     "longitude": -3.3029753
   },
   {
-    "id": "lingmell",
+    "id": "29",
     "heightRank": 29,
     "name": "Lingmell",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -630,7 +630,7 @@
     "priority": false,
     "prominenceFt": 236,
     "prominenceM": 72,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 320900,
     "y": 508100,
@@ -638,7 +638,7 @@
     "longitude": -3.2217781
   },
   {
-    "id": "high-stile",
+    "id": "30",
     "heightRank": 30,
     "name": "High Stile",
     "classification": "W,B",
@@ -652,7 +652,7 @@
     "priority": false,
     "prominenceFt": 33,
     "prominenceM": 10,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 316700,
     "y": 514700,
@@ -660,7 +660,7 @@
     "longitude": -3.2884174
   },
   {
-    "id": "the-old-man-of-coniston",
+    "id": "31",
     "heightRank": 31,
     "name": "The Old Man of Coniston",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel,CoH",
@@ -671,7 +671,7 @@
     "url": "https://en.wikipedia.org/wiki/The_Old_Man_of_Coniston",
     "osGridReference": "SD2720097800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 1362,
     "prominenceM": 415,
     "section": "Southern Fells",
@@ -682,7 +682,7 @@
     "longitude": -3.1220791
   },
   {
-    "id": "swirl-how",
+    "id": "32",
     "heightRank": 32,
     "name": "Swirl How",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -704,7 +704,7 @@
     "longitude": -3.1227412
   },
   {
-    "id": "kirk-fell",
+    "id": "33",
     "heightRank": 33,
     "name": "Kirk Fell",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -715,10 +715,10 @@
     "url": "https://en.wikipedia.org/wiki/Kirk_Fell",
     "osGridReference": "NY1940010400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 594,
     "prominenceM": 181,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 319400,
     "y": 510400,
@@ -726,7 +726,7 @@
     "longitude": -3.2455403
   },
   {
-    "id": "high-raise-high-street",
+    "id": "34",
     "heightRank": 34,
     "name": "High Raise (High Street)",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -740,7 +740,7 @@
     "priority": false,
     "prominenceFt": 289,
     "prominenceM": 88,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 344800,
     "y": 513400,
@@ -748,7 +748,7 @@
     "longitude": -2.8541225
   },
   {
-    "id": "green-gable",
+    "id": "35",
     "heightRank": 35,
     "name": "Green Gable",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -759,10 +759,10 @@
     "url": "https://en.wikipedia.org/wiki/Green_Gable",
     "osGridReference": "NY2140010700",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 164,
     "prominenceM": 50,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 321400,
     "y": 510700,
@@ -770,7 +770,7 @@
     "longitude": -3.2147588
   },
   {
-    "id": "haycock",
+    "id": "36",
     "heightRank": 36,
     "name": "Haycock",
     "classification": "Sim,Hew,N,sHu,W,B,Sy,Fel",
@@ -781,10 +781,10 @@
     "url": "https://en.wikipedia.org/wiki/Haycock_(Lake_District)",
     "osGridReference": "NY1440010700",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 308,
     "prominenceM": 94,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89",
     "x": 314400,
     "y": 510700,
@@ -792,7 +792,7 @@
     "longitude": -3.3227783
   },
   {
-    "id": "brim-fell",
+    "id": "37",
     "heightRank": 37,
     "name": "Brim Fell",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -806,7 +806,7 @@
     "priority": false,
     "prominenceFt": 69,
     "prominenceM": 21,
-    "section": "Southern Fells",
+    "section": "Western Fells",
     "topoMap": "96 97",
     "x": 327000,
     "y": 498500,
@@ -814,7 +814,7 @@
     "longitude": -3.1253289
   },
   {
-    "id": "rampsgill-head",
+    "id": "38",
     "heightRank": 38,
     "name": "Rampsgill Head",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -828,7 +828,7 @@
     "priority": false,
     "prominenceFt": 135,
     "prominenceM": 41,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 344300,
     "y": 512800,
@@ -836,7 +836,7 @@
     "longitude": -2.861731
   },
   {
-    "id": "dove-crag",
+    "id": "39",
     "heightRank": 39,
     "name": "Dove Crag",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -847,7 +847,7 @@
     "url": "https://en.wikipedia.org/wiki/Dove_Crag",
     "osGridReference": "NY3740010400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 164,
     "prominenceM": 50,
     "section": "Eastern Fells",
@@ -858,7 +858,7 @@
     "longitude": -2.9677675
   },
   {
-    "id": "grisedale-pike",
+    "id": "40",
     "heightRank": 40,
     "name": "Grisedale Pike",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -869,10 +869,10 @@
     "url": "https://en.wikipedia.org/wiki/Grisedale_Pike",
     "osGridReference": "NY1980022500",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 620,
     "prominenceM": 189,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319800,
     "y": 522500,
@@ -880,15 +880,15 @@
     "longitude": -3.2426675
   },
   {
-    "id": "watsons-dodd",
+    "id": "41",
     "heightRank": 41,
-    "name": "Watsons Dodd",
+    "name": "Watson's Dodd",
     "classification": "W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 2589,
     "heightM": 789,
-    "url": "https://en.wikipedia.org/wiki/Watson%27s_Dodd",
+    "url": "https://en.wikipedia.org/wiki/Watson's_Dodd",
     "osGridReference": "NY3350019500",
     "planned": false,
     "priority": false,
@@ -902,7 +902,7 @@
     "longitude": -3.0300119
   },
   {
-    "id": "allen-crags",
+    "id": "42",
     "heightRank": 42,
     "name": "Allen Crags",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -916,7 +916,7 @@
     "priority": false,
     "prominenceFt": 197,
     "prominenceM": 60,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 323600,
     "y": 508500,
@@ -924,7 +924,7 @@
     "longitude": -3.1802389
   },
   {
-    "id": "great-carrs",
+    "id": "43",
     "heightRank": 43,
     "name": "Great Carrs",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -946,7 +946,7 @@
     "longitude": -3.1259193
   },
   {
-    "id": "thornthwaite-crag",
+    "id": "44",
     "heightRank": 44,
     "name": "Thornthwaite Crag",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -960,7 +960,7 @@
     "priority": false,
     "prominenceFt": 102,
     "prominenceM": 31,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343100,
     "y": 510000,
@@ -968,7 +968,7 @@
     "longitude": -2.8797205
   },
   {
-    "id": "glaramara",
+    "id": "45",
     "heightRank": 45,
     "name": "Glaramara",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -982,7 +982,7 @@
     "priority": false,
     "prominenceFt": 397,
     "prominenceM": 121,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 324500,
     "y": 510400,
@@ -990,7 +990,7 @@
     "longitude": -3.1668425
   },
   {
-    "id": "kidsty-pike",
+    "id": "46",
     "heightRank": 46,
     "name": "Kidsty Pike",
     "classification": "N,W,B,Sy,Fel",
@@ -1004,7 +1004,7 @@
     "priority": false,
     "prominenceFt": 49,
     "prominenceM": 15,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 344700,
     "y": 512500,
@@ -1012,7 +1012,7 @@
     "longitude": -2.8554979
   },
   {
-    "id": "harter-fell-mardale",
+    "id": "47",
     "heightRank": 47,
     "name": "Harter Fell (Mardale)",
     "classification": "Hu,Sim,Hew,N,sMa,W,B,Sy,Fel",
@@ -1026,7 +1026,7 @@
     "priority": false,
     "prominenceFt": 490,
     "prominenceM": 149,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 345900,
     "y": 509300,
@@ -1034,7 +1034,7 @@
     "longitude": -2.8363814
   },
   {
-    "id": "dow-crag",
+    "id": "48",
     "heightRank": 48,
     "name": "Dow Crag",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -1056,11 +1056,11 @@
     "longitude": -3.1374434
   },
   {
-    "id": "red-screes",
+    "id": "49",
     "heightRank": 49,
     "name": "Red Screes",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 2546,
     "heightM": 776,
@@ -1078,7 +1078,7 @@
     "longitude": -2.9334666
   },
   {
-    "id": "sail",
+    "id": "50",
     "heightRank": 50,
     "name": "Sail",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1092,7 +1092,7 @@
     "priority": false,
     "prominenceFt": 105,
     "prominenceM": 32,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319800,
     "y": 520200,
@@ -1100,7 +1100,7 @@
     "longitude": -3.2420387
   },
   {
-    "id": "grey-friar",
+    "id": "51",
     "heightRank": 51,
     "name": "Grey Friar",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1122,7 +1122,7 @@
     "longitude": -3.1411692
   },
   {
-    "id": "wandope",
+    "id": "52",
     "heightRank": 52,
     "name": "Wandope",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1136,7 +1136,7 @@
     "priority": false,
     "prominenceFt": 98,
     "prominenceM": 30,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 318800,
     "y": 519700,
@@ -1144,7 +1144,7 @@
     "longitude": -3.2573641
   },
   {
-    "id": "hopegill-head",
+    "id": "53",
     "heightRank": 53,
     "name": "Hopegill Head",
     "classification": "Sim,Hew,N,sHu,W,B,Sy,Fel",
@@ -1158,7 +1158,7 @@
     "priority": false,
     "prominenceFt": 318,
     "prominenceM": 97,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 318500,
     "y": 522100,
@@ -1166,7 +1166,7 @@
     "longitude": -3.2626694
   },
   {
-    "id": "great-rigg",
+    "id": "54",
     "heightRank": 54,
     "name": "Great Rigg",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1188,7 +1188,7 @@
     "longitude": -2.9970899
   },
   {
-    "id": "stony-cove-pike",
+    "id": "55",
     "heightRank": 55,
     "name": "Stony Cove Pike",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -1202,7 +1202,7 @@
     "priority": false,
     "prominenceFt": 561,
     "prominenceM": 171,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 341700,
     "y": 510000,
@@ -1210,7 +1210,7 @@
     "longitude": -2.9013256
   },
   {
-    "id": "wetherlam",
+    "id": "56",
     "heightRank": 56,
     "name": "Wetherlam",
     "classification": "Hu,Sim,Hew,N,sMa,W,B,Sy,Fel",
@@ -1232,21 +1232,21 @@
     "longitude": -3.0982478
   },
   {
-    "id": "high-raise-langdale",
+    "id": "57",
     "heightRank": 57,
-    "name": "High Raise (Langdale)",
+    "name": "High Raise",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 2500,
     "heightM": 762,
-    "url": "https://en.wikipedia.org/wiki/High_Raise_(Langdale)�[Langdale]",
+    "url": "https://en.wikipedia.org/wiki/High_Raise_(Langdale)Ê[Langdale]",
     "osGridReference": "NY2800009500",
     "planned": false,
     "priority": false,
     "prominenceFt": 928,
     "prominenceM": 283,
-    "section": "Central & Western Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "89 90",
     "x": 328000,
     "y": 509500,
@@ -1254,7 +1254,7 @@
     "longitude": -3.1126124
   },
   {
-    "id": "slight-side",
+    "id": "58",
     "heightRank": 58,
     "name": "Slight Side",
     "classification": "W,B,Sy,Fel,xN",
@@ -1268,7 +1268,7 @@
     "priority": false,
     "prominenceFt": 46,
     "prominenceM": 14,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 320900,
     "y": 505000,
@@ -1276,7 +1276,7 @@
     "longitude": -3.2209489
   },
   {
-    "id": "mardale-ill-bell",
+    "id": "59",
     "heightRank": 59,
     "name": "Mardale Ill Bell",
     "classification": "W,B,Sy,Fel,xN",
@@ -1290,7 +1290,7 @@
     "priority": false,
     "prominenceFt": 33,
     "prominenceM": 10,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 344700,
     "y": 510100,
@@ -1298,7 +1298,7 @@
     "longitude": -2.8550475
   },
   {
-    "id": "ill-bell",
+    "id": "60",
     "heightRank": 60,
     "name": "Ill Bell",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -1312,7 +1312,7 @@
     "priority": false,
     "prominenceFt": 407,
     "prominenceM": 124,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343600,
     "y": 507700,
@@ -1320,7 +1320,7 @@
     "longitude": -2.8715648
   },
   {
-    "id": "hart-side",
+    "id": "61",
     "heightRank": 61,
     "name": "Hart Side",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -1342,7 +1342,7 @@
     "longitude": -2.9929432
   },
   {
-    "id": "red-pike-buttermere",
+    "id": "62",
     "heightRank": 62,
     "name": "Red Pike (Buttermere)",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1353,10 +1353,10 @@
     "url": "https://en.wikipedia.org/wiki/Red_Pike_(Buttermere)",
     "osGridReference": "NY1600015400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 131,
     "prominenceM": 40,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 316000,
     "y": 515400,
@@ -1364,7 +1364,7 @@
     "longitude": -3.2994284
   },
   {
-    "id": "dale-head",
+    "id": "63",
     "heightRank": 63,
     "name": "Dale Head",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -1378,7 +1378,7 @@
     "priority": false,
     "prominenceFt": 1302,
     "prominenceM": 397,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 322200,
     "y": 515300,
@@ -1386,7 +1386,7 @@
     "longitude": -3.2036278
   },
   {
-    "id": "carl-side",
+    "id": "64",
     "heightRank": 64,
     "name": "Carl Side",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1408,7 +1408,7 @@
     "longitude": -3.1574259
   },
   {
-    "id": "high-crag",
+    "id": "65",
     "heightRank": 65,
     "name": "High Crag",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1422,7 +1422,7 @@
     "priority": false,
     "prominenceFt": 115,
     "prominenceM": 35,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 318000,
     "y": 513900,
@@ -1430,7 +1430,7 @@
     "longitude": -3.2681164
   },
   {
-    "id": "the-knott",
+    "id": "66",
     "heightRank": 66,
     "name": "The Knott",
     "classification": "W,B,Sy,xN",
@@ -1444,7 +1444,7 @@
     "priority": false,
     "prominenceFt": 43,
     "prominenceM": 13,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343700,
     "y": 512600,
@@ -1452,7 +1452,7 @@
     "longitude": -2.8709578
   },
   {
-    "id": "robinson",
+    "id": "67",
     "heightRank": 67,
     "name": "Robinson",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -1466,7 +1466,7 @@
     "priority": false,
     "prominenceFt": 528,
     "prominenceM": 161,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 320100,
     "y": 516800,
@@ -1474,7 +1474,7 @@
     "longitude": -3.2364748
   },
   {
-    "id": "seat-sandal",
+    "id": "68",
     "heightRank": 68,
     "name": "Seat Sandal",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -1496,21 +1496,21 @@
     "longitude": -3.0143106
   },
   {
-    "id": "harrison-stickle",
+    "id": "69",
     "heightRank": 69,
     "name": "Harrison Stickle",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 2415,
     "heightM": 736,
     "url": "https://en.wikipedia.org/wiki/Harrison_Stickle",
     "osGridReference": "NY2810007400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 174,
     "prominenceM": 53,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 328100,
     "y": 507400,
@@ -1518,7 +1518,7 @@
     "longitude": -3.1105583
   },
   {
-    "id": "sergeant-man",
+    "id": "70",
     "heightRank": 70,
     "name": "Sergeant Man",
     "classification": "W,B,Sy,Fel,xN",
@@ -1532,7 +1532,7 @@
     "priority": false,
     "prominenceFt": 39,
     "prominenceM": 12,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 328600,
     "y": 508800,
@@ -1540,7 +1540,7 @@
     "longitude": -3.1031859
   },
   {
-    "id": "long-side",
+    "id": "71",
     "heightRank": 71,
     "name": "Long Side",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1562,7 +1562,7 @@
     "longitude": -3.1668236
   },
   {
-    "id": "kentmere-pike",
+    "id": "72",
     "heightRank": 72,
     "name": "Kentmere Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1576,7 +1576,7 @@
     "priority": false,
     "prominenceFt": 128,
     "prominenceM": 39,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 346500,
     "y": 507700,
@@ -1584,7 +1584,7 @@
     "longitude": -2.8268332
   },
   {
-    "id": "hindscarth",
+    "id": "73",
     "heightRank": 73,
     "name": "Hindscarth",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1598,7 +1598,7 @@
     "priority": false,
     "prominenceFt": 233,
     "prominenceM": 71,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 321500,
     "y": 516500,
@@ -1606,7 +1606,7 @@
     "longitude": -3.2147613
   },
   {
-    "id": "ullscarf",
+    "id": "74",
     "heightRank": 74,
     "name": "Ullscarf",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -1616,11 +1616,11 @@
     "heightM": 726,
     "url": "https://en.wikipedia.org/wiki/Ullscarf",
     "osGridReference": "NY2910012100",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 387,
     "prominenceM": 118,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 329100,
     "y": 512100,
@@ -1628,7 +1628,7 @@
     "longitude": -3.0962657
   },
   {
-    "id": "clough-head",
+    "id": "75",
     "heightRank": 75,
     "name": "Clough Head",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -1650,7 +1650,7 @@
     "longitude": -3.0337869
   },
   {
-    "id": "thunacar-knott",
+    "id": "76",
     "heightRank": 76,
     "name": "Thunacar Knott",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -1664,7 +1664,7 @@
     "priority": false,
     "prominenceFt": 89,
     "prominenceM": 27,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327900,
     "y": 507900,
@@ -1672,7 +1672,7 @@
     "longitude": -3.1137647
   },
   {
-    "id": "froswick",
+    "id": "77",
     "heightRank": 77,
     "name": "Froswick",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1686,7 +1686,7 @@
     "priority": false,
     "prominenceFt": 246,
     "prominenceM": 75,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343500,
     "y": 508500,
@@ -1694,7 +1694,7 @@
     "longitude": -2.8732604
   },
   {
-    "id": "birkhouse-moor",
+    "id": "78",
     "heightRank": 78,
     "name": "Birkhouse Moor",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -1716,7 +1716,7 @@
     "longitude": -2.9859334
   },
   {
-    "id": "lonscale-fell",
+    "id": "79",
     "heightRank": 79,
     "name": "Lonscale Fell",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1727,7 +1727,7 @@
     "url": "https://en.wikipedia.org/wiki/Lonscale_Fell",
     "osGridReference": "NY2850027100",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 164,
     "prominenceM": 50,
     "section": "Northern Fells",
@@ -1738,7 +1738,7 @@
     "longitude": -3.1091822
   },
   {
-    "id": "brandreth",
+    "id": "80",
     "heightRank": 80,
     "name": "Brandreth",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1752,7 +1752,7 @@
     "priority": false,
     "prominenceFt": 200,
     "prominenceM": 61,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 321400,
     "y": 511900,
@@ -1760,7 +1760,7 @@
     "longitude": -3.2150786
   },
   {
-    "id": "branstree",
+    "id": "81",
     "heightRank": 81,
     "name": "Branstree",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -1774,7 +1774,7 @@
     "priority": false,
     "prominenceFt": 449,
     "prominenceM": 137,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 347800,
     "y": 509900,
@@ -1782,9 +1782,9 @@
     "longitude": -2.8071701
   },
   {
-    "id": "knott-caldbeck",
+    "id": "82",
     "heightRank": 82,
-    "name": "Knott, Caldbeck",
+    "name": "Knott",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
@@ -1804,12 +1804,12 @@
     "longitude": -3.0935438
   },
   {
-    "id": "pike-of-stickle",
+    "id": "83",
     "heightRank": 83,
-    "name": "Pike of Stickle",
+    "name": "Pike o’Stickle",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
-    "completed": true,
-    "completedDate": "May 1, 2024",
+    "completed": false,
+    "completedDate": null,
     "heightFt": 2326,
     "heightM": 709,
     "url": "https://en.wikipedia.org/wiki/Pike_of_Stickle",
@@ -1818,7 +1818,7 @@
     "priority": false,
     "prominenceFt": 177,
     "prominenceM": 54,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327300,
     "y": 507300,
@@ -1826,21 +1826,21 @@
     "longitude": -3.122871
   },
   {
-    "id": "whiteside-west-top",
+    "id": "84",
     "heightRank": 84,
-    "name": "Whiteside �[West Top]",
+    "name": "Whiteside",
     "classification": "N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 2320,
     "heightM": 707,
-    "url": "https://en.wikipedia.org/wiki/Whiteside_(Lake_District)�[West Top]",
+    "url": "https://en.wikipedia.org/wiki/Whiteside_(Lake_District)Ê[West Top]",
     "osGridReference": "NY1700021900",
     "planned": false,
     "priority": false,
     "prominenceFt": 59,
     "prominenceM": 18,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 317000,
     "y": 521900,
@@ -1848,7 +1848,7 @@
     "longitude": -3.2858178
   },
   {
-    "id": "yoke",
+    "id": "85",
     "heightRank": 85,
     "name": "Yoke",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1862,7 +1862,7 @@
     "priority": false,
     "prominenceFt": 125,
     "prominenceM": 38,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343700,
     "y": 506700,
@@ -1870,9 +1870,9 @@
     "longitude": -2.8698317
   },
   {
-    "id": "pike-of-blisco",
+    "id": "86",
     "heightRank": 86,
-    "name": "Pike of Blisco",
+    "name": "Pike o’Blisco",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
@@ -1884,7 +1884,7 @@
     "priority": false,
     "prominenceFt": 581,
     "prominenceM": 177,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 327100,
     "y": 504200,
@@ -1892,7 +1892,7 @@
     "longitude": -3.1251912
   },
   {
-    "id": "bowscale-fell",
+    "id": "87",
     "heightRank": 87,
     "name": "Bowscale Fell",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1914,7 +1914,7 @@
     "longitude": -3.0356121
   },
   {
-    "id": "cold-pike",
+    "id": "88",
     "heightRank": 88,
     "name": "Cold Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -1928,7 +1928,7 @@
     "priority": false,
     "prominenceFt": 151,
     "prominenceM": 46,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 326200,
     "y": 503600,
@@ -1936,21 +1936,21 @@
     "longitude": -3.1389113
   },
   {
-    "id": "pavey-ark",
+    "id": "89",
     "heightRank": 89,
     "name": "Pavey Ark",
     "classification": "N,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 2297,
     "heightM": 700,
     "url": "https://en.wikipedia.org/wiki/Pavey_Ark",
     "osGridReference": "NY2840007900",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 49,
     "prominenceM": 15,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 328400,
     "y": 507900,
@@ -1958,7 +1958,7 @@
     "longitude": -3.106053
   },
   {
-    "id": "gray-crag",
+    "id": "90",
     "heightRank": 90,
     "name": "Gray Crag",
     "classification": "N,W,B,Sy,Fel",
@@ -1972,7 +1972,7 @@
     "priority": false,
     "prominenceFt": 52,
     "prominenceM": 16,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 342700,
     "y": 511700,
@@ -1980,7 +1980,7 @@
     "longitude": -2.8862238
   },
   {
-    "id": "grey-knotts",
+    "id": "91",
     "heightRank": 91,
     "name": "Grey Knotts",
     "classification": "N,W,B,Sy,Fel",
@@ -1994,7 +1994,7 @@
     "priority": false,
     "prominenceFt": 52,
     "prominenceM": 16,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 321700,
     "y": 512500,
@@ -2002,7 +2002,7 @@
     "longitude": -3.2106072
   },
   {
-    "id": "caw-fell",
+    "id": "92",
     "heightRank": 92,
     "name": "Caw Fell",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -2016,7 +2016,7 @@
     "priority": false,
     "prominenceFt": 72,
     "prominenceM": 22,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 313200,
     "y": 510900,
@@ -2024,7 +2024,7 @@
     "longitude": -3.3413539
   },
   {
-    "id": "rest-dodd",
+    "id": "93",
     "heightRank": 93,
     "name": "Rest Dodd",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -2038,7 +2038,7 @@
     "priority": false,
     "prominenceFt": 364,
     "prominenceM": 111,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343200,
     "y": 513600,
@@ -2046,7 +2046,7 @@
     "longitude": -2.8788713
   },
   {
-    "id": "seatallan",
+    "id": "94",
     "heightRank": 94,
     "name": "Seatallan",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -2060,7 +2060,7 @@
     "priority": false,
     "prominenceFt": 633,
     "prominenceM": 193,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 314000,
     "y": 508400,
@@ -2068,7 +2068,7 @@
     "longitude": -3.3282807
   },
   {
-    "id": "ullock-pike",
+    "id": "95",
     "heightRank": 95,
     "name": "Ullock Pike",
     "classification": "W,B,Sy,Fel,xN",
@@ -2090,7 +2090,7 @@
     "longitude": -3.1730982
   },
   {
-    "id": "great-calva",
+    "id": "96",
     "heightRank": 96,
     "name": "Great Calva",
     "classification": "Hu,Sim,Hew,N,sMa,W,B,Sy,Fel",
@@ -2112,7 +2112,7 @@
     "longitude": -3.1024105
   },
   {
-    "id": "bannerdale-crags",
+    "id": "97",
     "heightRank": 97,
     "name": "Bannerdale Crags",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2123,7 +2123,7 @@
     "url": "https://en.wikipedia.org/wiki/Bannerdale_Crags",
     "osGridReference": "NY3350029000",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 121,
     "prominenceM": 37,
     "section": "Northern Fells",
@@ -2134,7 +2134,7 @@
     "longitude": -3.0321701
   },
   {
-    "id": "loft-crag",
+    "id": "98",
     "heightRank": 98,
     "name": "Loft Crag",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -2148,7 +2148,7 @@
     "priority": false,
     "prominenceFt": 72,
     "prominenceM": 22,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327700,
     "y": 507100,
@@ -2156,7 +2156,7 @@
     "longitude": -3.1166536
   },
   {
-    "id": "sheffield-pike",
+    "id": "99",
     "heightRank": 99,
     "name": "Sheffield Pike",
     "classification": "Sim,Hew,N,sHu,W,B,Sy,Fel",
@@ -2167,7 +2167,7 @@
     "url": "https://en.wikipedia.org/wiki/Sheffield_Pike",
     "osGridReference": "NY3690018100",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 299,
     "prominenceM": 91,
     "section": "Eastern Fells",
@@ -2178,7 +2178,7 @@
     "longitude": -2.9771349
   },
   {
-    "id": "bakestall",
+    "id": "100",
     "heightRank": 100,
     "name": "Bakestall",
     "classification": "W,B,Sy,Fel",
@@ -2200,7 +2200,7 @@
     "longitude": -3.1395402
   },
   {
-    "id": "scar-crags",
+    "id": "101",
     "heightRank": 101,
     "name": "Scar Crags",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2214,7 +2214,7 @@
     "priority": false,
     "prominenceFt": 180,
     "prominenceM": 55,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 320800,
     "y": 520600,
@@ -2222,7 +2222,7 @@
     "longitude": -3.2266827
   },
   {
-    "id": "loadpot-hill",
+    "id": "102",
     "heightRank": 102,
     "name": "Loadpot Hill",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2236,7 +2236,7 @@
     "priority": false,
     "prominenceFt": 161,
     "prominenceM": 49,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 345600,
     "y": 518000,
@@ -2244,7 +2244,7 @@
     "longitude": -2.8426186
   },
   {
-    "id": "wether-hill",
+    "id": "103",
     "heightRank": 103,
     "name": "Wether Hill",
     "classification": "W,B,Sy,Fel,xN",
@@ -2258,7 +2258,7 @@
     "priority": false,
     "prominenceFt": 16,
     "prominenceM": 5,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 345500,
     "y": 516700,
@@ -2266,9 +2266,9 @@
     "longitude": -2.8439233
   },
   {
-    "id": "tarn-crag-far-eastern-fells",
+    "id": "104",
     "heightRank": 104,
-    "name": "Tarn Crag (Far Eastern Fells)",
+    "name": "Tarn Crag",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
@@ -2280,7 +2280,7 @@
     "priority": false,
     "prominenceFt": 525,
     "prominenceM": 160,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 348800,
     "y": 507800,
@@ -2288,7 +2288,7 @@
     "longitude": -2.7913732
   },
   {
-    "id": "carrock-fell",
+    "id": "105",
     "heightRank": 105,
     "name": "Carrock Fell",
     "classification": "Sim,Hew,N,sHu,W,B,Sy,Fel",
@@ -2310,7 +2310,7 @@
     "longitude": -3.0239123
   },
   {
-    "id": "whiteless-pike",
+    "id": "106",
     "heightRank": 106,
     "name": "Whiteless Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2324,7 +2324,7 @@
     "priority": false,
     "prominenceFt": 118,
     "prominenceM": 36,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 318000,
     "y": 518900,
@@ -2332,7 +2332,7 @@
     "longitude": -3.2695103
   },
   {
-    "id": "high-pike-caldbeck",
+    "id": "107",
     "heightRank": 107,
     "name": "High Pike (Caldbeck)",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2354,7 +2354,7 @@
     "longitude": -3.0599165
   },
   {
-    "id": "place-fell",
+    "id": "108",
     "heightRank": 108,
     "name": "Place Fell",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -2368,7 +2368,7 @@
     "priority": false,
     "prominenceFt": 860,
     "prominenceM": 262,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 340500,
     "y": 516900,
@@ -2376,7 +2376,7 @@
     "longitude": -2.9212386
   },
   {
-    "id": "high-pike-scandale",
+    "id": "109",
     "heightRank": 109,
     "name": "High Pike (Scandale)",
     "classification": "W,B,Sy,Fel",
@@ -2398,7 +2398,7 @@
     "longitude": -2.967428
   },
   {
-    "id": "selside-pike",
+    "id": "110",
     "heightRank": 110,
     "name": "Selside Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2412,7 +2412,7 @@
     "priority": false,
     "prominenceFt": 118,
     "prominenceM": 36,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 349000,
     "y": 511100,
@@ -2420,7 +2420,7 @@
     "longitude": -2.7888587
   },
   {
-    "id": "middle-dodd",
+    "id": "111",
     "heightRank": 111,
     "name": "Middle Dodd",
     "classification": "W,B,Sy,Fel",
@@ -2442,7 +2442,7 @@
     "longitude": -2.9320874
   },
   {
-    "id": "harter-fell-eskdale",
+    "id": "112",
     "heightRank": 112,
     "name": "Harter Fell (Eskdale)",
     "classification": "Ma,Sim,Hew,N,W,B,Sy,Fel",
@@ -2464,7 +2464,7 @@
     "longitude": -3.2056792
   },
   {
-    "id": "high-spy",
+    "id": "113",
     "heightRank": 113,
     "name": "High Spy",
     "classification": "Hu,Sim,Hew,N,sMa,W,B,Sy,Fel",
@@ -2478,7 +2478,7 @@
     "priority": false,
     "prominenceFt": 485,
     "prominenceM": 148,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 323400,
     "y": 516200,
@@ -2486,7 +2486,7 @@
     "longitude": -3.185325
   },
   {
-    "id": "great-sca-fell",
+    "id": "114",
     "heightRank": 114,
     "name": "Great Sca Fell",
     "classification": "W,B,Sy,Fel,xN",
@@ -2497,7 +2497,7 @@
     "url": "https://en.wikipedia.org/wiki/Great_Sca_Fell",
     "osGridReference": "NY2910033900",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 43,
     "prominenceM": 13,
     "section": "Northern Fells",
@@ -2508,7 +2508,7 @@
     "longitude": -3.1015415
   },
   {
-    "id": "rossett-pike",
+    "id": "115",
     "heightRank": 115,
     "name": "Rossett Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2522,7 +2522,7 @@
     "priority": false,
     "prominenceFt": 131,
     "prominenceM": 40,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 324900,
     "y": 507500,
@@ -2530,7 +2530,7 @@
     "longitude": -3.1599324
   },
   {
-    "id": "fleetwith-pike",
+    "id": "116",
     "heightRank": 116,
     "name": "Fleetwith Pike",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -2544,7 +2544,7 @@
     "priority": false,
     "prominenceFt": 388,
     "prominenceM": 118,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 320500,
     "y": 514100,
@@ -2552,7 +2552,7 @@
     "longitude": -3.2295644
   },
   {
-    "id": "base-brown",
+    "id": "117",
     "heightRank": 117,
     "name": "Base Brown",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2566,7 +2566,7 @@
     "priority": false,
     "prominenceFt": 125,
     "prominenceM": 38,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 322500,
     "y": 511400,
@@ -2574,21 +2574,21 @@
     "longitude": -3.1979675
   },
   {
-    "id": "grey-cragsleddale",
+    "id": "118",
     "heightRank": 118,
-    "name": "Grey Crag�[Sleddale]",
+    "name": "Gray Crag",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 2093,
     "heightM": 638,
-    "url": "https://en.wikipedia.org/wiki/Grey_Crag�[Sleddale]",
+    "url": "https://en.wikipedia.org/wiki/Grey_CragÊ[Sleddale]",
     "osGridReference": "NY4970007200",
     "planned": false,
     "priority": false,
     "prominenceFt": 135,
     "prominenceM": 41,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 349700,
     "y": 507200,
@@ -2596,7 +2596,7 @@
     "longitude": -2.7773881
   },
   {
-    "id": "causey-pike",
+    "id": "119",
     "heightRank": 119,
     "name": "Causey Pike",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2607,10 +2607,10 @@
     "url": "https://en.wikipedia.org/wiki/Causey_Pike",
     "osGridReference": "NY2180020800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 131,
     "prominenceM": 40,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 321800,
     "y": 520800,
@@ -2618,15 +2618,15 @@
     "longitude": -3.2112706
   },
   {
-    "id": "little-hart-cragw",
+    "id": "120",
     "heightRank": 120,
-    "name": "Little Hart Crag�W",
+    "name": "Little Hart Crag",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 2090,
     "heightM": 637,
-    "url": "https://en.wikipedia.org/wiki/Little_Hart_Crag�W",
+    "url": "https://en.wikipedia.org/wiki/Little_Hart_CragÊW",
     "osGridReference": "NY3870010000",
     "planned": false,
     "priority": false,
@@ -2640,7 +2640,7 @@
     "longitude": -2.9476214
   },
   {
-    "id": "starling-dodd",
+    "id": "121",
     "heightRank": 121,
     "name": "Starling Dodd",
     "classification": "Sim,Hew,N,W,B,Sy,Fel",
@@ -2654,7 +2654,7 @@
     "priority": false,
     "prominenceFt": 240,
     "prominenceM": 73,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 314200,
     "y": 515700,
@@ -2662,7 +2662,7 @@
     "longitude": -3.3273202
   },
   {
-    "id": "mungrisdale-common",
+    "id": "122",
     "heightRank": 122,
     "name": "Mungrisdale Common",
     "classification": "W,Sy",
@@ -2684,7 +2684,7 @@
     "longitude": -3.0709563
   },
   {
-    "id": "yewbarrow",
+    "id": "123",
     "heightRank": 123,
     "name": "Yewbarrow",
     "classification": "Hu,Sim,Hew,N,sMa,W,B,Sy,Fel",
@@ -2695,10 +2695,10 @@
     "url": "https://en.wikipedia.org/wiki/Yewbarrow",
     "osGridReference": "NY1730008400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 466,
     "prominenceM": 142,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 317300,
     "y": 508400,
@@ -2706,7 +2706,7 @@
     "longitude": -3.277384
   },
   {
-    "id": "birks",
+    "id": "124",
     "heightRank": 124,
     "name": "Birks",
     "classification": "N,sSim,W,B,Sy,Fel",
@@ -2728,21 +2728,21 @@
     "longitude": -2.9593285
   },
   {
-    "id": "hartsop-dodd",
+    "id": "125",
     "heightRank": 125,
     "name": "Hartsop Dodd",
     "classification": "N,sSim,W,B,Sy,Fel",
-    "completed": true,
-    "completedDate": "November 29, 2025",
+    "completed": false,
+    "completedDate": null,
     "heightFt": 2028,
     "heightM": 618,
     "url": "https://en.wikipedia.org/wiki/Hartsop_Dodd",
     "osGridReference": "NY4110011800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 79,
     "prominenceM": 24,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 341100,
     "y": 511800,
@@ -2750,7 +2750,7 @@
     "longitude": -2.9109444
   },
   {
-    "id": "great-borne",
+    "id": "126",
     "heightRank": 126,
     "name": "Great Borne",
     "classification": "Hu,Sim,Hew,N,W,B,Sy,Fel",
@@ -2764,7 +2764,7 @@
     "priority": false,
     "prominenceFt": 371,
     "prominenceM": 113,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 312300,
     "y": 516300,
@@ -2772,7 +2772,7 @@
     "longitude": -3.3568494
   },
   {
-    "id": "heron-pike",
+    "id": "127",
     "heightRank": 127,
     "name": "Heron Pike",
     "classification": "N,sSim,W,B,Sy",
@@ -2783,7 +2783,7 @@
     "url": "https://en.wikipedia.org/wiki/Heron_Pike",
     "osGridReference": "NY3550008300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 69,
     "prominenceM": 21,
     "section": "Eastern Fells",
@@ -2794,7 +2794,7 @@
     "longitude": -2.996631
   },
   {
-    "id": "illgill-head",
+    "id": "128",
     "heightRank": 128,
     "name": "Illgill Head",
     "classification": "Ma,Sim,Dew,W,B,Sy,Fel",
@@ -2808,7 +2808,7 @@
     "priority": false,
     "prominenceFt": 1030,
     "prominenceM": 314,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89",
     "x": 316800,
     "y": 504900,
@@ -2816,11 +2816,11 @@
     "longitude": -3.2841111
   },
   {
-    "id": "high-seat",
+    "id": "129",
     "heightRank": 129,
     "name": "High Seat",
     "classification": "Hu,Sim,Dew,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1995,
     "heightM": 608,
@@ -2830,7 +2830,7 @@
     "priority": false,
     "prominenceFt": 446,
     "prominenceM": 136,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 328700,
     "y": 518000,
@@ -2838,7 +2838,7 @@
     "longitude": -3.1038704
   },
   {
-    "id": "seathwaite-fell",
+    "id": "130",
     "heightRank": 130,
     "name": "Seathwaite Fell",
     "classification": "W,B,Sy,Fel",
@@ -2852,7 +2852,7 @@
     "priority": false,
     "prominenceFt": 39,
     "prominenceM": 12,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 322900,
     "y": 510100,
@@ -2860,7 +2860,7 @@
     "longitude": -3.191454
   },
   {
-    "id": "haystacks",
+    "id": "131",
     "heightRank": 131,
     "name": "Haystacks",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -2871,10 +2871,10 @@
     "url": "https://en.wikipedia.org/wiki/Haystacks_(Lake_District)",
     "osGridReference": "NY1930013100",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 256,
     "prominenceM": 78,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89 90",
     "x": 319300,
     "y": 513100,
@@ -2882,21 +2882,21 @@
     "longitude": -3.2478223
   },
   {
-    "id": "bleaberry-fell",
+    "id": "132",
     "heightRank": 132,
     "name": "Bleaberry Fell",
     "classification": "5,Dew,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1936,
     "heightM": 590,
     "url": "https://en.wikipedia.org/wiki/Bleaberry_Fell",
     "osGridReference": "NY2850019500",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 138,
     "prominenceM": 42,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 328500,
     "y": 519500,
@@ -2904,7 +2904,7 @@
     "longitude": -3.1073271
   },
   {
-    "id": "shipman-knotts",
+    "id": "133",
     "heightRank": 133,
     "name": "Shipman Knotts",
     "classification": "W,B,Sy,Fel",
@@ -2918,7 +2918,7 @@
     "priority": false,
     "prominenceFt": 36,
     "prominenceM": 11,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 347200,
     "y": 506200,
@@ -2926,7 +2926,7 @@
     "longitude": -2.8157677
   },
   {
-    "id": "brae-fell",
+    "id": "134",
     "heightRank": 134,
     "name": "Brae Fell",
     "classification": "W,B,Sy,Fel",
@@ -2948,7 +2948,7 @@
     "longitude": -3.1064885
   },
   {
-    "id": "middle-fell",
+    "id": "135",
     "heightRank": 135,
     "name": "Middle Fell",
     "classification": "Hu,5,Dew,W,B,Sy,Fel",
@@ -2962,7 +2962,7 @@
     "priority": false,
     "prominenceFt": 384,
     "prominenceM": 117,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 315000,
     "y": 507200,
@@ -2970,7 +2970,7 @@
     "longitude": -3.3125125
   },
   {
-    "id": "ard-crags",
+    "id": "136",
     "heightRank": 136,
     "name": "Ard Crags",
     "classification": "Hu,5,Dew,W,B,Sy,Fel",
@@ -2984,7 +2984,7 @@
     "priority": false,
     "prominenceFt": 381,
     "prominenceM": 116,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 320600,
     "y": 519700,
@@ -2992,7 +2992,7 @@
     "longitude": -3.2295323
   },
   {
-    "id": "hartsop-above-how",
+    "id": "137",
     "heightRank": 137,
     "name": "Hartsop Above How",
     "classification": "s5,W,B,Sy,Fel",
@@ -3014,7 +3014,7 @@
     "longitude": -2.9542127
   },
   {
-    "id": "the-nab",
+    "id": "138",
     "heightRank": 138,
     "name": "The Nab",
     "classification": "5,Dew,W,B,Sy",
@@ -3028,7 +3028,7 @@
     "priority": false,
     "prominenceFt": 200,
     "prominenceM": 61,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343400,
     "y": 515100,
@@ -3036,7 +3036,7 @@
     "longitude": -2.876071
   },
   {
-    "id": "maiden-moor",
+    "id": "139",
     "heightRank": 139,
     "name": "Maiden Moor",
     "classification": "W,B,Sy,Fel",
@@ -3050,7 +3050,7 @@
     "priority": false,
     "prominenceFt": 33,
     "prominenceM": 10,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 323600,
     "y": 518100,
@@ -3058,11 +3058,11 @@
     "longitude": -3.1827286
   },
   {
-    "id": "blake-fell",
+    "id": "140",
     "heightRank": 140,
     "name": "Blake Fell",
     "classification": "Ma,5,Dew,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1880,
     "heightM": 573,
@@ -3072,7 +3072,7 @@
     "priority": false,
     "prominenceFt": 538,
     "prominenceM": 164,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 311000,
     "y": 519600,
@@ -3080,21 +3080,21 @@
     "longitude": -3.3779327
   },
   {
-    "id": "sergeant27s-crag",
+    "id": "141",
     "heightRank": 141,
-    "name": "Sergeant%27s Crag",
+    "name": "Sergeant's Crag",
     "classification": "5,Dew,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1873,
     "heightM": 571,
-    "url": "https://en.wikipedia.org/wiki/Sergeant%27s_Crag",
+    "url": "https://en.wikipedia.org/wiki/Sergeant's_Crag",
     "osGridReference": "NY2730011300",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 148,
     "prominenceM": 45,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327300,
     "y": 511300,
@@ -3102,7 +3102,7 @@
     "longitude": -3.1238561
   },
   {
-    "id": "outerside",
+    "id": "142",
     "heightRank": 142,
     "name": "Outerside",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3116,7 +3116,7 @@
     "priority": false,
     "prominenceFt": 243,
     "prominenceM": 74,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 321100,
     "y": 521400,
@@ -3124,21 +3124,21 @@
     "longitude": -3.2222582
   },
   {
-    "id": "angletarn-pikesn",
+    "id": "143",
     "heightRank": 143,
-    "name": "Angletarn Pikes�N",
+    "name": "Angletarn Pikes",
     "classification": "5,Dew,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1860,
     "heightM": 567,
-    "url": "https://en.wikipedia.org/wiki/Angletarn_Pikes�N",
+    "url": "https://en.wikipedia.org/wiki/Angletarn_PikesÊN",
     "osGridReference": "NY4130014800",
     "planned": false,
     "priority": false,
     "prominenceFt": 256,
     "prominenceM": 78,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 341300,
     "y": 514800,
@@ -3146,7 +3146,7 @@
     "longitude": -2.908455
   },
   {
-    "id": "brock-crags",
+    "id": "144",
     "heightRank": 144,
     "name": "Brock Crags",
     "classification": "s5,W,B,Sy,Fel",
@@ -3160,7 +3160,7 @@
     "priority": false,
     "prominenceFt": 79,
     "prominenceM": 24,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 341600,
     "y": 513600,
@@ -3168,7 +3168,7 @@
     "longitude": -2.9035823
   },
   {
-    "id": "knott-rigg",
+    "id": "145",
     "heightRank": 145,
     "name": "Knott Rigg",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3179,10 +3179,10 @@
     "url": "https://en.wikipedia.org/wiki/Knott_Rigg",
     "osGridReference": "NY1970018800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 174,
     "prominenceM": 53,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319700,
     "y": 518800,
@@ -3190,21 +3190,21 @@
     "longitude": -3.2432022
   },
   {
-    "id": "steel-felldead-pike",
+    "id": "146",
     "heightRank": 146,
-    "name": "Steel Fell�[Dead Pike]",
+    "name": "Steel Fell [Dead Pike]",
     "classification": "5,Dew,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1814,
     "heightM": 553,
-    "url": "https://en.wikipedia.org/wiki/Steel_Fell�[Dead Pike]",
+    "url": "https://en.wikipedia.org/wiki/Steel_FellÊ[Dead Pike]",
     "osGridReference": "NY3190011100",
     "planned": false,
     "priority": false,
     "prominenceFt": 262,
     "prominenceM": 80,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 331900,
     "y": 511100,
@@ -3212,21 +3212,21 @@
     "longitude": -3.0528087
   },
   {
-    "id": "lord27s-seat",
+    "id": "147",
     "heightRank": 147,
-    "name": "Lord%27s Seat",
+    "name": "Lord's Seat",
     "classification": "Ma,5,Dew,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1811,
     "heightM": 552,
-    "url": "https://en.wikipedia.org/wiki/Lord%27s_Seat",
+    "url": "https://en.wikipedia.org/wiki/Lord's_Seat",
     "osGridReference": "NY2040026500",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 778,
     "prominenceM": 237,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 320400,
     "y": 526500,
@@ -3234,7 +3234,7 @@
     "longitude": -3.2344719
   },
   {
-    "id": "rosthwaite-fell",
+    "id": "148",
     "heightRank": 148,
     "name": "Rosthwaite Fell",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3248,7 +3248,7 @@
     "priority": false,
     "prominenceFt": 148,
     "prominenceM": 45,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 325800,
     "y": 512400,
@@ -3256,7 +3256,7 @@
     "longitude": -3.1472849
   },
   {
-    "id": "meal-fell",
+    "id": "149",
     "heightRank": 149,
     "name": "Meal Fell",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3278,7 +3278,7 @@
     "longitude": -3.1139017
   },
   {
-    "id": "tarn-crag-easedale",
+    "id": "150",
     "heightRank": 150,
     "name": "Tarn Crag (Easedale)",
     "classification": "W,B,Sy,Fel",
@@ -3292,7 +3292,7 @@
     "priority": false,
     "prominenceFt": 13,
     "prominenceM": 4,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 330300,
     "y": 509300,
@@ -3300,7 +3300,7 @@
     "longitude": -3.0770787
   },
   {
-    "id": "hard-knott",
+    "id": "151",
     "heightRank": 151,
     "name": "Hard Knott",
     "classification": "Ma,5,Dew,W,B,Sy,Fel",
@@ -3311,10 +3311,10 @@
     "url": "https://en.wikipedia.org/wiki/Hard_Knott",
     "osGridReference": "NY2310002300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 505,
     "prominenceM": 154,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89 90",
     "x": 323100,
     "y": 502300,
@@ -3322,7 +3322,7 @@
     "longitude": -3.1863399
   },
   {
-    "id": "blea-rigg",
+    "id": "152",
     "heightRank": 152,
     "name": "Blea Rigg",
     "classification": "W,B,Sy,Fel",
@@ -3333,10 +3333,10 @@
     "url": "https://en.wikipedia.org/wiki/Blea_Rigg",
     "osGridReference": "NY3010007800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 36,
     "prominenceM": 11,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 330100,
     "y": 507800,
@@ -3344,7 +3344,7 @@
     "longitude": -3.0798094
   },
   {
-    "id": "lank-rigg",
+    "id": "153",
     "heightRank": 153,
     "name": "Lank Rigg",
     "classification": "Hu,5,Dew,W,B,Sy,Fel",
@@ -3358,7 +3358,7 @@
     "priority": false,
     "prominenceFt": 364,
     "prominenceM": 111,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 309100,
     "y": 511900,
@@ -3366,7 +3366,7 @@
     "longitude": -3.404929
   },
   {
-    "id": "calf-crag",
+    "id": "154",
     "heightRank": 154,
     "name": "Calf Crag",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3380,7 +3380,7 @@
     "priority": false,
     "prominenceFt": 164,
     "prominenceM": 50,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 330100,
     "y": 510400,
@@ -3388,7 +3388,7 @@
     "longitude": -3.080425
   },
   {
-    "id": "whin-rigg",
+    "id": "155",
     "heightRank": 155,
     "name": "Whin Rigg",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3402,7 +3402,7 @@
     "priority": false,
     "prominenceFt": 200,
     "prominenceM": 61,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "89",
     "x": 315100,
     "y": 503500,
@@ -3410,7 +3410,7 @@
     "longitude": -3.3099092
   },
   {
-    "id": "great-mell-fell",
+    "id": "156",
     "heightRank": 156,
     "name": "Great Mell Fell",
     "classification": "Ma,5,Dew,W,B,Sy,Fel",
@@ -3432,21 +3432,21 @@
     "longitude": -2.936879
   },
   {
-    "id": "arthur27s-pike",
+    "id": "157",
     "heightRank": 157,
-    "name": "Arthur%27s Pike",
+    "name": "Arthur's Pike",
     "classification": "W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1749,
     "heightM": 533,
-    "url": "https://en.wikipedia.org/wiki/Arthur%27s_Pike",
+    "url": "https://en.wikipedia.org/wiki/Arthur's_Pike",
     "osGridReference": "NY4600020600",
     "planned": false,
     "priority": false,
     "prominenceFt": 13,
     "prominenceM": 4,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 346000,
     "y": 520600,
@@ -3454,7 +3454,7 @@
     "longitude": -2.8369133
   },
   {
-    "id": "great-cockup",
+    "id": "158",
     "heightRank": 158,
     "name": "Great Cockup",
     "classification": "5,Dew,sHu,W,B,Sy,Fel",
@@ -3465,7 +3465,7 @@
     "url": "https://en.wikipedia.org/wiki/Great_Cockup",
     "osGridReference": "NY2730033300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 295,
     "prominenceM": 90,
     "section": "Northern Fells",
@@ -3476,11 +3476,11 @@
     "longitude": -3.129313
   },
   {
-    "id": "gavel-fell",
+    "id": "159",
     "heightRank": 159,
     "name": "Gavel Fell",
     "classification": "5,Dew,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1726,
     "heightM": 526,
@@ -3490,7 +3490,7 @@
     "priority": false,
     "prominenceFt": 246,
     "prominenceM": 75,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 311600,
     "y": 518300,
@@ -3498,7 +3498,7 @@
     "longitude": -3.3682652
   },
   {
-    "id": "eagle-crag",
+    "id": "160",
     "heightRank": 160,
     "name": "Eagle Crag",
     "classification": "s5,W,B,Sy,Fel",
@@ -3508,11 +3508,11 @@
     "heightM": 525,
     "url": "https://en.wikipedia.org/wiki/Eagle_Crag",
     "osGridReference": "NY2750012100",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 89,
     "prominenceM": 27,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327500,
     "y": 512100,
@@ -3520,7 +3520,7 @@
     "longitude": -3.1209659
   },
   {
-    "id": "bonscale-pike",
+    "id": "161",
     "heightRank": 161,
     "name": "Bonscale Pike",
     "classification": "W,B,Sy,Fel",
@@ -3534,7 +3534,7 @@
     "priority": false,
     "prominenceFt": 3,
     "prominenceM": 1,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 345300,
     "y": 520000,
@@ -3542,7 +3542,7 @@
     "longitude": -2.8476293
   },
   {
-    "id": "crag-fell",
+    "id": "162",
     "heightRank": 162,
     "name": "Crag Fell",
     "classification": "Hu,5,Dew,W,B,Sy,Fel",
@@ -3556,7 +3556,7 @@
     "priority": false,
     "prominenceFt": 374,
     "prominenceM": 114,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 309700,
     "y": 514300,
@@ -3564,7 +3564,7 @@
     "longitude": -3.3964038
   },
   {
-    "id": "souther-fell",
+    "id": "163",
     "heightRank": 163,
     "name": "Souther Fell",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3586,7 +3586,7 @@
     "longitude": -3.0027501
   },
   {
-    "id": "high-hartsop-dodd",
+    "id": "164",
     "heightRank": 164,
     "name": "High Hartsop Dodd",
     "classification": "W,B,Sy,Fel",
@@ -3597,7 +3597,7 @@
     "url": "https://en.wikipedia.org/wiki/High_Hartsop_Dodd",
     "osGridReference": "NY3930010700",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 10,
     "prominenceM": 3,
     "section": "Eastern Fells",
@@ -3608,21 +3608,21 @@
     "longitude": -2.9385064
   },
   {
-    "id": "whinlatterbrown-how",
+    "id": "165",
     "heightRank": 165,
-    "name": "Whinlatter�[Brown How]",
+    "name": "Whinlatter",
     "classification": "W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1696,
     "heightM": 517,
-    "url": "https://en.wikipedia.org/wiki/Whinlatter�[Brown How]",
+    "url": "https://en.wikipedia.org/wiki/WhinlatterÊ[Brown How]",
     "osGridReference": "NY1910025100",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 52,
     "prominenceM": 16,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319100,
     "y": 525100,
@@ -3630,7 +3630,7 @@
     "longitude": -3.2542157
   },
   {
-    "id": "sallows",
+    "id": "166",
     "heightRank": 166,
     "name": "Sallows",
     "classification": "5,Dew,W,B,Sy,Fel",
@@ -3644,7 +3644,7 @@
     "priority": false,
     "prominenceFt": 226,
     "prominenceM": 69,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343600,
     "y": 503900,
@@ -3652,7 +3652,7 @@
     "longitude": -2.8708398
   },
   {
-    "id": "high-tove",
+    "id": "167",
     "heightRank": 167,
     "name": "High Tove",
     "classification": "W,B,Sy,Fel",
@@ -3662,11 +3662,11 @@
     "heightM": 515,
     "url": "https://en.wikipedia.org/wiki/High_Tove",
     "osGridReference": "NY2890016500",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 52,
     "prominenceM": 16,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 328900,
     "y": 516500,
@@ -3674,7 +3674,7 @@
     "longitude": -3.100416
   },
   {
-    "id": "mellbreak",
+    "id": "168",
     "heightRank": 168,
     "name": "Mellbreak",
     "classification": "Ma,5,Dew,W,B,Sy,Fel",
@@ -3685,10 +3685,10 @@
     "url": "https://en.wikipedia.org/wiki/Mellbreak",
     "osGridReference": "NY1480018600",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 853,
     "prominenceM": 260,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 314800,
     "y": 518600,
@@ -3696,11 +3696,11 @@
     "longitude": -3.3188918
   },
   {
-    "id": "broom-fell",
+    "id": "169",
     "heightRank": 169,
     "name": "Broom Fell",
     "classification": "s5,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1677,
     "heightM": 511,
@@ -3710,7 +3710,7 @@
     "priority": false,
     "prominenceFt": 89,
     "prominenceM": 27,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319400,
     "y": 527100,
@@ -3718,11 +3718,11 @@
     "longitude": -3.2501226
   },
   {
-    "id": "hen-comb",
+    "id": "170",
     "heightRank": 170,
     "name": "Hen Comb",
     "classification": "Hu,5,Dew,sMa,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1670,
     "heightM": 509,
@@ -3732,7 +3732,7 @@
     "priority": false,
     "prominenceFt": 459,
     "prominenceM": 140,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 313200,
     "y": 518100,
@@ -3740,21 +3740,21 @@
     "longitude": -3.3434762
   },
   {
-    "id": "beda-fellbeda-head",
+    "id": "171",
     "heightRank": 171,
-    "name": "Beda Fell�[Beda Head]",
+    "name": "Beda Fell [Beda Head]",
     "classification": "5,Dew,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1670,
     "heightM": 509,
-    "url": "https://en.wikipedia.org/wiki/Beda_Fell�[Beda Head]",
+    "url": "https://en.wikipedia.org/wiki/Beda_FellÊ[Beda Head]",
     "osGridReference": "NY4280017100",
     "planned": false,
     "priority": false,
     "prominenceFt": 200,
     "prominenceM": 61,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 342800,
     "y": 517100,
@@ -3762,7 +3762,7 @@
     "longitude": -2.8857299
   },
   {
-    "id": "low-pike",
+    "id": "172",
     "heightRank": 172,
     "name": "Low Pike",
     "classification": "W,B,Sy,Fel",
@@ -3784,7 +3784,7 @@
     "longitude": -2.9687584
   },
   {
-    "id": "little-mell-fell",
+    "id": "173",
     "heightRank": 173,
     "name": "Little Mell Fell",
     "classification": "Ma,5,Dew,W,B,Sy,Fel",
@@ -3806,7 +3806,7 @@
     "longitude": -2.8948158
   },
   {
-    "id": "stone-arthur",
+    "id": "174",
     "heightRank": 174,
     "name": "Stone Arthur",
     "classification": "W,B,Sy,Fel",
@@ -3828,18 +3828,18 @@
     "longitude": -3.0091705
   },
   {
-    "id": "dodd-skiddaw",
+    "id": "175",
     "heightRank": 175,
-    "name": "Dodd (Skiddaw)",
+    "name": "Dodd",
     "classification": "Hu,5,Dew,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1647,
     "heightM": 502,
     "url": "https://en.wikipedia.org/wiki/Dodd_(Skiddaw)",
     "osGridReference": "NY2440027300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 361,
     "prominenceM": 110,
     "section": "Northern Fells",
@@ -3850,7 +3850,7 @@
     "longitude": -3.172736
   },
   {
-    "id": "green-crag",
+    "id": "176",
     "heightRank": 176,
     "name": "Green Crag",
     "classification": "Hu,4,sMa,W,B,Sy,Fel",
@@ -3872,11 +3872,11 @@
     "longitude": -3.2329856
   },
   {
-    "id": "grike",
+    "id": "177",
     "heightRank": 177,
     "name": "Grike",
     "classification": "4,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1601,
     "heightM": 488,
@@ -3886,7 +3886,7 @@
     "priority": false,
     "prominenceFt": 121,
     "prominenceM": 37,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 308400,
     "y": 514000,
@@ -3894,21 +3894,21 @@
     "longitude": -3.4163853
   },
   {
-    "id": "baystoneswansfell",
+    "id": "178",
     "heightRank": 178,
-    "name": "Baystones�[Wansfell]",
+    "name": "Baystones [Wansfell]",
     "classification": "Hu,4,sMa,W,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1597,
     "heightM": 487,
-    "url": "https://en.wikipedia.org/wiki/Baystones�[Wansfell]",
+    "url": "https://en.wikipedia.org/wiki/BaystonesÊ[Wansfell]",
     "osGridReference": "NY4030005100",
     "planned": false,
     "priority": false,
     "prominenceFt": 485,
     "prominenceM": 148,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 340300,
     "y": 505100,
@@ -3916,11 +3916,11 @@
     "longitude": -2.92194
   },
   {
-    "id": "longlands-fell",
+    "id": "179",
     "heightRank": 179,
     "name": "Longlands Fell",
     "classification": "4,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1585,
     "heightM": 483,
@@ -3938,7 +3938,7 @@
     "longitude": -3.126734
   },
   {
-    "id": "sour-howes",
+    "id": "180",
     "heightRank": 180,
     "name": "Sour Howes",
     "classification": "4,W,B,Sy",
@@ -3952,7 +3952,7 @@
     "priority": false,
     "prominenceFt": 115,
     "prominenceM": 35,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 342700,
     "y": 503200,
@@ -3960,7 +3960,7 @@
     "longitude": -2.8845747
   },
   {
-    "id": "gowbarrow-fell",
+    "id": "181",
     "heightRank": 181,
     "name": "Gowbarrow Fell",
     "classification": "W,B,Sy,Fel",
@@ -3971,7 +3971,7 @@
     "url": "https://en.wikipedia.org/wiki/Gowbarrow_Fell",
     "osGridReference": "NY4070021800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 30,
     "prominenceM": 9,
     "section": "Eastern Fells",
@@ -3982,7 +3982,7 @@
     "longitude": -2.9191377
   },
   {
-    "id": "burnbank-fell",
+    "id": "182",
     "heightRank": 182,
     "name": "Burnbank Fell",
     "classification": "W,B,Sy",
@@ -3996,7 +3996,7 @@
     "priority": false,
     "prominenceFt": 72,
     "prominenceM": 22,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 311000,
     "y": 520900,
@@ -4004,7 +4004,7 @@
     "longitude": -3.3783268
   },
   {
-    "id": "armboth-fell",
+    "id": "183",
     "heightRank": 183,
     "name": "Armboth Fell",
     "classification": "W",
@@ -4014,11 +4014,11 @@
     "heightM": 475,
     "url": "https://en.wikipedia.org/wiki/Armboth_Fell",
     "osGridReference": "NY2950015700",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 25,
     "prominenceM": 8,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 329500,
     "y": 515700,
@@ -4026,7 +4026,7 @@
     "longitude": -3.0909526
   },
   {
-    "id": "lingmoor-fell",
+    "id": "184",
     "heightRank": 184,
     "name": "Lingmoor Fell",
     "classification": "Ma,4,W,B,Sy,Fel",
@@ -4040,7 +4040,7 @@
     "priority": false,
     "prominenceFt": 814,
     "prominenceM": 248,
-    "section": "Central & Western Fells",
+    "section": "Southern Fells",
     "topoMap": "90",
     "x": 330200,
     "y": 504600,
@@ -4048,11 +4048,11 @@
     "longitude": -3.0775116
   },
   {
-    "id": "barf",
+    "id": "185",
     "heightRank": 185,
     "name": "Barf",
     "classification": "4,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1539,
     "heightM": 469,
@@ -4062,7 +4062,7 @@
     "priority": false,
     "prominenceFt": 125,
     "prominenceM": 38,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 321400,
     "y": 526700,
@@ -4070,7 +4070,7 @@
     "longitude": -3.2190402
   },
   {
-    "id": "raven-crag",
+    "id": "186",
     "heightRank": 186,
     "name": "Raven Crag",
     "classification": "4,W,B,Sy,Fel",
@@ -4080,11 +4080,11 @@
     "heightM": 461,
     "url": "https://en.wikipedia.org/wiki/Raven_Crag",
     "osGridReference": "NY3030018700",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 144,
     "prominenceM": 44,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 330300,
     "y": 518700,
@@ -4092,7 +4092,7 @@
     "longitude": -3.0793041
   },
   {
-    "id": "barrow",
+    "id": "187",
     "heightRank": 187,
     "name": "Barrow",
     "classification": "4,W,B,Sy,Fel",
@@ -4106,7 +4106,7 @@
     "priority": false,
     "prominenceFt": 233,
     "prominenceM": 71,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 322700,
     "y": 521800,
@@ -4114,21 +4114,21 @@
     "longitude": -3.1976145
   },
   {
-    "id": "graystones",
+    "id": "188",
     "heightRank": 188,
     "name": "Graystones",
     "classification": "W",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1483,
     "heightM": 452,
     "url": "https://en.wikipedia.org/wiki/Graystones",
     "osGridReference": "NY1760026600",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 31,
     "prominenceM": 9,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 317600,
     "y": 526600,
@@ -4136,21 +4136,21 @@
     "longitude": -3.2778586
   },
   {
-    "id": "catbells",
+    "id": "189",
     "heightRank": 189,
     "name": "Catbells",
     "classification": "4,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1480,
     "heightM": 451,
     "url": "https://en.wikipedia.org/wiki/Catbells",
     "osGridReference": "NY2440019800",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 285,
     "prominenceM": 87,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 324400,
     "y": 519800,
@@ -4158,7 +4158,7 @@
     "longitude": -3.1708004
   },
   {
-    "id": "nab-scar",
+    "id": "190",
     "heightRank": 190,
     "name": "Nab Scar",
     "classification": "W,B,Sy,Fel",
@@ -4180,7 +4180,7 @@
     "longitude": -2.9963908
   },
   {
-    "id": "great-crag",
+    "id": "191",
     "heightRank": 191,
     "name": "Great Crag",
     "classification": "4,W,B,Sy,Fel",
@@ -4190,11 +4190,11 @@
     "heightM": 449,
     "url": "https://en.wikipedia.org/wiki/Great_Crag",
     "osGridReference": "NY2700014600",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 105,
     "prominenceM": 32,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327000,
     "y": 514600,
@@ -4202,9 +4202,9 @@
     "longitude": -3.1293042
   },
   {
-    "id": "binsey-cumbria",
+    "id": "192",
     "heightRank": 192,
-    "name": "Binsey, Cumbria",
+    "name": "Binsey",
     "classification": "Ma,4,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
@@ -4224,7 +4224,7 @@
     "longitude": -3.2043431
   },
   {
-    "id": "glenridding-dodd",
+    "id": "193",
     "heightRank": 193,
     "name": "Glenridding Dodd",
     "classification": "4,W,B,Sy,Fel",
@@ -4235,7 +4235,7 @@
     "url": "https://en.wikipedia.org/wiki/Glenridding_Dodd",
     "osGridReference": "NY3800017500",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 148,
     "prominenceM": 45,
     "section": "Eastern Fells",
@@ -4246,7 +4246,7 @@
     "longitude": -2.9600032
   },
   {
-    "id": "arnison-crag",
+    "id": "194",
     "heightRank": 194,
     "name": "Arnison Crag",
     "classification": "4,W,B,Sy,Fel",
@@ -4268,7 +4268,7 @@
     "longitude": -2.939372
   },
   {
-    "id": "steel-knotts",
+    "id": "195",
     "heightRank": 195,
     "name": "Steel Knotts",
     "classification": "4,W,B,Sy,Fel",
@@ -4282,7 +4282,7 @@
     "priority": false,
     "prominenceFt": 167,
     "prominenceM": 51,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 344000,
     "y": 518100,
@@ -4290,7 +4290,7 @@
     "longitude": -2.867373
   },
   {
-    "id": "low-fell",
+    "id": "196",
     "heightRank": 196,
     "name": "Low Fell",
     "classification": "Ma,4,W,B,Sy,Fel",
@@ -4304,7 +4304,7 @@
     "priority": false,
     "prominenceFt": 873,
     "prominenceM": 266,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 313700,
     "y": 522600,
@@ -4312,7 +4312,7 @@
     "longitude": -3.3370713
   },
   {
-    "id": "buckbarrow",
+    "id": "197",
     "heightRank": 197,
     "name": "Buckbarrow",
     "classification": "W,B,Sy,Fel",
@@ -4323,10 +4323,10 @@
     "url": "https://en.wikipedia.org/wiki/Buckbarrow",
     "osGridReference": "NY1350006100",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 13,
     "prominenceM": 4,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 313500,
     "y": 506100,
@@ -4334,7 +4334,7 @@
     "longitude": -3.3353193
   },
   {
-    "id": "gibson-knott",
+    "id": "198",
     "heightRank": 198,
     "name": "Gibson Knott",
     "classification": "W,B,Sy,Fel",
@@ -4348,7 +4348,7 @@
     "priority": false,
     "prominenceFt": 33,
     "prominenceM": 10,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 331600,
     "y": 510000,
@@ -4356,7 +4356,7 @@
     "longitude": -3.057184
   },
   {
-    "id": "fellbarrow",
+    "id": "199",
     "heightRank": 199,
     "name": "Fellbarrow",
     "classification": "4,W,B,Sy,Fel",
@@ -4370,7 +4370,7 @@
     "priority": false,
     "prominenceFt": 169,
     "prominenceM": 52,
-    "section": "Central & Western Fells",
+    "section": "Western Fells",
     "topoMap": "89",
     "x": 313200,
     "y": 524200,
@@ -4378,21 +4378,21 @@
     "longitude": -3.3452808
   },
   {
-    "id": "grange-fellbrund-fell",
+    "id": "200",
     "heightRank": 200,
-    "name": "Grange Fell�[Brund Fell]",
+    "name": "Grange Fell [Brund Fell]",
     "classification": "4,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1365,
     "heightM": 416,
-    "url": "https://en.wikipedia.org/wiki/Grange_Fell�[Brund Fell]",
+    "url": "https://en.wikipedia.org/wiki/Grange_FellÊ[Brund Fell]",
     "osGridReference": "NY2640016200",
-    "planned": true,
+    "planned": false,
     "priority": false,
     "prominenceFt": 125,
     "prominenceM": 38,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 326400,
     "y": 516200,
@@ -4400,7 +4400,7 @@
     "longitude": -3.1389719
   },
   {
-    "id": "helm-crag",
+    "id": "201",
     "heightRank": 201,
     "name": "Helm Crag",
     "classification": "4,W,B,Sy,Fel",
@@ -4411,10 +4411,10 @@
     "url": "https://en.wikipedia.org/wiki/Helm_Crag",
     "osGridReference": "NY3260009300",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 230,
     "prominenceM": 70,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 332600,
     "y": 509300,
@@ -4422,7 +4422,7 @@
     "longitude": -3.0415931
   },
   {
-    "id": "silver-how",
+    "id": "202",
     "heightRank": 202,
     "name": "Silver How",
     "classification": "3,W,B,Sy,Fel",
@@ -4436,7 +4436,7 @@
     "priority": false,
     "prominenceFt": 102,
     "prominenceM": 31,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 332400,
     "y": 506600,
@@ -4444,7 +4444,7 @@
     "longitude": -3.0440609
   },
   {
-    "id": "hallin-fell",
+    "id": "203",
     "heightRank": 203,
     "name": "Hallin Fell",
     "classification": "Ma,3,W,B,Sy,Fel",
@@ -4458,7 +4458,7 @@
     "priority": false,
     "prominenceFt": 535,
     "prominenceM": 163,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 343300,
     "y": 519800,
@@ -4466,11 +4466,11 @@
     "longitude": -2.8785233
   },
   {
-    "id": "walla-crag",
+    "id": "204",
     "heightRank": 204,
     "name": "Walla Crag",
     "classification": "W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1243,
     "heightM": 379,
@@ -4480,7 +4480,7 @@
     "priority": false,
     "prominenceFt": 79,
     "prominenceM": 24,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "89 90",
     "x": 327600,
     "y": 521200,
@@ -4488,11 +4488,11 @@
     "longitude": -3.121663
   },
   {
-    "id": "ling-fell",
+    "id": "205",
     "heightRank": 205,
     "name": "Ling Fell",
     "classification": "3,sHu,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1224,
     "heightM": 373,
@@ -4502,7 +4502,7 @@
     "priority": false,
     "prominenceFt": 318,
     "prominenceM": 97,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 317900,
     "y": 528500,
@@ -4510,11 +4510,11 @@
     "longitude": -3.2737466
   },
   {
-    "id": "latrigg",
+    "id": "206",
     "heightRank": 206,
     "name": "Latrigg",
     "classification": "3,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1207,
     "heightM": 368,
@@ -4532,7 +4532,7 @@
     "longitude": -3.1178838
   },
   {
-    "id": "troutbeck-tongue",
+    "id": "207",
     "heightRank": 207,
     "name": "Troutbeck Tongue",
     "classification": "3,W,B,Sy,Fel",
@@ -4543,10 +4543,10 @@
     "url": "https://en.wikipedia.org/wiki/Troutbeck_Tongue",
     "osGridReference": "NY4220006400",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 240,
     "prominenceM": 73,
-    "section": "Eastern Fells",
+    "section": "Far Eastern Fells",
     "topoMap": "90",
     "x": 342200,
     "y": 506400,
@@ -4554,11 +4554,11 @@
     "longitude": -2.8929047
   },
   {
-    "id": "sale-fell",
+    "id": "208",
     "heightRank": 208,
     "name": "Sale Fell",
     "classification": "Hu,3,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1178,
     "heightM": 359,
@@ -4568,7 +4568,7 @@
     "priority": false,
     "prominenceFt": 449,
     "prominenceM": 137,
-    "section": "Northern Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 319400,
     "y": 529600,
@@ -4576,21 +4576,21 @@
     "longitude": -3.2508122
   },
   {
-    "id": "high-riggnaddle-fell",
+    "id": "209",
     "heightRank": 209,
-    "name": "High Rigg�[Naddle Fell]",
+    "name": "High Rigg",
     "classification": "Ma,3,W,B,Sy,Fel",
     "completed": false,
     "completedDate": null,
     "heightFt": 1171,
     "heightM": 357,
-    "url": "https://en.wikipedia.org/wiki/High_Rigg�[Naddle Fell]",
+    "url": "https://en.wikipedia.org/wiki/High_RiggÊ[Naddle Fell]",
     "osGridReference": "NY3080021900",
     "planned": false,
     "priority": false,
     "prominenceFt": 620,
     "prominenceM": 189,
-    "section": "Eastern Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 330800,
     "y": 521900,
@@ -4598,21 +4598,21 @@
     "longitude": -3.0723287
   },
   {
-    "id": "rannerdale-knotts",
+    "id": "210",
     "heightRank": 210,
     "name": "Rannerdale Knotts",
     "classification": "3,W,B,Sy,Fel",
-    "completed": true,
+    "completed": false,
     "completedDate": null,
     "heightFt": 1165,
     "heightM": 355,
     "url": "https://en.wikipedia.org/wiki/Rannerdale_Knotts",
     "osGridReference": "NY1670018200",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 217,
     "prominenceM": 66,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89",
     "x": 316700,
     "y": 518200,
@@ -4620,7 +4620,7 @@
     "longitude": -3.2894086
   },
   {
-    "id": "loughrigg-fell",
+    "id": "211",
     "heightRank": 211,
     "name": "Loughrigg Fell",
     "classification": "Ma,3,W,B,Sy,Fel",
@@ -4634,7 +4634,7 @@
     "priority": false,
     "prominenceFt": 564,
     "prominenceM": 172,
-    "section": "Central & Western Fells",
+    "section": "Central Fells",
     "topoMap": "90",
     "x": 334600,
     "y": 505100,
@@ -4642,7 +4642,7 @@
     "longitude": -3.0098059
   },
   {
-    "id": "black-fell",
+    "id": "212",
     "heightRank": 212,
     "name": "Black Fell",
     "classification": "Hu,3,W,B,Sy,Fel",
@@ -4664,7 +4664,7 @@
     "longitude": -3.0182523
   },
   {
-    "id": "holme-fell",
+    "id": "213",
     "heightRank": 213,
     "name": "Holme Fell",
     "classification": "Ma,3,W,B,Sy,Fel",
@@ -4686,7 +4686,7 @@
     "longitude": -3.0565504
   },
   {
-    "id": "castle-crag",
+    "id": "214",
     "heightRank": 214,
     "name": "Castle Crag",
     "classification": "2,W,Sy,Fel",
@@ -4697,10 +4697,10 @@
     "url": "https://en.wikipedia.org/wiki/Castle_Crag",
     "osGridReference": "NY2490015900",
     "planned": false,
-    "priority": true,
+    "priority": false,
     "prominenceFt": 246,
     "prominenceM": 75,
-    "section": "Central & Western Fells",
+    "section": "North Western Fells",
     "topoMap": "89 90",
     "x": 324900,
     "y": 515900,

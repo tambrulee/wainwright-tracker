@@ -137,8 +137,6 @@ export default function MapView({
               <p className="text-2xl font-black">{savedRoutesCount}</p>
               <p className="text-xs text-emerald-200">routes</p>
             </div>
-
-            
           </div>
 
           <div>
@@ -161,49 +159,78 @@ export default function MapView({
             </div>
 
             <div className="grid gap-3 md:grid-cols-4">
-              <input
-                value={search}
-                onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Haystacks, Catbells..."
-                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-              />
+              
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wide text-stone-500">
+                  Search
+                </label>
 
-              <select
-                value={section}
-                onChange={(e) => onSectionChange(e.target.value)}
-                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-              >
-                {sections.map((sectionName) => (
-                  <option key={sectionName} value={sectionName}>
-                    {sectionName}
-                  </option>
-                ))}
-              </select>
+                <input
+                  value={search}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  placeholder="e.g. Haystacks, Helvellyn..."
+                  className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                />
+              </div>
 
-              <select
-                value={statusFilter}
-                onChange={(e) =>
-                  onStatusFilterChange(e.target.value as StatusFilter)
-                }
-                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-              >
-                <option>All</option>
-                <option>Not completed</option>
-                <option>Completed</option>
-                <option>Planned</option>
-                <option>Priority</option>
-              </select>
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wide text-stone-500">
+                  Fell region
+                </label>
 
-              <select
-                value={sortBy}
-                onChange={(e) => onSortByChange(e.target.value as SortOption)}
-                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-              >
-                <option value="name">Name A-Z</option>
-                <option value="height-high">Highest first</option>
-                <option value="height-low">Lowest first</option>
-                <option value="section">Section</option>
-              </select>
+                <select
+                  value={section}
+                  onChange={(e) => onSectionChange(e.target.value)}
+                  className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                >
+                  <option value="All">All regions</option>
+
+                  {sections
+                    .filter((sectionName) => sectionName !== "All")
+                    .map((sectionName) => (
+                      <option key={sectionName} value={sectionName}>
+                        {sectionName}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wide text-stone-500">
+                  Completion status
+                </label>
+
+                <select
+                  value={statusFilter}
+                  onChange={(e) =>
+                    onStatusFilterChange(e.target.value as StatusFilter)
+                  }
+                  className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                >
+                  <option value="All">All statuses</option>
+                  <option value="Not completed">Not completed</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Planned">Planned</option>
+                  <option value="Priority">Priority</option>
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wide text-stone-500">
+                  Sort by
+                </label>
+
+                <select
+                  value={sortBy}
+                  onChange={(e) => onSortByChange(e.target.value as SortOption)}
+                  className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                >
+                  <option value="name">Name A–Z</option>
+                  <option value="height-high">Highest first</option>
+                  <option value="height-low">Lowest first</option>
+                  <option value="section">Region</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
