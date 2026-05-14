@@ -1,13 +1,39 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
-import WeatherPanel from "@/components/dashboard/WeatherPanel";
+import type { AreaWeather } from "@/lib/weather/getAreaWeather";
 
 type Props = {
   fells: Wainwright[];
   onSelectFell: (fellId: string) => void;
 };
+
+type RegionWeather = {
+  condition: "sunny" | "bright" | "cloudy" | "rain" | "wind" | "fog";
+  temperatureC: number;
+  windMph: number;
+  rainChance: number;
+};
+
+function getWeatherSymbol(condition: RegionWeather["condition"]) {
+  switch (condition) {
+    case "sunny":
+      return "☀️";
+    case "bright":
+      return "🌤️";
+    case "cloudy":
+      return "☁️";
+    case "rain":
+      return "🌧️";
+    case "wind":
+      return "💨";
+    case "fog":
+      return "🌫️";
+    default:
+      return "⛰️";
+  }
+}
 
 export default function OverviewView({ fells, onSelectFell }: Props) {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
@@ -67,6 +93,25 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
       .slice(0, 6);
   }, [fells, activeSection]);
 
+  const [regionWeather, setRegionWeather] = useState<Record<string, AreaWeather>>(
+  {}
+  );
+
+  useEffect(() => {
+    async function loadWeather() {
+      const response = await fetch("/api/weather/regions");
+      const data = await response.json();
+
+      const weatherByName = Object.fromEntries(
+        data.weather.map((item: AreaWeather) => [item.name, item])
+      );
+
+      setRegionWeather(weatherByName);
+    }
+
+    loadWeather();
+  }, []);
+
   return (
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
@@ -116,8 +161,6 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
         </div>
       </section>
 
-      <WeatherPanel />
-
       <section className="grid gap-8 lg:grid-cols-[1fr_420px]">
         <div className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
@@ -130,11 +173,12 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {sectionStats.map((stat) => {
-              const percentage = Math.round((stat.completed / stat.total) * 100);
-              const isActive = activeSection === stat.section;
+          {sectionStats.map((stat) => {
+            const percentage = Math.round((stat.completed / stat.total) * 100);
+            const isActive = activeSection === stat.section;
+            const weather = regionWeather[stat.section];
 
-              return (
+            return (
                 <button
                   key={stat.section}
                   onClick={() => setSelectedSection(stat.section)}
@@ -154,9 +198,17 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
                       </p>
                     </div>
 
-                    <p className="text-xl font-black text-emerald-900">
-                      {percentage}%
-                    </p>
+                    <div className="text-right">
+                      <p className="text-xl font-black text-emerald-900">
+                        {percentage}%
+                      </p>
+
+                      {weather && (
+                        <p className="mt-1 text-2xl" aria-label={weather.condition}>
+                          {getWeatherSymbol(weather.condition)}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mt-4 h-2 overflow-hidden rounded-full bg-stone-200">
@@ -165,6 +217,14 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
+
+                  {weather && (
+                    <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl bg-white/70 p-3 text-xs font-bold text-stone-700">
+                      <span>{weather.temperatureC}°C</span>
+                      <span>{weather.windMph}mph</span>
+                      <span>{weather.rainChance}% rain</span>
+                    </div>
+                  )}
 
                   <div className="mt-3 flex gap-2 text-xs font-bold text-stone-600">
                     <span>{stat.planned} planned</span>
