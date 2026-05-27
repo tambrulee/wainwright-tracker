@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import type { DashboardView } from "@/types/dashboard";
 import AuthButton from "@/components/AuthButton";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 type Props = {
   activeView: DashboardView;
@@ -12,6 +13,7 @@ type Props = {
 
 const navItems: { label: string; value: DashboardView }[] = [
   { label: "Overview", value: "overview" },
+  { label: "Planner", value: "planner" },
   { label: "Map", value: "map" },
 ];
 

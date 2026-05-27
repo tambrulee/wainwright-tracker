@@ -14,6 +14,7 @@ import {
   saveFellProgressToSupabase,
 } from "@/lib/supabase/progress";
 import { createClient } from "@/lib/supabase/client";
+import FellPlanner from "@/components/fells/FellPlanner";
 
 type ProgressState = Record<string, FellProgress>;
 
@@ -191,6 +192,38 @@ useEffect(() => {
 
   const plannedCount = mergedFells.filter((fell) => fell.planned).length;
 
+  const handleTogglePlanned = async (fellId: string) => {
+  const current = progress[fellId];
+
+  const updated = {
+    ...current,
+    planned: !current?.planned,
+  };
+
+  setProgress((prev) => ({
+    ...prev,
+    [fellId]: updated,
+  }));
+
+  await saveFellProgressToSupabase(fellId, updated);
+};
+
+const handleToggleCompleted = async (fellId: string) => {
+  const current = progress[fellId];
+
+  const updated = {
+    ...current,
+    completed: !current?.completed,
+  };
+
+  setProgress((prev) => ({
+    ...prev,
+    [fellId]: updated,
+  }));
+
+  await saveFellProgressToSupabase(fellId, updated);
+};
+
 
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => {
@@ -347,6 +380,14 @@ useEffect(() => {
         }
         completedFellsCount={completedCount}
         plannedFellsCount={plannedCount}
+      />
+    )}
+
+    {activeView === "planner" && (
+      <FellPlanner
+        fells={mergedFells}
+        onTogglePlanned={handleTogglePlanned}
+        onToggleCompleted={handleToggleCompleted}
       />
     )}
 

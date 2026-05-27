@@ -9,6 +9,7 @@ type Props = {
 
 const navItems: { label: string; value: DashboardView }[] = [
   { label: "Overview", value: "overview" },
+  { label: "Planner", value: "planner" },
   { label: "Map", value: "map" },
   { label: "Route builder", value: "route" },
   { label: "Saved routes", value: "saved" },

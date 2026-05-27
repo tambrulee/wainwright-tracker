@@ -9,4 +9,9 @@ export type StatusFilter =
   | "Planned"
   | "Priority";
 
-export type DashboardView = "overview" | "map" | "route" | "saved";
+export type DashboardView =
+  | "overview"
+  | "map"
+  | "route"
+  | "saved"
+  | "planner";
