@@ -225,12 +225,13 @@ const handleToggleCompleted = async (fellId: string) => {
 };
 
 const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
+  const cleanDate = plannedDate || null;
   const current = progress[fellId];
 
   const updated = {
     ...current,
-    planned: true,
-    plannedDate,
+    planned: Boolean(cleanDate),
+    plannedDate: cleanDate,
   };
 
   setProgress((prev) => ({

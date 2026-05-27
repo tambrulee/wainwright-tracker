@@ -57,7 +57,7 @@ export async function saveFellProgressToSupabase(
       completed_date: updates.completedDate ?? null,
       priority: updates.priority ?? false,
       planned: updates.planned ?? false,
-      planned_date: updates.plannedDate ?? null,
+      planned_date: updates.plannedDate || null,
       updated_at: new Date().toISOString(),
     },
     {
