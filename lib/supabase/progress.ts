@@ -14,7 +14,7 @@ export async function loadProgressFromSupabase(): Promise<ProgressState> {
 
   const { data, error } = await supabase
     .from("fell_progress")
-    .select("fell_id, completed, completed_date, priority")
+    .select("fell_id, completed, completed_date, priority, planned, planned_date")
     .eq("user_id", user.id);
 
   if (error) {
@@ -29,6 +29,8 @@ export async function loadProgressFromSupabase(): Promise<ProgressState> {
       completed: row.completed,
       completedDate: row.completed_date,
       priority: row.priority,
+      planned: row.planned,
+      plannedDate: row.planned_date,
     };
   });
 
@@ -54,6 +56,8 @@ export async function saveFellProgressToSupabase(
       completed: updates.completed ?? false,
       completed_date: updates.completedDate ?? null,
       priority: updates.priority ?? false,
+      planned: updates.planned ?? false,
+      planned_date: updates.plannedDate ?? null,
       updated_at: new Date().toISOString(),
     },
     {
