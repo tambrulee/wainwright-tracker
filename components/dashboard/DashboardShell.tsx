@@ -49,10 +49,10 @@ export default function DashboardShell({
               <button
                 key={item.value}
                 onClick={() => onChangeView(item.value)}
-                className={`rounded-xl px-4 py-2 text-sm font-bold transition ${
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                   activeView === item.value
-                    ? "bg-emerald-900 text-white"
-                    : "text-stone-600 hover:bg-stone-100 hover:text-stone-950"
+                    ? "bg-emerald-700 text-white shadow-sm"
+                    : "bg-stone-100 text-stone-700 hover:bg-stone-200"
                 }`}
               >
                 {item.label}
