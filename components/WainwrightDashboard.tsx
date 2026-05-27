@@ -122,10 +122,10 @@ useEffect(() => {
           ...fellProgress,
 
           // planned is always derived from routes
-          planned: plannedFellIds.has(fell.id),
+          planned: Boolean(fellProgress?.plannedDate),
         };
       }),
-    [fells, progress, plannedFellIds]
+    [fells, progress]
   );
 
   const sections = useMemo(
@@ -190,7 +190,9 @@ useEffect(() => {
 
   const completedCount = mergedFells.filter((fell) => fell.completed).length;
 
-  const plannedCount = mergedFells.filter((fell) => fell.planned).length;
+  const plannedCount = mergedFells.filter(
+    (fell) => fell.plannedDate && !fell.completed
+  ).length;
 
   const handleTogglePlanned = async (fellId: string) => {
   const current = progress[fellId];

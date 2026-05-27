@@ -42,8 +42,8 @@ export default function FellPlanner({
 
         const matchesStatus =
           status === "all" ||
-          (status === "planned" && fell.planned && !fell.completed) ||
-          (status === "unplanned" && !fell.planned && !fell.completed) ||
+          (status === "planned" && Boolean(fell.plannedDate) && !fell.completed) ||
+          (status === "unplanned" && !fell.plannedDate && !fell.completed) ||
           (status === "completed" && fell.completed);
 
         return matchesSearch && matchesStatus;
@@ -212,9 +212,9 @@ const renderDateInput = (fell: PlannerFell) => {
         </div>
 
         <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
-          fell.completed ? "bg-emerald-100 text-emerald-700" :
-          fell.planned ? "bg-amber-100 text-amber-700" :
-          "bg-slate-100 text-slate-600"
+          fell.completed ? "bg-emerald-100 text-emerald-700":
+          fell.planned ? "bg-amber-100 text-amber-700"
+          : "bg-slate-100 text-slate-600"
         }`}>
           {fell.completed ? "Completed" : fell.planned ? "Planned" : "Unplanned"}
         </span>
@@ -233,13 +233,12 @@ const renderDateInput = (fell: PlannerFell) => {
 
       {renderDateInput(fell)}
 
-      <div className="mt-5 flex gap-2">
-        <button onClick={() => onTogglePlanned?.(fell.id)} className="flex-1 rounded-2xl bg-stone-100 px-3 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-200">
-          {fell.planned ? "Unplan" : "Plan"}
-        </button>
-
-        <button onClick={() => onToggleCompleted?.(fell.id)} className="flex-1 rounded-2xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800">
-          {fell.completed ? "Undo" : "Complete"}
+      <div className="mt-5">
+        <button
+          onClick={() => onToggleCompleted?.(fell.id)}
+          className="w-full rounded-2xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800"
+        >
+          {fell.completed ? "Completed" : fell.plannedDate ? "Planned" : "Unplanned"}
         </button>
       </div>
     </article>

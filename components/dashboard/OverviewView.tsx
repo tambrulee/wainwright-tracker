@@ -4,8 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import type { AreaWeather } from "@/lib/weather/getAreaWeather";
 
+type OverviewFell = Wainwright & {
+  completed?: boolean;
+  priority?: boolean;
+  plannedDate?: string | null;
+};
+
 type Props = {
-  fells: Wainwright[];
+  fells: OverviewFell[];
   onSelectFell: (fellId: string) => void;
 };
 
@@ -39,7 +45,9 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   const completedCount = fells.filter((fell) => fell.completed).length;
-  const plannedCount = fells.filter((fell) => fell.planned).length;
+  const plannedCount = fells.filter(
+    (fell) => fell.plannedDate && !fell.completed
+  ).length;
   const priorityCount = fells.filter((fell) => fell.priority).length;
   const remainingCount = fells.length - completedCount;
 
@@ -67,7 +75,7 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
 
       current.total += 1;
       if (fell.completed) current.completed += 1;
-      if (fell.planned) current.planned += 1;
+      if (fell.plannedDate && !fell.completed) current.planned += 1;
       if (fell.priority) current.priority += 1;
 
       grouped.set(fell.section, current);
@@ -84,8 +92,8 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
     return fells
       .filter((fell) => fell.section === activeSection && !fell.completed)
       .sort((a, b) => {
-        if (a.planned && !b.planned) return -1;
-        if (!a.planned && b.planned) return 1;
+        if (a.plannedDate && !b.plannedDate) return -1;
+        if (!a.plannedDate && b.plannedDate) return 1;
         if (a.priority && !b.priority) return -1;
         if (!a.priority && b.priority) return 1;
         return a.heightM - b.heightM;
@@ -269,7 +277,7 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
                     </div>
 
                     <div className="flex gap-1">
-                      {fell.planned && (
+                      {fell.plannedDate && (
                         <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-bold text-blue-800">
                           Planned
                         </span>
