@@ -224,6 +224,23 @@ const handleToggleCompleted = async (fellId: string) => {
   await saveFellProgressToSupabase(fellId, updated);
 };
 
+const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
+  const current = progress[fellId];
+
+  const updated = {
+    ...current,
+    planned: true,
+    plannedDate,
+  };
+
+  setProgress((prev) => ({
+    ...prev,
+    [fellId]: updated,
+  }));
+
+  await saveFellProgressToSupabase(fellId, updated);
+};
+
 
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => {
@@ -388,6 +405,7 @@ const handleToggleCompleted = async (fellId: string) => {
         fells={mergedFells}
         onTogglePlanned={handleTogglePlanned}
         onToggleCompleted={handleToggleCompleted}
+        onUpdatePlannedDate={handleUpdatePlannedDate}
       />
     )}
 

@@ -3,4 +3,5 @@ export type FellProgress = {
   completedDate?: string | null;
   planned?: boolean;
   priority?: boolean;
+  plannedDate?: string;
 };

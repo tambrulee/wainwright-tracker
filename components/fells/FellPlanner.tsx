@@ -5,16 +5,26 @@ import type { Wainwright } from "@/types/wainwright";
 
 type StatusFilter = "all" | "planned" | "unplanned" | "completed";
 
+type PlannerFell = Wainwright & {
+  completed?: boolean;
+  planned?: boolean;
+  priority?: boolean;
+  plannedDate?: string;
+};
+
+
 type Props = {
-  fells: Wainwright[];
+  fells: PlannerFell[];
   onTogglePlanned?: (fellId: string) => void;
   onToggleCompleted?: (fellId: string) => void;
+  onUpdatePlannedDate?: (fellId: string, date: string) => void;
 };
 
 export default function FellPlanner({
   fells,
   onTogglePlanned,
   onToggleCompleted,
+  onUpdatePlannedDate,
 }: Props) {
   const [status, setStatus] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
@@ -56,6 +66,7 @@ export default function FellPlanner({
           placeholder="Search by fell or area..."
           className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-400 md:max-w-sm"
         />
+        
 
         <div className="flex flex-wrap gap-2">
           {(["all", "planned", "unplanned", "completed"] as StatusFilter[]).map(
@@ -126,6 +137,13 @@ export default function FellPlanner({
                 <p>#{fell.heightRank}</p>
               </div>
             </div>
+
+                          <input
+                type="date"
+                value={fell.plannedDate ?? ""}
+                onChange={(e) => onUpdatePlannedDate?.(fell.id, e.target.value)}
+                className="mt-5 w-full rounded-2xl border border-slate-200 px-3 py-2 text-sm text-slate-700 outline-none focus:border-emerald-700"
+              />
 
             <div className="mt-5 flex gap-2">
               <button
