@@ -20,6 +20,9 @@ type Props = {
   onUpdatePlannedDate?: (fellId: string, date: string) => void;
 };
 
+type SortOption = "planned-date" | "height-high" | "height-low" | "a-z" | "rank";
+
+
 export default function FellPlanner({
   fells,
   onTogglePlanned,
@@ -28,22 +31,38 @@ export default function FellPlanner({
 }: Props) {
   const [status, setStatus] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<SortOption>("rank");
 
   const filteredFells = useMemo(() => {
-    return fells.filter((fell) => {
-      const matchesSearch =
-        fell.name.toLowerCase().includes(search.toLowerCase()) ||
-        fell.section?.toLowerCase().includes(search.toLowerCase());
+    return fells
+      .filter((fell) => {
+        const matchesSearch =
+          fell.name.toLowerCase().includes(search.toLowerCase()) ||
+          fell.section?.toLowerCase().includes(search.toLowerCase());
 
-      const matchesStatus =
-        status === "all" ||
-        (status === "planned" && fell.planned && !fell.completed) ||
-        (status === "unplanned" && !fell.planned && !fell.completed) ||
-        (status === "completed" && fell.completed);
+        const matchesStatus =
+          status === "all" ||
+          (status === "planned" && fell.planned && !fell.completed) ||
+          (status === "unplanned" && !fell.planned && !fell.completed) ||
+          (status === "completed" && fell.completed);
 
-      return matchesSearch && matchesStatus;
-    });
-  }, [fells, search, status]);
+        return matchesSearch && matchesStatus;
+      })
+      .sort((a, b) => {
+        if (sort === "planned-date") {
+          if (!a.plannedDate && !b.plannedDate) return 0;
+          if (!a.plannedDate) return 1;
+          if (!b.plannedDate) return -1;
+          return a.plannedDate.localeCompare(b.plannedDate);
+        }
+
+        if (sort === "height-high") return b.heightM - a.heightM;
+        if (sort === "height-low") return a.heightM - b.heightM;
+        if (sort === "a-z") return a.name.localeCompare(b.name);
+
+        return a.heightRank - b.heightRank;
+      });
+  }, [fells, search, status, sort]);
 
   return (
     <section className="space-y-6">
@@ -67,6 +86,7 @@ export default function FellPlanner({
           className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-400 md:max-w-sm"
         />
         
+        {/* Status Filter */}
 
         <div className="flex flex-wrap gap-2">
           {(["all", "planned", "unplanned", "completed"] as StatusFilter[]).map(
@@ -85,6 +105,20 @@ export default function FellPlanner({
             )
           )}
         </div>
+
+        {/* Sort Dropdown */}
+
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value as SortOption)}
+          className="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-semibold"
+        >
+          <option value="rank">Rank</option>
+          <option value="planned-date">Planned date</option>
+          <option value="height-high">Height: high to low</option>
+          <option value="height-low">Height: low to high</option>
+          <option value="a-z">A-Z</option>
+        </select>
       </div>
 
       <div className="text-sm text-slate-500">
