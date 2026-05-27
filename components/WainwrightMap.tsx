@@ -16,6 +16,12 @@ import L from "leaflet";
 import type { Wainwright } from "@/types/wainwright";
 import type { WalkingRoute } from "@/lib/getWalkingRoute";
 
+type MapFell = Wainwright & {
+  completed?: boolean;
+  priority?: boolean;
+  plannedDate?: string | null;
+};
+
 type RoutePoint = {
   id: string;
   type: "fell" | "custom";
@@ -26,16 +32,16 @@ type RoutePoint = {
 };
 
 type Props = {
-  fells: Wainwright[];
+  fells: MapFell[];
   onSelectFell: (fellId: string) => void;
-  selectedFell?: Wainwright | null;
+  selectedFell?: MapFell | null;
   isRouteMode: boolean;
   routePoints: RoutePoint[];
   walkingRoute?: WalkingRoute | null;
   onAddRoutePoint: (point: Omit<RoutePoint, "id">) => void;
   onRemoveRoutePoint: (pointId: string) => void;
-  onToggleCompleted: (fell: Wainwright) => void;
-  onTogglePriority: (fell: Wainwright) => void;
+  onToggleCompleted: (fell: MapFell) => void;
+  onTogglePriority: (fell: MapFell) => void;
 };
 
 function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
@@ -177,12 +183,23 @@ export default function WainwrightMap({
             const isInRoute = routePoints.some(
               (point) => point.fellId === fell.id
             );
+            const isPlanned = Boolean(fell.plannedDate);
 
             return (
               <CircleMarker
                 key={fell.id}
                 center={[fell.latitude, fell.longitude]}
-                radius={isSelected ? 11 : isInRoute ? 9 : fell.completed ? 7 : 5}
+                radius={
+                  isSelected
+                    ? 11
+                    : isInRoute
+                    ? 9
+                    : fell.completed
+                    ? 7
+                    : isPlanned
+                    ? 6
+                    : 5
+                }
                 eventHandlers={{
                   click: () => {
                     if (isRouteMode) {
@@ -203,58 +220,59 @@ export default function WainwrightMap({
                   color: isSelected
                     ? "#1c1917"
                     : isInRoute
-                      ? "#2563eb"
-                      : fell.completed
-                        ? "#15803d"
-                        : fell.priority
-                          ? "#f97316"
-                          : "#57534e",
+                    ? "#2563eb"
+                    : fell.completed
+                    ? "#15803d"
+                    : isPlanned
+                    ? "#2563eb"
+                    : fell.priority
+                    ? "#f97316"
+                    : "#57534e",
                   fillColor: isSelected
                     ? "#1c1917"
                     : isInRoute
-                      ? "#2563eb"
-                      : fell.completed
-                        ? "#22c55e"
-                        : fell.priority
-                          ? "#fb923c"
-                          : "#a8a29e",
+                    ? "#2563eb"
+                    : fell.completed
+                    ? "#22c55e"
+                    : isPlanned
+                    ? "#60a5fa"
+                    : fell.priority
+                    ? "#fb923c"
+                    : "#a8a29e",
                   fillOpacity: 0.9,
-                  weight: isSelected ? 4 : 2,
+                  weight: isSelected ? 4 : isInRoute || isPlanned ? 3 : 2,
                 }}
               >
                 <Popup>
-                  <div className="space-y-3">
-                    <div>
-                      <strong>{fell.name}</strong>
-                      <br />
-                      {fell.heightM}m / {fell.heightFt}ft
-                      <br />
-                      {fell.section}
-                      <br />
-                      Completed: {fell.completed ? "Yes" : "No"}
-                    </div>
+                  <div className="space-y-2">
+                    <strong>{fell.name}</strong>
+                    <br />
+                    {fell.section}
+                    <br />
+                    {fell.heightM}m · Rank #{fell.heightRank}
 
-                    {isRouteMode ? (
-                      <p className="text-sm font-bold text-emerald-800">
-                        Click this fell to add it to your route
+                    {fell.plannedDate && (
+                      <p className="text-sm">
+                        Planned:{" "}
+                        {new Date(fell.plannedDate).toLocaleDateString(
+                          "en-GB"
+                        )}
                       </p>
-                    ) : (
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          onClick={() => onToggleCompleted(fell)}
-                          className="rounded-lg bg-emerald-900 px-3 py-2 text-sm font-bold !text-white"
-                        >
-                          {fell.completed ? "Mark not done" : "Mark completed"}
-                        </button>
-
-                        <button
-                          onClick={() => onTogglePriority(fell)}
-                          className="rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm font-bold text-stone-900"
-                        >
-                          {fell.priority ? "Remove priority" : "Mark priority"}
-                        </button>
-                      </div>
                     )}
+
+                    <div className="flex gap-2 pt-2">
+                      <button onClick={() => onSelectFell(fell.id)}>
+                        View
+                      </button>
+
+                      <button onClick={() => onTogglePriority(fell)}>
+                        {fell.priority ? "Unpriority" : "Priority"}
+                      </button>
+
+                      <button onClick={() => onToggleCompleted(fell)}>
+                        {fell.completed ? "Undo" : "Complete"}
+                      </button>
+                    </div>
                   </div>
                 </Popup>
               </CircleMarker>
