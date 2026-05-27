@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 
+
 type StatusFilter = "all" | "planned" | "unplanned" | "completed";
 
 type PlannerFell = Wainwright & {
@@ -22,6 +23,7 @@ type Props = {
 
 type SortOption = "planned-date" | "height-high" | "height-low" | "a-z" | "rank";
 
+type ViewMode = "cards" | "timeline";
 
 export default function FellPlanner({
   fells,
@@ -32,6 +34,7 @@ export default function FellPlanner({
   const [status, setStatus] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortOption>("rank");
+  const [viewMode, setViewMode] = useState<ViewMode>("cards");
 
   const filteredFells = useMemo(() => {
     return fells
@@ -63,6 +66,17 @@ export default function FellPlanner({
         return a.heightRank - b.heightRank;
       });
   }, [fells, search, status, sort]);
+
+  const groupedByDate = useMemo(() => {
+    return filteredFells.reduce<Record<string, PlannerFell[]>>((groups, fell) => {
+      const key = fell.plannedDate || "Unscheduled";
+
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(fell);
+
+      return groups;
+    }, {});
+  }, [filteredFells]);
 
   return (
     <section className="space-y-6">
@@ -119,12 +133,74 @@ export default function FellPlanner({
           <option value="height-low">Height: low to high</option>
           <option value="a-z">A-Z</option>
         </select>
+
+        <div className="flex gap-2">
+          {(["cards", "timeline"] as ViewMode[]).map((mode) => (
+            <button
+              key={mode}
+              onClick={() => setViewMode(mode)}
+              className={`rounded-full px-4 py-2 text-sm font-semibold capitalize ${
+                viewMode === mode
+                  ? "bg-emerald-700 text-white"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div> 
       </div>
 
       <div className="text-sm text-slate-500">
         Showing {filteredFells.length} of {fells.length} Wainwrights
       </div>
+      
+      {viewMode === "timeline" ? (
+        <div className="space-y-6">
+          {Object.entries(groupedByDate).map(([date, dateFells]) => (
+            <section
+              key={date}
+              className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+            >
+              <h2 className="text-lg font-bold text-slate-950">
+                {date === "Unscheduled"
+                  ? "Unscheduled"
+                  : new Date(date).toLocaleDateString("en-GB", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+              </h2>
 
+              <p className="mt-1 text-sm text-slate-500">
+                {dateFells.length} Wainwright{dateFells.length === 1 ? "" : "s"}
+              </p>
+
+              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {dateFells.map((fell) => (
+                  <article
+                    key={fell.id}
+                    className="rounded-2xl border border-slate-100 bg-slate-50 p-4"
+                  >
+                    <p className="font-bold text-slate-950">{fell.name}</p>
+                    <p className="text-sm text-slate-500">{fell.section}</p>
+                    <p className="mt-2 text-sm text-slate-600">
+                      {fell.heightM}m · Rank #{fell.heightRank}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {/* your existing card map goes here */}
+        </div>
+      )}
+
+      {/* Grouped Fells */}
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {filteredFells.map((fell) => (
           <article
@@ -172,7 +248,7 @@ export default function FellPlanner({
               </div>
             </div>
 
-                          <input
+              <input
                 type="date"
                 value={fell.plannedDate ?? ""}
                 onChange={(e) => onUpdatePlannedDate?.(fell.id, e.target.value)}
