@@ -406,7 +406,6 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
     {activeView === "planner" && (
       <FellPlanner
         fells={mergedFells}
-        onTogglePlanned={handleTogglePlanned}
         onToggleCompleted={handleToggleCompleted}
         onUpdatePlannedDate={handleUpdatePlannedDate}
       />
