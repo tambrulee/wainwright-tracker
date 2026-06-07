@@ -111,8 +111,43 @@ export default function WainwrightMap({
 
   const displayedRoute = walkingRoute?.coordinates ?? fallbackRoutePositions;
 
+
+  const legendItems = [
+    { label: "Selected", border: "#1c1917", fill: "#1c1917", size: 22 },
+    { label: "In route", border: "#2563eb", fill: "#2563eb", size: 18 },
+    { label: "Completed", border: "#15803d", fill: "#22c55e", size: 14 },
+    { label: "Planned", border: "#2563eb", fill: "#60a5fa", size: 12 },
+    { label: "Priority", border: "#f97316", fill: "#fb923c", size: 10 },
+    { label: "Not started", border: "#57534e", fill: "#a8a29e", size: 10 },
+  ];
+
   return (
+
+    
     <div className="h-[75vh] w-full overflow-hidden rounded-2xl border border-stone-300">
+      <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+        <p className="mb-3 text-xs font-bold uppercase tracking-wide text-stone-500">
+          Map legend
+        </p>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {legendItems.map((item) => (
+            <div key={item.label} className="flex items-center gap-2">
+              <span
+                className="inline-block rounded-full"
+                style={{
+                  width: item.size,
+                  height: item.size,
+                  backgroundColor: item.fill,
+                  border: `2px solid ${item.border}`,
+                }}
+              />
+              <span className="text-sm text-stone-700">{item.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <MapContainer
         center={[54.5, -3.1]}
         zoom={10}

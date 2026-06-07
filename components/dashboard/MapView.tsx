@@ -1,11 +1,14 @@
 "use client";
 
+// This component is responsible for rendering the map view of the dashboard, including the side panel with filters and recommended fells, and the main map area. It manages the state for the side panel mode (recommended vs all fells) and the tool panel (route builder and saved routes). It also handles user interactions such as selecting a fell, adding/removing route points, and managing saved routes.
+
 import { useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
 import type { RoutePoint, RouteSummary, SavedRoute } from "@/types/route";
 import type { SortOption, StatusFilter } from "@/types/dashboard";
 import FellList from "@/components/FellList";
 import MapWrapper from "@/components/MapWrapper";
+
 
 type Props = {
   fells: Wainwright[];
@@ -111,6 +114,7 @@ export default function MapView({
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-5 shadow-sm">
         <div className="grid gap-4 lg:grid-cols-[1fr_2fr]">
+          {/* Stats */}
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl bg-emerald-900 p-4 text-white">
               <p className="text-xs uppercase tracking-wide text-emerald-200">
@@ -136,7 +140,7 @@ export default function MapView({
               <p className="text-xs text-emerald-200">routes</p>
             </div>
           </div>
-
+          {/* Filters */}
           <div>
             <div className="mb-3 flex items-center justify-between gap-3">
               <div>
@@ -234,6 +238,7 @@ export default function MapView({
         </div>
       </section>
 
+      {/* Tool Panel */}
       <section className="grid gap-8 lg:grid-cols-[420px_minmax(0,1fr)]">
         <div className="max-h-[680px] overflow-y-auto rounded-[2rem] border border-stone-200/70 bg-white p-4 shadow-sm">
           <div className="mb-4 grid grid-cols-2 gap-2">
