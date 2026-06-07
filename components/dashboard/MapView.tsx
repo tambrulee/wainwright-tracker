@@ -60,7 +60,6 @@ export default function MapView({
   selectedFell,
   isRouteMode,
   routePoints,
-  routePointsCount,
   filteredFellsCount,
   savedRoutesCount,
   routeSummary,
@@ -87,7 +86,6 @@ export default function MapView({
   onToggleCompleted,
   onTogglePriority,
   completedFellsCount,
-  plannedFellsCount,
 }: Props) {
   const [sidePanelMode, setSidePanelMode] =
     useState<SidePanelMode>("recommended");
@@ -113,7 +111,7 @@ export default function MapView({
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-5 shadow-sm">
         <div className="grid gap-4 lg:grid-cols-[1fr_2fr]">
-          <div className="grid gap-3 sm:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl bg-emerald-900 p-4 text-white">
               <p className="text-xs uppercase tracking-wide text-emerald-200">
                 Completed
