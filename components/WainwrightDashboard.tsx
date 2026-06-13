@@ -83,27 +83,6 @@ useEffect(() => {
   localStorage.setItem("wainwright-saved-routes", JSON.stringify(savedRoutes));
 }, [savedRoutes]);
 
-  
-
-  const plannedFellIds = useMemo(() => {
-    const ids = new Set<string>();
-
-    routePoints.forEach((point) => {
-      if (point.type === "fell" && point.fellId) {
-        ids.add(point.fellId);
-      }
-    });
-
-    savedRoutes.forEach((route) => {
-      route.points.forEach((point) => {
-        if (point.type === "fell" && point.fellId) {
-          ids.add(point.fellId);
-        }
-      });
-    });
-
-    return ids;
-  }, [routePoints, savedRoutes]);
 
   const mergedFells = useMemo(
     () =>
@@ -194,22 +173,6 @@ useEffect(() => {
     (fell) => fell.plannedDate && !fell.completed
   ).length;
 
-  const handleTogglePlanned = async (fellId: string) => {
-  const current = progress[fellId];
-
-  const updated = {
-    ...current,
-    planned: !current?.planned,
-  };
-
-  setProgress((prev) => ({
-    ...prev,
-    [fellId]: updated,
-  }));
-
-  await saveFellProgressToSupabase(fellId, updated);
-};
-
 const handleToggleCompleted = async (fellId: string) => {
   const current = progress[fellId];
 
@@ -243,7 +206,6 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
 
   await saveFellProgressToSupabase(fellId, updated);
 };
-
 
   function updateFell(fellId: string, updates: FellProgress) {
     setProgress((current) => {
