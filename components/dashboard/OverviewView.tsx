@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { Wainwright } from "@/types/wainwright";
-import type { AreaWeather } from "@/lib/weather/getAreaWeather";
+import type { AreaWeather } from "@/lib/weather/types";
 
 type OverviewFell = Wainwright & {
   completed?: boolean;
@@ -15,14 +15,8 @@ type Props = {
   onSelectFell: (fellId: string) => void;
 };
 
-type RegionWeather = {
-  condition: "sunny" | "bright" | "cloudy" | "rain" | "wind" | "fog";
-  temperatureC: number;
-  windMph: number;
-  rainChance: number;
-};
 
-function getWeatherSymbol(condition: RegionWeather["condition"]) {
+function getWeatherSymbol(condition: AreaWeather["condition"]) {
   switch (condition) {
     case "sunny":
       return "☀️";
@@ -227,10 +221,21 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
                   </div>
 
                   {weather && (
-                    <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl bg-white/70 p-3 text-xs font-bold text-stone-700">
-                      <span>{weather.temperatureC}°C</span>
-                      <span>{weather.windMph}mph</span>
-                      <span>{weather.rainChance}% rain</span>
+                    <div className="mt-4 space-y-2 rounded-2xl bg-white/70 p-3 text-xs font-bold text-stone-700">
+                      <div className="grid grid-cols-3 gap-2">
+                        <span>{weather.temperatureC}°C</span>
+                        <span>{weather.gustMph}mph gusts</span>
+                        <span>{weather.rainChance}% rain</span>
+                      </div>
+
+                      <div className="flex items-center justify-between rounded-xl bg-stone-100 px-3 py-2">
+                        <span>{weather.rainfallMm}mm rainfall</span>
+                        <span>
+                          {weather.warningLevel === "none"
+                            ? "No warning"
+                            : `${weather.warningLevel} risk`}
+                        </span>
+                      </div>
                     </div>
                   )}
 
