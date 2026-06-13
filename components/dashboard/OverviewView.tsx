@@ -99,16 +99,27 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
   {}
   );
 
+  const progressPercentage = Math.round((completedCount / fells.length) * 100);
+
   useEffect(() => {
     async function loadWeather() {
-      const response = await fetch("/api/weather/regions");
-      const data = await response.json();
+      try {
+        const response = await fetch("/api/weather/regions");
 
-      const weatherByName = Object.fromEntries(
-        data.weather.map((item: AreaWeather) => [item.name, item])
-      );
+        if (!response.ok) {
+          throw new Error("Weather request failed");
+        }
 
-      setRegionWeather(weatherByName);
+        const data = await response.json();
+
+        const weatherByName = Object.fromEntries(
+          data.weather.map((item: AreaWeather) => [item.name, item])
+        );
+
+        setRegionWeather(weatherByName);
+      } catch (error) {
+        console.error("Could not load regional weather", error);
+      }
     }
 
     loadWeather();
@@ -116,12 +127,12 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
+      <section className="rounded-[1.5rem] border border-stone-200 bg-white p-4 shadow-sm sm:p-6 md:rounded-[2rem]">
         <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
           Overview
         </p>
 
-        <h1 className="mt-2 text-3xl font-black tracking-tight text-stone-950 md:text-5xl">
+        <h1 className="mt-2 text-3xl font-black tracking-tight text-stone-950 sm:text-4xl md:text-5xl">
           Your Wainwright progress
         </h1>
 
@@ -130,7 +141,21 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
           worth focusing on next.
         </p>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-4">
+        <div className="mt-6">
+          <div className="flex items-center justify-between text-sm font-bold text-stone-700">
+            <span>{progressPercentage}% complete</span>
+            <span>{remainingCount} left</span>
+          </div>
+
+          <div className="mt-2 h-3 overflow-hidden rounded-full bg-stone-200">
+            <div
+              className="h-full rounded-full bg-emerald-800"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
           <div className="rounded-3xl bg-stone-950 p-5 text-white">
             <p className="text-xs uppercase tracking-wide text-stone-300">
               Completed
@@ -163,7 +188,7 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
         </div>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-[1fr_420px]">
+      <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
@@ -174,7 +199,7 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
             </h2>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2">
           {sectionStats.map((stat) => {
             const percentage = Math.round((stat.completed / stat.total) * 100);
             const isActive = activeSection === stat.section;
@@ -222,7 +247,7 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
 
                   {weather && (
                     <div className="mt-4 space-y-2 rounded-2xl bg-white/70 p-3 text-xs font-bold text-stone-700">
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
                         <span>{weather.temperatureC}°C</span>
                         <span>{weather.gustMph}mph gusts</span>
                         <span>{weather.rainChance}% rain</span>
