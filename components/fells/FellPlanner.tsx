@@ -32,17 +32,24 @@ export default function FellPlanner({
     Record<string, { day: string; month: string; year: string }>
   >({});
 
+  const [area, setArea] = useState("all");
+
+  const areas = useMemo(() => {
+    return Array.from(new Set(fells.map((fell) => fell.section))).sort();
+  }, [fells]);
+
   useEffect(() => {
-    const saved = localStorage.getItem("planner-view");
-    if (!saved) return;
+  const saved = localStorage.getItem("planner-view");
+  if (!saved) return;
 
-    const parsed = JSON.parse(saved);
+  const parsed = JSON.parse(saved);
 
-    setStatus(parsed.status ?? "all");
-    setSearch(parsed.search ?? "");
-    setSort(parsed.sort ?? "planned-date");
-    setHideCompleted(parsed.hideCompleted ?? true);
-  }, []);
+  setStatus(parsed.status ?? "all");
+  setSearch(parsed.search ?? "");
+  setSort(parsed.sort ?? "planned-date");
+  setHideCompleted(parsed.hideCompleted ?? false);
+  setArea(parsed.area ?? "all");
+}, []);
 
   useEffect(() => {
     localStorage.setItem(
@@ -52,18 +59,21 @@ export default function FellPlanner({
         search,
         sort,
         hideCompleted,
+        area,
       })
     );
-  }, [status, search, sort, hideCompleted]);
+  }, [status, search, sort, hideCompleted, area]);
 
   const filteredFells = useMemo(() => {
     return fells
       .filter((fell) => {
         const isPlanned = Boolean(fell.plannedDate);
 
-        const matchesSearch =
-          fell.name.toLowerCase().includes(search.toLowerCase()) ||
-          fell.section?.toLowerCase().includes(search.toLowerCase());
+        const matchesSearch = fell.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+        const matchesArea = area === "all" || fell.section === area;
 
         const matchesStatus =
           status === "all" ||
@@ -74,7 +84,12 @@ export default function FellPlanner({
         const matchesCompletedVisibility =
           status === "completed" || !hideCompleted || !fell.completed;
 
-        return matchesSearch && matchesStatus && matchesCompletedVisibility;
+        return (
+          matchesSearch &&
+          matchesArea &&
+          matchesStatus &&
+          matchesCompletedVisibility
+        );
       })
       .sort((a, b) => {
         if (sort === "planned-date") {
@@ -90,7 +105,7 @@ export default function FellPlanner({
 
         return a.heightRank - b.heightRank;
       });
-  }, [fells, search, status, sort, hideCompleted]);
+  }, [fells, search, status, sort, hideCompleted, area]);
 
   const groupedByDate = useMemo(() => {
     return filteredFells.reduce<Record<string, PlannerFell[]>>((groups, fell) => {
@@ -139,7 +154,7 @@ export default function FellPlanner({
     };
 
     return (
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="grid gap-2 sm:flex sm:flex-wrap sm:items-center">
         <select
           value={parts.day}
           onChange={(e) => updatePart("day", e.target.value)}
@@ -187,7 +202,7 @@ export default function FellPlanner({
           type="button"
           disabled={!hasChanged || !currentValue}
           onClick={() => saveDate(fell.id, currentValue)}
-          className="rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400"
+          className="w-full rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400 sm:w-auto"
         >
           Save
         </button>
@@ -196,7 +211,7 @@ export default function FellPlanner({
           <button
             type="button"
             onClick={() => saveDate(fell.id, "")}
-            className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200"
+            className="w-full rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400 sm:w-auto"
           >
             Clear
           </button>
@@ -216,12 +231,6 @@ export default function FellPlanner({
     });
   };
 
-  const plannedCount = fells.filter(
-    (fell) => fell.plannedDate && !fell.completed
-  ).length;
-
-  const completedCount = fells.filter((fell) => fell.completed).length;
-
   return (
     <section className="space-y-6">
       <div>
@@ -235,63 +244,60 @@ export default function FellPlanner({
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="grid gap-3 xl:grid-cols-[1.4fr_1fr_0.8fr] xl:items-center">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search fell or area..."
+            placeholder="Search fell..."
             className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-700"
           />
 
-          <div className="flex flex-wrap gap-2">
-            {(["all", "planned", "unplanned", "completed"] as StatusFilter[]).map(
-              (item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => setStatus(item)}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold capitalize transition ${
-                    status === item
-                      ? "bg-emerald-700 text-white"
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                  }`}
-                >
-                  {item}
-                </button>
-              )
-            )}
+          <select
+            value={area}
+            onChange={(e) => setArea(e.target.value)}
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm sm:w-auto"
+          >
+            <option value="all">All areas</option>
+            {areas.map((area) => (
+              <option key={area} value={area}>
+                {area}
+              </option>
+            ))}
+          </select>
 
-            <button
-              type="button"
-              onClick={() => setHideCompleted((prev) => !prev)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                hideCompleted
-                  ? "bg-slate-900 text-white"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-              }`}
-            >
-              {hideCompleted ? "Completed hidden" : "Completed visible"}
-            </button>
-          </div>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value as StatusFilter)}
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm sm:w-auto"
+          >
+            <option value="all">All fells</option>
+            <option value="planned">Planned</option>
+            <option value="unplanned">Unplanned</option>
+            <option value="completed">Completed</option>
+          </select>
 
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortOption)}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold"
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm sm:w-auto"
           >
-            <option value="planned-date">Sort by planned date</option>
-            <option value="rank">Sort by Wainwright rank</option>
-            <option value="height-high">Height: high to low</option>
-            <option value="height-low">Height: low to high</option>
+            <option value="planned-date">Planned date</option>
+            <option value="height-high">Highest first</option>
+            <option value="height-low">Lowest first</option>
             <option value="a-z">A-Z</option>
+            <option value="rank">Wainwright rank</option>
           </select>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-500">
-          <span>Showing {filteredFells.length} of {fells.length}</span>
-          <span>Planned {plannedCount}</span>
-          <span>Completed {completedCount}</span>
-        </div>
+        <label className="mt-4 flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
+          <input
+            type="checkbox"
+            checked={hideCompleted}
+            onChange={(e) => setHideCompleted(e.target.checked)}
+            className="h-4 w-4 accent-emerald-700"
+          />
+          Hide completed fells
+        </label>
       </div>
 
       <div className="space-y-5">
