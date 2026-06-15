@@ -38,17 +38,22 @@ export default function FellPlanner({
     return Array.from(new Set(fells.map((fell) => fell.section))).sort();
   }, [fells]);
 
-  useEffect(() => {
+useEffect(() => {
   const saved = localStorage.getItem("planner-view");
   if (!saved) return;
 
-  const parsed = JSON.parse(saved);
+  try {
+    const parsed = JSON.parse(saved);
 
-  setStatus(parsed.status ?? "all");
-  setSearch(parsed.search ?? "");
-  setSort(parsed.sort ?? "planned-date");
-  setHideCompleted(parsed.hideCompleted ?? false);
-  setArea(parsed.area ?? "all");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setStatus(parsed.status ?? "all");
+    setSearch(parsed.search ?? "");
+    setSort(parsed.sort ?? "planned-date");
+    setHideCompleted(parsed.hideCompleted ?? false);
+    setArea(parsed.area ?? "all");
+  } catch {
+    localStorage.removeItem("planner-view");
+  }
 }, []);
 
   useEffect(() => {
