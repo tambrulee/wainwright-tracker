@@ -121,45 +121,45 @@ export default function WainwrightMap({
     { label: "Not started", border: "#57534e", fill: "#a8a29e", size: 10 },
   ];
 
-  return (
-  <div className="relative h-full min-h-[520px] w-full overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
-    <div className="absolute left-4 right-4 top-4 z-[500] rounded-2xl border border-stone-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-        <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
-          Legend
-        </span>
-
-        {legendItems.map((item) => (
-          <div key={item.label} className="flex items-center gap-2">
-            <span
-              className="inline-block rounded-full"
-              style={{
-                width: item.size,
-                height: item.size,
-                backgroundColor: item.fill,
-                border: `2px solid ${item.border}`,
-              }}
-            />
-            <span className="text-xs font-semibold text-stone-700 sm:text-sm">
-              {item.label}
+    return (
+      <div className="relative h-full min-h-[520px] w-full overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
+        <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl border border-stone-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
+              Legend
             </span>
+
+            {legendItems.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <span
+                  className="inline-block rounded-full"
+                  style={{
+                    width: item.size,
+                    height: item.size,
+                    backgroundColor: item.fill,
+                    border: `2px solid ${item.border}`,
+                  }}
+                />
+                <span className="text-xs font-semibold text-stone-700 sm:text-sm">
+                  {item.label}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
 
-    {isRouteMode && (
-      <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl bg-emerald-950/95 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur sm:left-auto sm:right-4 sm:w-auto">
-        Click fells or the map to add route points
-      </div>
-    )}
+        {isRouteMode && (
+          <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl bg-emerald-950/95 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur sm:left-auto sm:right-4 sm:w-auto">
+            Click fells or the map to add route points
+          </div>
+        )}
 
-    <MapContainer
-      center={[54.5, -3.1]}
-      zoom={10}
-      scrollWheelZoom
-      className="h-full min-h-[520px] w-full rounded-3xl"
-    >
+        <MapContainer
+          center={[54.5, -3.1]}
+          zoom={10}
+          scrollWheelZoom
+          className="h-full min-h-[520px] w-full rounded-3xl"
+        >
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
