@@ -122,38 +122,44 @@ export default function WainwrightMap({
   ];
 
   return (
+  <div className="relative h-full min-h-[520px] w-full overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
+    <div className="absolute left-4 right-4 top-4 z-[500] rounded-2xl border border-stone-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+        <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
+          Legend
+        </span>
 
-    
-    <div className="h-[75vh] w-full overflow-hidden rounded-2xl border border-stone-300">
-      <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
-        <p className="mb-3 text-xs font-bold uppercase tracking-wide text-stone-500">
-          Map legend
-        </p>
-
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {legendItems.map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <span
-                className="inline-block rounded-full"
-                style={{
-                  width: item.size,
-                  height: item.size,
-                  backgroundColor: item.fill,
-                  border: `2px solid ${item.border}`,
-                }}
-              />
-              <span className="text-sm text-stone-700">{item.label}</span>
-            </div>
-          ))}
-        </div>
+        {legendItems.map((item) => (
+          <div key={item.label} className="flex items-center gap-2">
+            <span
+              className="inline-block rounded-full"
+              style={{
+                width: item.size,
+                height: item.size,
+                backgroundColor: item.fill,
+                border: `2px solid ${item.border}`,
+              }}
+            />
+            <span className="text-xs font-semibold text-stone-700 sm:text-sm">
+              {item.label}
+            </span>
+          </div>
+        ))}
       </div>
+    </div>
 
-      <MapContainer
-        center={[54.5, -3.1]}
-        zoom={10}
-        scrollWheelZoom
-        className="h-full w-full"
-      >
+    {isRouteMode && (
+      <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl bg-emerald-950/95 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur sm:left-auto sm:right-4 sm:w-auto">
+        Click fells or the map to add route points
+      </div>
+    )}
+
+    <MapContainer
+      center={[54.5, -3.1]}
+      zoom={10}
+      scrollWheelZoom
+      className="h-full min-h-[520px] w-full rounded-3xl"
+    >
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

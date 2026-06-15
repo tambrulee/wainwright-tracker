@@ -181,7 +181,9 @@ export default function MapView({
         </div>
       </section>
 
-      <section className="grid gap-5">
+
+      {/* Map & Side Panel Section */}
+      <section className="grid gap-4 lg:grid-cols-[360px_1fr]">
 
         <div className="h-[520px] overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm md:h-[680px]">
           <MapWrapper
@@ -234,7 +236,7 @@ export default function MapView({
           </div>
 
           {toolPanel === "route" && (
-            <div className="mb-4 rounded-3xl bg-emerald-950 p-4 text-white">
+            <div className="rounded-3xl bg-emerald-950 p-4 text-white">
               <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-200">
                 Route builder
               </p>
