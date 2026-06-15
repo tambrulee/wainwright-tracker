@@ -18,56 +18,68 @@ type Props = {
   onUpdatePlannedDate?: (fellId: string, date: string) => void;
 };
 
+type PlannerFilters = {
+  status: StatusFilter;
+  search: string;
+  sort: SortOption;
+  hideCompleted: boolean;
+  area: string;
+};
+
+const defaultFilters: PlannerFilters = {
+  status: "all",
+  search: "",
+  sort: "planned-date",
+  hideCompleted: true,
+  area: "all",
+};
+
 export default function FellPlanner({
   fells,
   onToggleCompleted,
   onUpdatePlannedDate,
 }: Props) {
-  const [status, setStatus] = useState<StatusFilter>("all");
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortOption>("planned-date");
-  const [hideCompleted, setHideCompleted] = useState(true);
+  const [filters, setFilters] = useState<PlannerFilters>(() => {
+    if (typeof window === "undefined") return defaultFilters;
+
+    try {
+      const saved = localStorage.getItem("planner-view");
+      if (!saved) return defaultFilters;
+
+      return {
+        ...defaultFilters,
+        ...JSON.parse(saved),
+      };
+    } catch {
+      return defaultFilters;
+    }
+  });
 
   const [draftDateParts, setDraftDateParts] = useState<
     Record<string, { day: string; month: string; year: string }>
   >({});
 
-  const [area, setArea] = useState("all");
+  const { status, search, sort, hideCompleted, area } = filters;
 
-  const areas = useMemo(() => {
-    return Array.from(new Set(fells.map((fell) => fell.section))).sort();
-  }, [fells]);
-
-useEffect(() => {
-  const saved = localStorage.getItem("planner-view");
-  if (!saved) return;
-
-  try {
-    const parsed = JSON.parse(saved);
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setStatus(parsed.status ?? "all");
-    setSearch(parsed.search ?? "");
-    setSort(parsed.sort ?? "planned-date");
-    setHideCompleted(parsed.hideCompleted ?? false);
-    setArea(parsed.area ?? "all");
-  } catch {
-    localStorage.removeItem("planner-view");
-  }
-}, []);
+  const updateFilter = <K extends keyof PlannerFilters>(
+    key: K,
+    value: PlannerFilters[K]
+  ) => {
+    setFilters((current) => ({
+      ...current,
+      [key]: value,
+    }));
+  };
 
   useEffect(() => {
-    localStorage.setItem(
-      "planner-view",
-      JSON.stringify({
-        status,
-        search,
-        sort,
-        hideCompleted,
-        area,
-      })
-    );
-  }, [status, search, sort, hideCompleted, area]);
+    localStorage.setItem("planner-view", JSON.stringify(filters));
+  }, [filters]);
+
+  const areas = useMemo(() => {
+    return Array.from(
+      new Set(fells.map((fell) => fell.section).filter(Boolean))
+    ).sort();
+  }, [fells]);
 
   const filteredFells = useMemo(() => {
     return fells
@@ -110,7 +122,7 @@ useEffect(() => {
 
         return a.heightRank - b.heightRank;
       });
-  }, [fells, search, status, sort, hideCompleted, area]);
+  }, [fells, search, area, status, sort, hideCompleted]);
 
   const groupedByDate = useMemo(() => {
     return filteredFells.reduce<Record<string, PlannerFell[]>>((groups, fell) => {
@@ -120,6 +132,12 @@ useEffect(() => {
       return groups;
     }, {});
   }, [filteredFells]);
+
+  const plannedCount = fells.filter(
+    (fell) => fell.plannedDate && !fell.completed
+  ).length;
+
+  const completedCount = fells.filter((fell) => fell.completed).length;
 
   const saveDate = (fellId: string, value: string) => {
     onUpdatePlannedDate?.(fellId, value);
@@ -131,9 +149,14 @@ useEffect(() => {
     });
   };
 
+  const resetFilters = () => {
+    setFilters(defaultFilters);
+  };
+
   const renderDateControls = (fell: PlannerFell) => {
     const savedDate = fell.plannedDate ?? "";
-    const [savedYear = "", savedMonth = "", savedDay = ""] = savedDate.split("-");
+    const [savedYear = "", savedMonth = "", savedDay = ""] =
+      savedDate.split("-");
 
     const parts = draftDateParts[fell.id] ?? {
       day: savedDay,
@@ -159,11 +182,11 @@ useEffect(() => {
     };
 
     return (
-      <div className="grid gap-2 sm:flex sm:flex-wrap sm:items-center">
+      <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center">
         <select
           value={parts.day}
           onChange={(e) => updatePart("day", e.target.value)}
-          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
         >
           <option value="">Day</option>
           {Array.from({ length: 31 }, (_, i) =>
@@ -178,7 +201,7 @@ useEffect(() => {
         <select
           value={parts.month}
           onChange={(e) => updatePart("month", e.target.value)}
-          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
         >
           <option value="">Month</option>
           {Array.from({ length: 12 }, (_, i) =>
@@ -193,7 +216,7 @@ useEffect(() => {
         <select
           value={parts.year}
           onChange={(e) => updatePart("year", e.target.value)}
-          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
         >
           <option value="">Year</option>
           {[2026, 2027, 2028, 2029, 2030].map((year) => (
@@ -207,7 +230,7 @@ useEffect(() => {
           type="button"
           disabled={!hasChanged || !currentValue}
           onClick={() => saveDate(fell.id, currentValue)}
-          className="w-full rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400 sm:w-auto"
+          className="col-span-3 rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400 sm:col-span-1"
         >
           Save
         </button>
@@ -216,7 +239,7 @@ useEffect(() => {
           <button
             type="button"
             onClick={() => saveDate(fell.id, "")}
-            className="w-full rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400 sm:w-auto"
+            className="col-span-3 rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200 sm:col-span-1"
           >
             Clear
           </button>
@@ -239,41 +262,45 @@ useEffect(() => {
   return (
     <section className="space-y-6">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
+        <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-800">
           Wainwright Planner
         </p>
-        <h1 className="text-3xl font-bold text-slate-950">Plan your 214</h1>
-        <p className="mt-2 text-slate-600">
-          Add a date to plan a fell. Clear the date to move it back to unscheduled.
+        <h1 className="mt-1 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+          Plan your 214
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
+          Add planned dates, filter by area, and keep your upcoming fells tidy.
         </p>
       </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => updateFilter("search", e.target.value)}
             placeholder="Search fell..."
-            className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-700"
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-emerald-700 focus:bg-white"
           />
 
           <select
             value={area}
-            onChange={(e) => setArea(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm sm:w-auto"
+            onChange={(e) => updateFilter("area", e.target.value)}
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-700 focus:bg-white"
           >
             <option value="all">All areas</option>
-            {areas.map((area) => (
-              <option key={area} value={area}>
-                {area}
+            {areas.map((areaName) => (
+              <option key={areaName} value={areaName}>
+                {areaName}
               </option>
             ))}
           </select>
 
           <select
             value={status}
-            onChange={(e) => setStatus(e.target.value as StatusFilter)}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm sm:w-auto"
+            onChange={(e) =>
+              updateFilter("status", e.target.value as StatusFilter)
+            }
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-700 focus:bg-white"
           >
             <option value="all">All fells</option>
             <option value="planned">Planned</option>
@@ -283,26 +310,50 @@ useEffect(() => {
 
           <select
             value={sort}
-            onChange={(e) => setSort(e.target.value as SortOption)}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm sm:w-auto"
+            onChange={(e) => updateFilter("sort", e.target.value as SortOption)}
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-700 focus:bg-white"
           >
             <option value="planned-date">Planned date</option>
+            <option value="rank">Wainwright rank</option>
             <option value="height-high">Highest first</option>
             <option value="height-low">Lowest first</option>
             <option value="a-z">A-Z</option>
-            <option value="rank">Wainwright rank</option>
           </select>
         </div>
 
-        <label className="mt-4 flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
-          <input
-            type="checkbox"
-            checked={hideCompleted}
-            onChange={(e) => setHideCompleted(e.target.checked)}
-            className="h-4 w-4 accent-emerald-700"
-          />
-          Hide completed fells
-        </label>
+        <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+          <label className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
+            <input
+              type="checkbox"
+              checked={hideCompleted}
+              onChange={(e) =>
+                updateFilter("hideCompleted", e.target.checked)
+              }
+              className="h-4 w-4 accent-emerald-700"
+            />
+            Hide completed fells
+          </label>
+
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50"
+          >
+            Reset filters
+          </button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-bold sm:flex sm:flex-wrap sm:text-sm">
+          <span className="rounded-xl bg-slate-50 px-3 py-2 text-slate-600">
+            Showing {filteredFells.length}
+          </span>
+          <span className="rounded-xl bg-blue-50 px-3 py-2 text-blue-700">
+            Planned {plannedCount}
+          </span>
+          <span className="rounded-xl bg-emerald-50 px-3 py-2 text-emerald-700">
+            Completed {completedCount}
+          </span>
+        </div>
       </div>
 
       <div className="space-y-5">
@@ -311,12 +362,13 @@ useEffect(() => {
             key={date}
             className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
           >
-            <div className="border-b border-slate-100 bg-slate-50 px-5 py-4">
-              <h2 className="text-lg font-bold text-slate-950">
+            <div className="border-b border-slate-100 bg-slate-50 px-4 py-4 sm:px-5">
+              <h2 className="text-lg font-black text-slate-950">
                 {formatDateHeading(date)}
               </h2>
               <p className="text-sm text-slate-500">
-                {dateFells.length} Wainwright{dateFells.length === 1 ? "" : "s"}
+                {dateFells.length} Wainwright
+                {dateFells.length === 1 ? "" : "s"}
               </p>
             </div>
 
@@ -327,14 +379,16 @@ useEffect(() => {
                 return (
                   <div
                     key={fell.id}
-                    className="grid gap-4 px-5 py-4 xl:grid-cols-[1.3fr_0.7fr_1.7fr_0.7fr] xl:items-center"
+                    className="grid gap-4 px-4 py-4 sm:px-5 xl:grid-cols-[1.3fr_0.7fr_1.7fr_0.7fr] xl:items-center"
                   >
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="font-bold text-slate-950">{fell.name}</h3>
+                        <h3 className="font-black text-slate-950">
+                          {fell.name}
+                        </h3>
 
                         <span
-                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          className={`rounded-full px-3 py-1 text-xs font-bold ${
                             fell.completed
                               ? "bg-emerald-100 text-emerald-700"
                               : isPlanned
@@ -355,7 +409,7 @@ useEffect(() => {
                       </p>
                     </div>
 
-                    <div className="text-sm text-slate-600">
+                    <div className="text-sm font-semibold text-slate-600">
                       <span>{fell.heightM}m</span>
                       <span className="mx-2 text-slate-300">·</span>
                       <span>Rank #{fell.heightRank}</span>
@@ -366,7 +420,7 @@ useEffect(() => {
                     <button
                       type="button"
                       onClick={() => onToggleCompleted?.(fell.id)}
-                      className="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800"
+                      className="w-full rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 xl:w-auto"
                     >
                       {fell.completed ? "Undo complete" : "Complete"}
                     </button>
