@@ -31,10 +31,6 @@ function getFell(fellId: string) {
   return allWainwrights.find((w) => w.id === fellId);
 }
 
-function getFellName(fellId: string) {
-  return getFell(fellId)?.name ?? fellId;
-}
-
 function getFellNumber(fellId: string) {
   return getFell(fellId)?.heightRank ?? null;
 }
@@ -186,11 +182,11 @@ export default function WainwrightLogbook() {
         return true;
         })
         .sort((a, b) => {
-        const aVisits = visitsByFell[a.fell_id] ?? [];
-        const bVisits = visitsByFell[b.fell_id] ?? [];
+        const aVisits = visitsByFell[a.id] ?? [];
+        const bVisits = visitsByFell[b.id] ?? [];
 
         if (sortBy === "name") {
-            return getFellName(a.fell_id).localeCompare(getFellName(b.fell_id));
+            return getFellName(a.id).localeCompare(getFellName(b.id));
         }
 
         if (sortBy === "firstCompleted") {
@@ -204,24 +200,24 @@ export default function WainwrightLogbook() {
         }
 
         if (sortBy === "number") {
-        return (getFellNumber(a.fell_id) ?? 999) - (getFellNumber(b.fell_id) ?? 999);
+        return (getFellNumber(a.id) ?? 999) - (getFellNumber(b.id) ?? 999);
         }
 
         if (sortBy === "height") {
-        return (getFellHeight(b.fell_id) ?? 0) - (getFellHeight(a.fell_id) ?? 0);
+        return (getFellHeight(b.id) ?? 0) - (getFellHeight(a.id) ?? 0);
         }
 
         if (sortBy === "number") {
-        return (getFellNumber(a.fell_id) ?? 999) - (getFellNumber(b.fell_id) ?? 999);
+        return (getFellNumber(a.id) ?? 999) - (getFellNumber(b.id) ?? 999);
         }
 
         if (sortBy === "height") {
-        return (getFellHeight(b.fell_id) ?? 0) - (getFellHeight(a.fell_id) ?? 0);
+        return (getFellHeight(b.id) ?? 0) - (getFellHeight(a.id) ?? 0);
         }
 
         return 0;
         });
-    }, [fells, visitsByFell, searchTerm, statusFilter, sortBy]);
+    }, [fells, visitsByFell, searchTerm, statusFilter, sortBy, progressByFell]);
 
   return (
     <section className="space-y-6">
@@ -293,7 +289,6 @@ export default function WainwrightLogbook() {
                 "—";
 
                 const timesDone = Math.max(fellVisits.length, completed ? 1 : 0);
-                const fellHeight = getFellHeight(fell.fell_id);
 
                 return (
                 <tr key={fell.id} className="border-t border-stone-100">
