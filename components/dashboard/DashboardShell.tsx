@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import type { DashboardView } from "@/types/dashboard";
 import AuthButton from "@/components/AuthButton";
+import Image from "next/image";
 
 type Props = {
   activeView: DashboardView;
@@ -25,23 +26,18 @@ export default function DashboardShell({
   return (
     <div className="min-h-screen bg-[#f4f7f2] text-stone-950">
       <header className="sticky top-0 z-[9999] border-b border-stone-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-6 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex h-16 max-w-[1500px] items-center justify-between gap-6 px-4 sm:px-6">
           <button
             onClick={() => onChangeView("overview")}
             className="flex min-w-0 items-center gap-3"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-900 text-sm font-black text-white">
-              214
-            </div>
-
-            <div className="min-w-0 text-left">
-              <p className="truncate text-sm font-black tracking-wide text-stone-950">
-                Wainwright Planner
-              </p>
-              <p className="hidden truncate text-xs font-semibold text-stone-500 sm:block">
-                Lake District tracker
-              </p>
-            </div>
+            <Image
+              src="/summitr_logov2.png"
+              alt="Summitr logo"
+              width={170}
+              height={50}
+              className="rounded-xl"
+            />
           </button>
 
           <nav className="hidden items-center gap-6 md:flex">
