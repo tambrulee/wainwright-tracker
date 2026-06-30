@@ -16,7 +16,32 @@ const navItems: { label: string; value: DashboardView; icon: string }[] = [
   { label: "Map", value: "map", icon: "🗺️" },
   { label: "Planner", value: "planner", icon: "📅" },
   { label: "Logbook", value: "logbook", icon: "📖" },
+  { label: "Achievements", value: "achievements", icon: "🏆" },
 ];
+
+const heightMilestones = [
+  { label: "Completed all 300m+ Wainwrights", minHeightM: 300 },
+  { label: "Completed all 400m+ Wainwrights", minHeightM: 400 },
+  { label: "Completed all 500m+ Wainwrights", minHeightM: 500 },
+  { label: "Completed all 600m+ Wainwrights", minHeightM: 600 },
+  { label: "Completed all 700m+ Wainwrights", minHeightM: 700 },
+  { label: "Completed all 800m+ Wainwrights", minHeightM: 800 },
+  { label: "Completed all 900m+ Wainwrights", minHeightM: 900 },
+];
+
+const sectionMilestones = [
+  "North Western Fells",
+  "Western Fells",
+  "Southern Fells",
+  "Central Fells",
+  "Eastern Fells",
+  "Far Eastern Fells",
+  "Northern Fells",
+];
+
+const overallMilestone = {
+  label: "Completed all 214 Wainwrights",
+};
 
 export default function DashboardShell({
   activeView,
