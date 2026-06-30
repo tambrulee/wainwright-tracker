@@ -10,11 +10,11 @@ type Props = {
   children: ReactNode;
 };
 
-const navItems: { label: string; value: DashboardView }[] = [
-  { label: "Overview", value: "overview" },
-  { label: "Map", value: "map" },
-  { label: "Planner", value: "planner" },
-  { label: "Logbook", value: "logbook" },
+const navItems: { label: string; value: DashboardView; icon: string }[] = [
+  { label: "Overview", value: "overview", icon: "🏠" },
+  { label: "Map", value: "map", icon: "🗺️" },
+  { label: "Planner", value: "planner", icon: "📅" },
+  { label: "Logbook", value: "logbook", icon: "📖" },
 ];
 
 export default function DashboardShell({
@@ -24,57 +24,82 @@ export default function DashboardShell({
 }: Props) {
   return (
     <div className="min-h-screen bg-[#f4f7f2] text-stone-950">
-      <header className="sticky top-0 z-[9999] border-b border-stone-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1500px] flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center justify-between gap-3">
-            <button
-              onClick={() => onChangeView("overview")}
-              className="flex min-w-0 items-center gap-3"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-900 text-sm font-black text-white">
-                214
-              </div>
-
-              <div className="min-w-0 text-left">
-                <p className="truncate text-sm font-black tracking-wide text-stone-950">
-                  Wainwright Planner
-                </p>
-                <p className="truncate text-xs font-semibold text-stone-500">
-                  Lake District tracker
-                </p>
-              </div>
-            </button>
-
-            <div className="shrink-0 lg:hidden">
-              <AuthButton />
+      <header className="sticky top-0 z-[9999] border-b border-stone-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-6 px-4 py-3 sm:px-6">
+          <button
+            onClick={() => onChangeView("overview")}
+            className="flex min-w-0 items-center gap-3"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-900 text-sm font-black text-white">
+              214
             </div>
-          </div>
 
-          <nav className="grid grid-cols-3 gap-2 rounded-2xl bg-stone-100 p-1 lg:flex lg:items-center lg:gap-1 lg:bg-transparent lg:p-0">
-            {navItems.map((item) => (
-              <button
-                key={item.value}
-                onClick={() => onChangeView(item.value)}
-                className={`rounded-xl px-3 py-2 text-sm font-bold transition lg:rounded-full lg:px-4 ${
-                  activeView === item.value
-                    ? "bg-emerald-700 text-white shadow-sm"
-                    : "text-stone-700 hover:bg-stone-200 lg:bg-stone-100"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+            <div className="min-w-0 text-left">
+              <p className="truncate text-sm font-black tracking-wide text-stone-950">
+                Wainwright Planner
+              </p>
+              <p className="hidden truncate text-xs font-semibold text-stone-500 sm:block">
+                Lake District tracker
+              </p>
+            </div>
+          </button>
+
+          <nav className="hidden items-center gap-6 md:flex">
+            {navItems.map((item) => {
+              const isActive = activeView === item.value;
+
+              return (
+                <button
+                  key={item.value}
+                  onClick={() => onChangeView(item.value)}
+                  className={`relative py-2 text-sm font-bold transition ${
+                    isActive
+                      ? "text-emerald-800"
+                      : "text-stone-500 hover:text-stone-950"
+                  }`}
+                >
+                  {item.label}
+
+                  {isActive && (
+                    <span className="absolute inset-x-0 -bottom-[13px] h-0.5 rounded-full bg-emerald-700" />
+                  )}
+                </button>
+              );
+            })}
           </nav>
 
-          <div className="hidden shrink-0 lg:block">
+          <div className="shrink-0">
             <AuthButton />
           </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1500px] px-4 py-5 sm:px-6 sm:py-8">
+      <main className="mx-auto w-full max-w-[1500px] px-4 pb-24 pt-5 sm:px-6 sm:py-8">
         {children}
       </main>
+
+      <nav className="fixed inset-x-0 bottom-0 z-[9999] border-t border-stone-200 bg-white/95 px-2 pb-safe pt-2 shadow-[0_-8px_20px_rgba(0,0,0,0.06)] backdrop-blur md:hidden">
+        <div className="grid grid-cols-4">
+          {navItems.map((item) => {
+            const isActive = activeView === item.value;
+
+            return (
+              <button
+                key={item.value}
+                onClick={() => onChangeView(item.value)}
+                className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-xs font-bold transition ${
+                  isActive
+                    ? "text-emerald-800"
+                    : "text-stone-500 hover:text-stone-900"
+                }`}
+              >
+                <span className="text-lg leading-none">{item.icon}</span>
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }
