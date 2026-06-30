@@ -139,6 +139,19 @@ export default function FellPlanner({
 
   const completedCount = fells.filter((fell) => fell.completed).length;
 
+  const plannedCalendarDays = useMemo(() => {
+    return fells
+      .filter((fell) => fell.plannedDate && !fell.completed)
+      .reduce<Record<string, PlannerFell[]>>((days, fell) => {
+        const key = fell.plannedDate as string;
+        if (!days[key]) days[key] = [];
+        days[key].push(fell);
+        return days;
+      }, {});
+  }, [fells]);
+
+  const plannedDates = Object.keys(plannedCalendarDays).sort();
+
   const saveDate = (fellId: string, value: string) => {
     onUpdatePlannedDate?.(fellId, value);
 
@@ -259,6 +272,14 @@ export default function FellPlanner({
     });
   };
 
+  const formatShortDate = (date: string) => {
+    return new Date(date).toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+  };
+
   return (
     <section className="space-y-6">
       <div>
@@ -272,7 +293,7 @@ export default function FellPlanner({
           Add planned dates, filter by area, and keep your upcoming fells tidy.
         </p>
       </div>
-
+    {/* Filter Controls */}
       <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <input
@@ -355,6 +376,67 @@ export default function FellPlanner({
           </span>
         </div>
       </div>
+
+      <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-800">
+              Planned calendar
+            </p>
+            <h2 className="mt-1 text-2xl font-black text-slate-950">
+              Hiking days at a glance
+            </h2>
+          </div>
+
+          <span className="rounded-full bg-blue-50 px-3 py-1 text-sm font-bold text-blue-700">
+            {plannedDates.length} days
+          </span>
+        </div>
+
+        {plannedDates.length === 0 ? (
+          <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+            Nothing planned yet.
+          </p>
+        ) : (
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+            {plannedDates.map((date) => {
+              const dayFells = plannedCalendarDays[date];
+
+              return (
+                <button
+                  key={date}
+                  type="button"
+                  className="min-w-[180px] rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:border-emerald-300 hover:bg-emerald-50"
+                >
+                  <p className="text-sm font-black text-slate-950">
+                    {formatShortDate(date)}
+                  </p>
+
+                  <p className="mt-1 text-xs font-bold text-slate-500">
+                    {dayFells.length} fell{dayFells.length === 1 ? "" : "s"}
+                  </p>
+
+                  <div className="mt-3 space-y-1">
+                    {dayFells.slice(0, 3).map((fell) => (
+                      <p key={fell.id} className="truncate text-sm text-slate-700">
+                        {fell.name}
+                      </p>
+                    ))}
+
+                    {dayFells.length > 3 && (
+                      <p className="text-xs font-bold text-slate-500">
+                        +{dayFells.length - 3} more
+                      </p>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Planned Dates */}
 
       <div className="space-y-5">
         {Object.entries(groupedByDate).map(([date, dateFells]) => (

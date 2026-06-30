@@ -15,6 +15,7 @@ import {
 } from "@/lib/supabase/progress";
 import { createClient } from "@/lib/supabase/client";
 import FellPlanner from "@/components/fells/FellPlanner";
+import WainwrightLogbook from "@/components/WainwrightLogbook";
 
 type ProgressState = Record<string, FellProgress>;
 
@@ -372,6 +373,8 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
         onUpdatePlannedDate={handleUpdatePlannedDate}
       />
     )}
+
+    {activeView === "logbook" && <WainwrightLogbook />}
 
     <SaveRouteModal
       isOpen={isSaveModalOpen}

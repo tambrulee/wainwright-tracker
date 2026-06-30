@@ -14,6 +14,7 @@ const navItems: { label: string; value: DashboardView }[] = [
   { label: "Overview", value: "overview" },
   { label: "Map", value: "map" },
   { label: "Planner", value: "planner" },
+  { label: "Logbook", value: "logbook" },
 ];
 
 export default function DashboardShell({

@@ -14,4 +14,5 @@ export type DashboardView =
   | "map"
   | "route"
   | "saved"
-  | "planner";
+  | "planner"
+  | "logbook";

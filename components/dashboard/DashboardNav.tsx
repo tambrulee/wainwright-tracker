@@ -13,6 +13,7 @@ const navItems: { label: string; value: DashboardView }[] = [
   { label: "Planner", value: "planner" },
   { label: "Route builder", value: "route" },
   { label: "Saved routes", value: "saved" },
+  { label: "Logbook", value: "logbook" },
 ];
 
 export default function DashboardNav({ activeView, onChangeView }: Props) {
