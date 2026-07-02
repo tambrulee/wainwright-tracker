@@ -225,6 +225,8 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
     });
   }
 
+  
+
   function toggleCompleted(fell: Wainwright) {
     const isNowCompleted = !fell.completed;
 
@@ -334,7 +336,6 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
         selectedFell={selectedFell}
         isRouteMode={isRouteMode}
         routePoints={routePoints}
-        routePointsCount={routePoints.length}
         filteredFellsCount={filteredFells.length}
         savedRoutesCount={savedRoutes.length}
         onSearchChange={setSearch}
@@ -364,6 +365,9 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
         }
         completedFellsCount={completedCount}
         plannedFellsCount={plannedCount}
+        onSetPlannedDate={(fell, plannedDate) =>
+          handleUpdatePlannedDate(fell.id, plannedDate ?? "")
+        }
       />
     )}
 

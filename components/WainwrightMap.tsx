@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -42,6 +42,7 @@ type Props = {
   onRemoveRoutePoint: (pointId: string) => void;
   onToggleCompleted: (fell: MapFell) => void;
   onTogglePriority: (fell: MapFell) => void;
+  onSetPlannedDate: (fell: MapFell, plannedDate: string | null) => void;
 };
 
 function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
@@ -93,6 +94,15 @@ const RoutePointIcon = L.divIcon({
   iconAnchor: [10, 10],
 });
 
+const legendItems = [
+  { label: "Selected", border: "#1c1917", fill: "#1c1917", size: 22 },
+  { label: "In route", border: "#2563eb", fill: "#2563eb", size: 18 },
+  { label: "Completed", border: "#15803d", fill: "#22c55e", size: 14 },
+  { label: "Planned", border: "#2563eb", fill: "#60a5fa", size: 12 },
+  { label: "Priority", border: "#f97316", fill: "#fb923c", size: 10 },
+  { label: "Not started", border: "#57534e", fill: "#a8a29e", size: 10 },
+];
+
 export default function WainwrightMap({
   fells,
   onSelectFell,
@@ -104,25 +114,152 @@ export default function WainwrightMap({
   onRemoveRoutePoint,
   onToggleCompleted,
   onTogglePriority,
+  onSetPlannedDate,
 }: Props) {
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "completed" | "planned" | "priority" | "not-started"
+  >("all");
+
   const fallbackRoutePositions = routePoints.map(
     (point) => [point.lat, point.lng] as [number, number]
   );
 
   const displayedRoute = walkingRoute?.coordinates ?? fallbackRoutePositions;
 
+  const filteredFells = useMemo(() => {
+    return fells
+      .filter((fell) => {
+        const matchesSearch = fell.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-  const legendItems = [
-    { label: "Selected", border: "#1c1917", fill: "#1c1917", size: 22 },
-    { label: "In route", border: "#2563eb", fill: "#2563eb", size: 18 },
-    { label: "Completed", border: "#15803d", fill: "#22c55e", size: 14 },
-    { label: "Planned", border: "#2563eb", fill: "#60a5fa", size: 12 },
-    { label: "Priority", border: "#f97316", fill: "#fb923c", size: 10 },
-    { label: "Not started", border: "#57534e", fill: "#a8a29e", size: 10 },
-  ];
+        const isPlanned = Boolean(fell.plannedDate);
 
-    return (
-      <div className="relative h-full min-h-[520px] w-full overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
+        if (!matchesSearch) return false;
+        if (statusFilter === "completed") return Boolean(fell.completed);
+        if (statusFilter === "planned") return isPlanned;
+        if (statusFilter === "priority") return Boolean(fell.priority);
+        if (statusFilter === "not-started") return !fell.completed && !isPlanned;
+
+        return true;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [fells, searchTerm, statusFilter]);
+
+  return (
+    <div
+      className={`grid h-[calc(100vh-8rem)] min-h-[640px] gap-4 transition-all ${
+        isPanelOpen ? "lg:grid-cols-[320px_1fr]" : "lg:grid-cols-[56px_1fr]"
+      }`}
+    >
+      <aside className="hidden overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm lg:block">
+        <div className="flex items-center justify-between border-b border-stone-100 p-3">
+          {isPanelOpen && (
+            <div>
+              <h2 className="text-sm font-black uppercase tracking-[0.18em] text-emerald-800">
+                Wainwrights
+              </h2>
+              <p className="text-xs text-stone-500">
+                {filteredFells.length} shown
+              </p>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsPanelOpen((current) => !current)}
+            className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-bold hover:bg-stone-50"
+            aria-label={isPanelOpen ? "Collapse panel" : "Expand panel"}
+          >
+            {isPanelOpen ? "‹" : "›"}
+          </button>
+        </div>
+
+        {isPanelOpen && (
+          <>
+            <div className="space-y-2 border-b border-stone-100 p-3">
+              <input
+                type="search"
+                placeholder="Search fells..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm"
+              />
+
+              <select
+                value={statusFilter}
+                onChange={(e) =>
+                  setStatusFilter(
+                    e.target.value as
+                      | "all"
+                      | "completed"
+                      | "planned"
+                      | "priority"
+                      | "not-started"
+                  )
+                }
+                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm"
+              >
+                <option value="all">All fells</option>
+                <option value="completed">Completed</option>
+                <option value="planned">Planned</option>
+                <option value="priority">Priority</option>
+                <option value="not-started">Not started</option>
+              </select>
+            </div>
+
+            <div className="h-[calc(100%-146px)] overflow-y-auto p-2">
+              {filteredFells.map((fell) => {
+                const isSelected = selectedFell?.id === fell.id;
+                const isPlanned = Boolean(fell.plannedDate);
+
+                return (
+                  <button
+                    key={fell.id}
+                    type="button"
+                    onClick={() => onSelectFell(fell.id)}
+                    className={`w-full rounded-2xl px-3 py-2 text-left transition ${
+                      isSelected
+                        ? "bg-emerald-50 text-emerald-950 ring-1 ring-emerald-200"
+                        : "hover:bg-stone-50"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-black">{fell.name}</p>
+                        <p className="text-xs text-stone-500">
+                          {fell.heightM}m · {fell.section}
+                        </p>
+                      </div>
+
+                      <span className="text-xs">
+                        {fell.completed
+                          ? "✅"
+                          : isPlanned
+                          ? "📅"
+                          : fell.priority
+                          ? "⭐"
+                          : ""}
+                      </span>
+                    </div>
+
+                    {fell.plannedDate && (
+                      <p className="mt-1 text-xs font-semibold text-blue-700">
+                        Planned{" "}
+                        {new Date(fell.plannedDate).toLocaleDateString("en-GB")}
+                      </p>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </aside>
+
+      <div className="relative h-full overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
         <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl border border-stone-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
             <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
@@ -149,7 +286,7 @@ export default function WainwrightMap({
         </div>
 
         {isRouteMode && (
-          <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl bg-emerald-950/95 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur sm:left-auto sm:right-4 sm:w-auto">
+          <div className="absolute top-4 left-4 right-4 z-[500] rounded-2xl bg-emerald-950/95 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur sm:left-auto sm:right-4 sm:w-auto">
             Click fells or the map to add route points
           </div>
         )}
@@ -158,168 +295,179 @@ export default function WainwrightMap({
           center={[54.5, -3.1]}
           zoom={10}
           scrollWheelZoom
-          className="h-full min-h-[520px] w-full rounded-3xl"
+          className="h-full w-full rounded-3xl"
         >
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-
-        <RouteClickHandler
-          isRouteMode={isRouteMode}
-          onAddRoutePoint={onAddRoutePoint}
-        />
-
-        {displayedRoute.length > 1 && (
-          <Polyline
-            positions={displayedRoute}
-            pathOptions={{
-              color: walkingRoute ? "#16a34a" : "#2563eb",
-              weight: 4,
-              opacity: 0.9,
-            }}
+          <TileLayer
+            attribution='&copy; OpenStreetMap contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        )}
 
-        {routePoints.map((point, index) => (
-          <Marker
-            key={point.id}
-            position={[point.lat, point.lng]}
-            icon={RoutePointIcon}
-            eventHandlers={{
-              click: () => {
-                if (isRouteMode) onRemoveRoutePoint(point.id);
-              },
-            }}
-          >
-            <Popup>
-              <strong>
-                {index + 1}. {point.name}
-              </strong>
-              <br />
-              {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
-              <br />
-              {isRouteMode && <span>Click marker to remove it.</span>}
-            </Popup>
-          </Marker>
-        ))}
+          <RouteClickHandler
+            isRouteMode={isRouteMode}
+            onAddRoutePoint={onAddRoutePoint}
+          />
 
-        {selectedFell &&
-          typeof selectedFell.latitude === "number" &&
-          typeof selectedFell.longitude === "number" && (
-            <FlyToFell
-              lat={selectedFell.latitude}
-              lng={selectedFell.longitude}
+          {displayedRoute.length > 1 && (
+            <Polyline
+              positions={displayedRoute}
+              pathOptions={{
+                color: walkingRoute ? "#16a34a" : "#2563eb",
+                weight: 4,
+                opacity: 0.9,
+              }}
             />
           )}
 
-        {fells
-          .filter(
-            (fell) =>
-              typeof fell.latitude === "number" &&
-              typeof fell.longitude === "number"
-          )
-          .map((fell) => {
-            const isSelected = selectedFell?.id === fell.id;
-            const isInRoute = routePoints.some(
-              (point) => point.fellId === fell.id
-            );
-            const isPlanned = Boolean(fell.plannedDate);
+          {routePoints.map((point, index) => (
+            <Marker
+              key={point.id}
+              position={[point.lat, point.lng]}
+              icon={RoutePointIcon}
+              eventHandlers={{
+                click: () => {
+                  if (isRouteMode) onRemoveRoutePoint(point.id);
+                },
+              }}
+            >
+              <Popup>
+                <strong>
+                  {index + 1}. {point.name}
+                </strong>
+                <br />
+                {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
+                <br />
+                {isRouteMode && <span>Click marker to remove it.</span>}
+              </Popup>
+            </Marker>
+          ))}
 
-            return (
-              <CircleMarker
-                key={fell.id}
-                center={[fell.latitude, fell.longitude]}
-                radius={
-                  isSelected
-                    ? 11
-                    : isInRoute
-                    ? 9
-                    : fell.completed
-                    ? 7
-                    : isPlanned
-                    ? 6
-                    : 5
-                }
-                eventHandlers={{
-                  click: () => {
-                    if (isRouteMode) {
-                      onAddRoutePoint({
-                        type: "fell",
-                        fellId: fell.id,
-                        lat: fell.latitude,
-                        lng: fell.longitude,
-                        name: fell.name,
-                      });
-                      return;
-                    }
+          {selectedFell &&
+            typeof selectedFell.latitude === "number" &&
+            typeof selectedFell.longitude === "number" && (
+              <FlyToFell
+                lat={selectedFell.latitude}
+                lng={selectedFell.longitude}
+              />
+            )}
 
-                    onSelectFell(fell.id);
-                  },
-                }}
-                pathOptions={{
-                  color: isSelected
-                    ? "#1c1917"
-                    : isInRoute
-                    ? "#2563eb"
-                    : fell.completed
-                    ? "#15803d"
-                    : isPlanned
-                    ? "#2563eb"
-                    : fell.priority
-                    ? "#f97316"
-                    : "#57534e",
-                  fillColor: isSelected
-                    ? "#1c1917"
-                    : isInRoute
-                    ? "#2563eb"
-                    : fell.completed
-                    ? "#22c55e"
-                    : isPlanned
-                    ? "#60a5fa"
-                    : fell.priority
-                    ? "#fb923c"
-                    : "#a8a29e",
-                  fillOpacity: 0.9,
-                  weight: isSelected ? 4 : isInRoute || isPlanned ? 3 : 2,
-                }}
-              >
-                <Popup>
-                  <div className="space-y-2">
-                    <strong>{fell.name}</strong>
-                    <br />
-                    {fell.section}
-                    <br />
-                    {fell.heightM}m · Rank #{fell.heightRank}
+          {fells
+            .filter(
+              (fell) =>
+                typeof fell.latitude === "number" &&
+                typeof fell.longitude === "number"
+            )
+            .map((fell) => {
+              const isSelected = selectedFell?.id === fell.id;
+              const isInRoute = routePoints.some(
+                (point) => point.fellId === fell.id
+              );
+              const isPlanned = Boolean(fell.plannedDate);
 
-                    {fell.plannedDate && (
-                      <p className="text-sm">
-                        Planned:{" "}
-                        {new Date(fell.plannedDate).toLocaleDateString(
-                          "en-GB"
-                        )}
-                      </p>
-                    )}
+              return (
+                <CircleMarker
+                  key={fell.id}
+                  center={[fell.latitude, fell.longitude]}
+                  radius={
+                    isSelected
+                      ? 11
+                      : isInRoute
+                      ? 9
+                      : fell.completed
+                      ? 7
+                      : isPlanned
+                      ? 6
+                      : 5
+                  }
+                  eventHandlers={{
+                    click: () => {
+                      if (isRouteMode) {
+                        onAddRoutePoint({
+                          type: "fell",
+                          fellId: fell.id,
+                          lat: fell.latitude,
+                          lng: fell.longitude,
+                          name: fell.name,
+                        });
+                        return;
+                      }
 
-                    <div className="flex gap-2 pt-2">
-                      <button onClick={() => onSelectFell(fell.id)}>
-                        View
-                      </button>
+                      onSelectFell(fell.id);
+                    },
+                  }}
+                  pathOptions={{
+                    color: isSelected
+                      ? "#1c1917"
+                      : isInRoute
+                      ? "#2563eb"
+                      : fell.completed
+                      ? "#15803d"
+                      : isPlanned
+                      ? "#2563eb"
+                      : fell.priority
+                      ? "#f97316"
+                      : "#57534e",
+                    fillColor: isSelected
+                      ? "#1c1917"
+                      : isInRoute
+                      ? "#2563eb"
+                      : fell.completed
+                      ? "#22c55e"
+                      : isPlanned
+                      ? "#60a5fa"
+                      : fell.priority
+                      ? "#fb923c"
+                      : "#a8a29e",
+                    fillOpacity: 0.9,
+                    weight: isSelected ? 4 : isInRoute || isPlanned ? 3 : 2,
+                  }}
+                >
+                  <Popup>
+                    <div className="space-y-2">
+                      <strong>{fell.name}</strong>
+                      <br />
+                      {fell.section}
+                      <br />
+                      {fell.heightM}m · Rank #{fell.heightRank}
 
-                      <button onClick={() => onTogglePriority(fell)}>
-                        {fell.priority ? "Unpriority" : "Priority"}
-                      </button>
+                      <label className="block pt-2 text-xs font-bold text-stone-600">
+                        Plan date
+                      </label>
 
-                      <button onClick={() => onToggleCompleted(fell)}>
-                        {fell.completed ? "Undo" : "Complete"}
-                      </button>
+                      <input
+                        type="date"
+                        value={fell.plannedDate ?? ""}
+                        onChange={(e) =>
+                          onSetPlannedDate(fell, e.target.value || null)
+                        }
+                        className="mt-1 w-full rounded-lg border border-stone-300 px-2 py-1 text-sm"
+                      />
+
+                      <div className="flex gap-2 pt-2">
+                        <button type="button" onClick={() => onSelectFell(fell.id)}>
+                          View
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => onTogglePriority(fell)}
+                        >
+                          {fell.priority ? "Unpriority" : "Priority"}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => onToggleCompleted(fell)}
+                        >
+                          {fell.completed ? "Undo" : "Complete"}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </Popup>
-              </CircleMarker>
-            );
-          })}
-      </MapContainer>
+                  </Popup>
+                </CircleMarker>
+              );
+            })}
+        </MapContainer>
+      </div>
     </div>
   );
 }
