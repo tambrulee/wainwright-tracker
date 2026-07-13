@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -117,10 +117,7 @@ export default function WainwrightMap({
   onSetPlannedDate,
 }: Props) {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "completed" | "planned" | "priority" | "not-started"
-  >("all");
+
 
   const fallbackRoutePositions = routePoints.map(
     (point) => [point.lat, point.lng] as [number, number]
@@ -128,33 +125,16 @@ export default function WainwrightMap({
 
   const displayedRoute = walkingRoute?.coordinates ?? fallbackRoutePositions;
 
-  const filteredFells = useMemo(() => {
-    return fells
-      .filter((fell) => {
-        const matchesSearch = fell.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-
-        const isPlanned = Boolean(fell.plannedDate);
-
-        if (!matchesSearch) return false;
-        if (statusFilter === "completed") return Boolean(fell.completed);
-        if (statusFilter === "planned") return isPlanned;
-        if (statusFilter === "priority") return Boolean(fell.priority);
-        if (statusFilter === "not-started") return !fell.completed && !isPlanned;
-
-        return true;
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [fells, searchTerm, statusFilter]);
 
   return (
     <div
       className={`grid h-[calc(100vh-8rem)] min-h-[640px] gap-4 transition-all ${
-        isPanelOpen ? "lg:grid-cols-[320px_1fr]" : "lg:grid-cols-[56px_1fr]"
+        isPanelOpen
+          ? "grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr]"
+          : "grid-cols-1 md:grid-cols-[56px_1fr]"
       }`}
     >
-      <aside className="hidden overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm lg:block">
+      <aside className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
         <div className="flex items-center justify-between border-b border-stone-100 p-3">
           {isPanelOpen && (
             <div>
@@ -162,7 +142,7 @@ export default function WainwrightMap({
                 Wainwrights
               </h2>
               <p className="text-xs text-stone-500">
-                {filteredFells.length} shown
+                {fells.length} shown
               </p>
             </div>
           )}
@@ -179,39 +159,9 @@ export default function WainwrightMap({
 
         {isPanelOpen && (
           <>
-            <div className="space-y-2 border-b border-stone-100 p-3">
-              <input
-                type="search"
-                placeholder="Search fells..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm"
-              />
-
-              <select
-                value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(
-                    e.target.value as
-                      | "all"
-                      | "completed"
-                      | "planned"
-                      | "priority"
-                      | "not-started"
-                  )
-                }
-                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm"
-              >
-                <option value="all">All fells</option>
-                <option value="completed">Completed</option>
-                <option value="planned">Planned</option>
-                <option value="priority">Priority</option>
-                <option value="not-started">Not started</option>
-              </select>
-            </div>
 
             <div className="h-[calc(100%-146px)] overflow-y-auto p-2">
-              {filteredFells.map((fell) => {
+              {fells.map((fell) => {
                 const isSelected = selectedFell?.id === fell.id;
                 const isPlanned = Boolean(fell.plannedDate);
 
@@ -298,7 +248,7 @@ export default function WainwrightMap({
           className="h-full w-full rounded-3xl"
         >
           <TileLayer
-            attribution='&copy; OpenStreetMap contributors'
+            attribution='& copy; OpenStreetMap contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 

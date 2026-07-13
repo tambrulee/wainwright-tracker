@@ -1,7 +1,12 @@
 // types/dashboard.ts
 
-export type SortOption = "name" | "height-high" | "height-low" | "section";
-
+export type SortOption =
+  | "name"
+  | "height-high"
+  | "height-low"
+  | "section"
+  | "planned-date";
+  
 export type StatusFilter =
   | "All"
   | "Not completed"

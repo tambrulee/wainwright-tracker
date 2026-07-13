@@ -142,6 +142,7 @@ export default function MapView({
             <option value="height-high">Highest first</option>
             <option value="height-low">Lowest first</option>
             <option value="section">Region</option>
+            <option value="planned-date">Planned date</option>
           </select>
 
           <button

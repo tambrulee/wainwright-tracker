@@ -117,8 +117,12 @@ useEffect(() => {
   const filteredFells = useMemo(() => {
     return mergedFells
       .filter((fell) => {
-        const matchesSearch = fell.name.toLowerCase().includes(search.toLowerCase());
-        const matchesSection = section === "All" || fell.section === section;
+        const matchesSearch = fell.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+        const matchesSection =
+          section === "All" || fell.section === section;
 
         const matchesStatus =
           statusFilter === "All" ||
@@ -130,10 +134,36 @@ useEffect(() => {
         return matchesSearch && matchesSection && matchesStatus;
       })
       .sort((a, b) => {
-        if (sortBy === "height-high") return b.heightM - a.heightM;
-        if (sortBy === "height-low") return a.heightM - b.heightM;
-        if (sortBy === "section") return a.section.localeCompare(b.section);
-        return a.name.localeCompare(b.name);
+        switch (sortBy) {
+          case "height-high":
+            return b.heightM - a.heightM;
+
+          case "height-low":
+            return a.heightM - b.heightM;
+
+          case "section":
+            return (
+              a.section.localeCompare(b.section) ||
+              a.name.localeCompare(b.name)
+            );
+
+          case "planned-date":
+            if (!a.plannedDate && !b.plannedDate) {
+              return a.name.localeCompare(b.name);
+            }
+
+            if (!a.plannedDate) return 1;
+            if (!b.plannedDate) return -1;
+
+            return (
+              a.plannedDate.localeCompare(b.plannedDate) ||
+              a.name.localeCompare(b.name)
+            );
+
+          case "name":
+          default:
+            return a.name.localeCompare(b.name);
+        }
       });
   }, [mergedFells, search, section, statusFilter, sortBy]);
 
