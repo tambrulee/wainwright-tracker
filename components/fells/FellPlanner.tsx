@@ -55,10 +55,6 @@ export default function FellPlanner({
     }
   });
 
-  const [draftDateParts, setDraftDateParts] = useState<
-    Record<string, { day: string; month: string; year: string }>
-  >({});
-
   const { status, search, sort, hideCompleted, area } = filters;
 
   const updateFilter = <K extends keyof PlannerFilters>(
@@ -152,14 +148,16 @@ export default function FellPlanner({
 
   const plannedDates = Object.keys(plannedCalendarDays).sort();
 
+  const today = new Date();
+  const todayKey = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
+  const nextPlannedDate = plannedDates.find((date) => date >= todayKey);
+
   const saveDate = (fellId: string, value: string) => {
     onUpdatePlannedDate?.(fellId, value);
-
-    setDraftDateParts((prev) => {
-      const copy = { ...prev };
-      delete copy[fellId];
-      return copy;
-    });
   };
 
   const resetFilters = () => {
@@ -168,91 +166,23 @@ export default function FellPlanner({
 
   const renderDateControls = (fell: PlannerFell) => {
     const savedDate = fell.plannedDate ?? "";
-    const [savedYear = "", savedMonth = "", savedDay = ""] =
-      savedDate.split("-");
-
-    const parts = draftDateParts[fell.id] ?? {
-      day: savedDay,
-      month: savedMonth,
-      year: savedYear,
-    };
-
-    const currentValue =
-      parts.year && parts.month && parts.day
-        ? `${parts.year}-${parts.month}-${parts.day}`
-        : "";
-
-    const hasChanged = currentValue !== savedDate;
-
-    const updatePart = (part: "day" | "month" | "year", value: string) => {
-      setDraftDateParts((prev) => ({
-        ...prev,
-        [fell.id]: {
-          ...parts,
-          [part]: value,
-        },
-      }));
-    };
 
     return (
-      <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center">
-        <select
-          value={parts.day}
-          onChange={(e) => updatePart("day", e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
-        >
-          <option value="">Day</option>
-          {Array.from({ length: 31 }, (_, i) =>
-            String(i + 1).padStart(2, "0")
-          ).map((day) => (
-            <option key={day} value={day}>
-              {day}
-            </option>
-          ))}
-        </select>
+      <div className="flex min-w-0 items-center gap-2">
+        <input
+          type="date"
+          value={savedDate}
+          aria-label={`Planned date for ${fell.name}`}
+          onChange={(event) => saveDate(fell.id, event.target.value)}
+          className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+        />
 
-        <select
-          value={parts.month}
-          onChange={(e) => updatePart("month", e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
-        >
-          <option value="">Month</option>
-          {Array.from({ length: 12 }, (_, i) =>
-            String(i + 1).padStart(2, "0")
-          ).map((month) => (
-            <option key={month} value={month}>
-              {month}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={parts.year}
-          onChange={(e) => updatePart("year", e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
-        >
-          <option value="">Year</option>
-          {[2026, 2027, 2028, 2029, 2030].map((year) => (
-            <option key={year} value={String(year)}>
-              {year}
-            </option>
-          ))}
-        </select>
-
-        <button
-          type="button"
-          disabled={!hasChanged || !currentValue}
-          onClick={() => saveDate(fell.id, currentValue)}
-          className="col-span-3 rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white disabled:bg-slate-200 disabled:text-slate-400 sm:col-span-1"
-        >
-          Save
-        </button>
-
-        {(savedDate || currentValue) && (
+        {savedDate && (
           <button
             type="button"
             onClick={() => saveDate(fell.id, "")}
-            className="col-span-3 rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200 sm:col-span-1"
+            aria-label={`Clear planned date for ${fell.name}`}
+            className="shrink-0 rounded-lg px-2 py-2 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
           >
             Clear
           </button>
@@ -264,7 +194,7 @@ export default function FellPlanner({
   const formatDateHeading = (date: string) => {
     if (date === "Unscheduled") return "Unscheduled";
 
-    return new Date(date).toLocaleDateString("en-GB", {
+    return new Date(`${date}T12:00:00`).toLocaleDateString("en-GB", {
       weekday: "long",
       day: "numeric",
       month: "long",
@@ -273,11 +203,17 @@ export default function FellPlanner({
   };
 
   const formatShortDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-GB", {
+    return new Date(`${date}T12:00:00`).toLocaleDateString("en-GB", {
       weekday: "short",
       day: "numeric",
       month: "short",
     });
+  };
+
+  const jumpToDate = (date: string) => {
+    document
+      .getElementById(`planner-day-${date}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -377,57 +313,70 @@ export default function FellPlanner({
         </div>
       </div>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-        <div className="flex items-start justify-between gap-4">
+      <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="flex items-start justify-between gap-4 px-4 pb-4 pt-5 sm:px-5">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-800">
-              Planned calendar
+              Your hiking diary
             </p>
             <h2 className="mt-1 text-2xl font-black text-slate-950">
               Hiking days at a glance
             </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              {plannedCount} fell{plannedCount === 1 ? "" : "s"} across {plannedDates.length} hiking day{plannedDates.length === 1 ? "" : "s"}
+            </p>
           </div>
 
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-sm font-bold text-blue-700">
-            {plannedDates.length} days
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">
+            {nextPlannedDate ? `${formatShortDate(nextPlannedDate)} next` : "No upcoming plans"}
           </span>
         </div>
 
         {plannedDates.length === 0 ? (
-          <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+          <p className="mx-4 mb-5 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600 sm:mx-5">
             Nothing planned yet.
           </p>
         ) : (
-          <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+          <div className="flex gap-2 overflow-x-auto border-t border-slate-100 bg-slate-50/70 px-4 py-3 sm:px-5">
             {plannedDates.map((date) => {
               const dayFells = plannedCalendarDays[date];
+              const isNext = date === nextPlannedDate;
+              const isPast = date < todayKey;
 
               return (
                 <button
                   key={date}
                   type="button"
-                  className="min-w-[180px] rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:border-emerald-300 hover:bg-emerald-50"
+                  onClick={() => jumpToDate(date)}
+                  className={`group flex min-w-[245px] items-center gap-3 rounded-2xl border p-3 text-left transition ${
+                    isNext
+                      ? "border-emerald-300 bg-emerald-50"
+                      : "border-slate-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/60"
+                  }`}
                 >
-                  <p className="text-sm font-black text-slate-950">
-                    {formatShortDate(date)}
-                  </p>
+                  <div className={`flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl ${
+                    isNext ? "bg-emerald-700 text-white" : "bg-slate-100 text-slate-700 group-hover:bg-emerald-100"
+                  }`}>
+                    <span className="text-[10px] font-black uppercase leading-none">
+                      {new Date(`${date}T12:00:00`).toLocaleDateString("en-GB", { month: "short" })}
+                    </span>
+                    <span className="mt-1 text-lg font-black leading-none">
+                      {new Date(`${date}T12:00:00`).getDate()}
+                    </span>
+                  </div>
 
-                  <p className="mt-1 text-xs font-bold text-slate-500">
-                    {dayFells.length} fell{dayFells.length === 1 ? "" : "s"}
-                  </p>
-
-                  <div className="mt-3 space-y-1">
-                    {dayFells.slice(0, 3).map((fell) => (
-                      <p key={fell.id} className="truncate text-sm text-slate-700">
-                        {fell.name}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="truncate text-sm font-black text-slate-950">
+                        {new Date(`${date}T12:00:00`).toLocaleDateString("en-GB", { weekday: "long" })}
                       </p>
-                    ))}
-
-                    {dayFells.length > 3 && (
-                      <p className="text-xs font-bold text-slate-500">
-                        +{dayFells.length - 3} more
-                      </p>
-                    )}
+                      <span className="shrink-0 text-xs font-bold text-slate-500">
+                        {isPast ? "Overdue" : `${dayFells.length} fell${dayFells.length === 1 ? "" : "s"}`}
+                      </span>
+                    </div>
+                    <p className="mt-1 truncate text-xs text-slate-600">
+                      {dayFells.map((fell) => fell.name).join(" · ")}
+                    </p>
                   </div>
                 </button>
               );
@@ -442,7 +391,8 @@ export default function FellPlanner({
         {Object.entries(groupedByDate).map(([date, dateFells]) => (
           <section
             key={date}
-            className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
+            id={`planner-day-${date}`}
+            className="scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
           >
             <div className="border-b border-slate-100 bg-slate-50 px-4 py-4 sm:px-5">
               <h2 className="text-lg font-black text-slate-950">
@@ -461,37 +411,18 @@ export default function FellPlanner({
                 return (
                   <div
                     key={fell.id}
-                    className="grid gap-4 px-4 py-4 sm:px-5 xl:grid-cols-[1.3fr_0.7fr_1.7fr_0.7fr] xl:items-center"
+                    className="grid gap-3 px-4 py-3 sm:px-5 lg:grid-cols-[minmax(190px,1.3fr)_minmax(130px,0.8fr)_minmax(190px,1fr)_auto_auto] lg:items-center"
                   >
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="font-black text-slate-950">
-                          {fell.name}
-                        </h3>
-
-                        <span
-                          className={`rounded-full px-3 py-1 text-xs font-bold ${
-                            fell.completed
-                              ? "bg-emerald-100 text-emerald-700"
-                              : isPlanned
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          {fell.completed
-                            ? "Completed"
-                            : isPlanned
-                            ? "Planned"
-                            : "Unplanned"}
-                        </span>
-                      </div>
-
-                      <p className="mt-1 text-sm text-slate-500">
+                    <div className="min-w-0">
+                      <h3 className="truncate font-black text-slate-950">
+                        {fell.name}
+                      </h3>
+                      <p className="truncate text-xs text-slate-500">
                         {fell.section}
                       </p>
                     </div>
 
-                    <div className="text-sm font-semibold text-slate-600">
+                    <div className="text-sm font-semibold text-slate-600 lg:whitespace-nowrap">
                       <span>{fell.heightM}m</span>
                       <span className="mx-2 text-slate-300">·</span>
                       <span>Rank #{fell.heightRank}</span>
@@ -499,10 +430,30 @@ export default function FellPlanner({
 
                     {renderDateControls(fell)}
 
+                    <span
+                      className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${
+                        fell.completed
+                          ? "bg-emerald-100 text-emerald-700"
+                          : isPlanned
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {fell.completed
+                        ? "Completed"
+                        : isPlanned
+                        ? "Planned"
+                        : "Unplanned"}
+                    </span>
+
                     <button
                       type="button"
                       onClick={() => onToggleCompleted?.(fell.id)}
-                      className="w-full rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 xl:w-auto"
+                      className={`w-full whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition lg:w-auto ${
+                        fell.completed
+                          ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          : "bg-emerald-700 text-white hover:bg-emerald-800"
+                      }`}
                     >
                       {fell.completed ? "Undo complete" : "Complete"}
                     </button>
