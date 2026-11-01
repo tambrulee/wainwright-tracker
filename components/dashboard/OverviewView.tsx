@@ -99,7 +99,7 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
   {}
   );
 
-  const progressPercentage = Math.round((completedCount / fells.length) * 100);
+  const progressPercentage = fells.length ? Math.round((completedCount / fells.length) * 100) : 0;
 
   useEffect(() => {
     async function loadWeather() {
@@ -126,149 +126,120 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
   }, []);
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-[1.5rem] border border-stone-200 bg-white p-4 shadow-sm sm:p-6 md:rounded-[2rem]">
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
-          Overview
-        </p>
-
-        <h1 className="mt-2 text-3xl font-black tracking-tight text-stone-950 sm:text-4xl md:text-5xl">
-          Your Wainwright progress
-        </h1>
-
-        <p className="mt-3 max-w-3xl text-stone-600">
-          See what you’ve completed, where your gaps are, and which areas are
-          worth focusing on next.
-        </p>
-
-        <div className="mt-6">
-          <div className="flex items-center justify-between text-sm font-bold text-stone-700">
-            <span>{progressPercentage}% complete</span>
-            <span>{remainingCount} left</span>
+    <div className="space-y-5 md:space-y-6">
+      <section className="rounded-[1.5rem] border border-stone-200 bg-white p-4 shadow-sm sm:p-5 md:p-6">
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 sm:text-xs">
+              Overview
+            </p>
+            <h1 className="mt-1 text-2xl font-black tracking-tight text-stone-950 sm:text-3xl">
+              Your Wainwright progress
+            </h1>
           </div>
-
-          <div className="mt-2 h-3 overflow-hidden rounded-full bg-stone-200">
-            <div
-              className="h-full rounded-full bg-emerald-800"
-              style={{ width: `${progressPercentage}%` }}
-            />
+          <div className="shrink-0 text-right">
+            <p className="text-2xl font-black leading-none text-emerald-900 sm:text-3xl">
+              {progressPercentage}%
+            </p>
+            <p className="mt-1 text-[11px] font-medium text-stone-500">
+              {remainingCount} left
+            </p>
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-          <div className="rounded-3xl bg-stone-950 p-5 text-white">
-            <p className="text-xs uppercase tracking-wide text-stone-300">
-              Completed
-            </p>
-            <p className="mt-2 text-3xl font-black">
-              {completedCount} / {fells.length}
-            </p>
-          </div>
+        <div
+          className="mt-4 h-1.5 overflow-hidden rounded-full bg-stone-200"
+          role="progressbar"
+          aria-label="Wainwright completion"
+          aria-valuenow={completedCount}
+          aria-valuemin={0}
+          aria-valuemax={fells.length}
+        >
+          <div
+            className="h-full rounded-full bg-emerald-800 transition-all duration-300"
+            style={{ width: `${progressPercentage}%` }}
+          />
+        </div>
 
-          <div className="rounded-3xl border border-stone-200 bg-stone-50 p-5">
-            <p className="text-xs uppercase tracking-wide text-stone-500">
-              Remaining
-            </p>
-            <p className="mt-2 text-3xl font-black">{remainingCount}</p>
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+          <div className="rounded-xl bg-stone-950 px-3 py-3 text-white sm:px-4">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-300">Completed</p>
+            <p className="mt-1 text-xl font-black leading-tight sm:text-2xl">{completedCount} <span className="text-sm font-semibold text-stone-400">/ {fells.length}</span></p>
           </div>
-
-          <div className="rounded-3xl border border-stone-200 bg-stone-50 p-5">
-            <p className="text-xs uppercase tracking-wide text-stone-500">
-              Planned
-            </p>
-            <p className="mt-2 text-3xl font-black">{plannedCount}</p>
+          <div className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-3 sm:px-4">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Remaining</p>
+            <p className="mt-1 text-xl font-black leading-tight text-stone-950 sm:text-2xl">{remainingCount}</p>
           </div>
-
-          <div className="rounded-3xl bg-emerald-900 p-5 text-white">
-            <p className="text-xs uppercase tracking-wide text-emerald-200">
-              Priority
-            </p>
-            <p className="mt-2 text-3xl font-black">{priorityCount}</p>
+          <div className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-3 sm:px-4">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-500">Planned</p>
+            <p className="mt-1 text-xl font-black leading-tight text-stone-950 sm:text-2xl">{plannedCount}</p>
+          </div>
+          <div className="rounded-xl bg-emerald-900 px-3 py-3 text-white sm:px-4">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-200">Priority</p>
+            <p className="mt-1 text-xl font-black leading-tight sm:text-2xl">{priorityCount}</p>
           </div>
         </div>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <div className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-          <div className="mb-5">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-800">
-              Regions
-            </p>
-            <h2 className="text-2xl font-black text-stone-950">
-              Progress by area
-            </h2>
+        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm sm:p-5">
+          <div className="mb-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800">Regions</p>
+            <h2 className="text-xl font-black text-stone-950">Progress by area</h2>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-          {sectionStats.map((stat) => {
-            const percentage = Math.round((stat.completed / stat.total) * 100);
-            const isActive = activeSection === stat.section;
-            const weather = regionWeather[stat.section];
+          <div className="grid gap-2 sm:grid-cols-2">
+            {sectionStats.map((stat) => {
+              const percentage = Math.round((stat.completed / stat.total) * 100);
+              const isActive = activeSection === stat.section;
+              const weather = regionWeather[stat.section];
 
-            return (
+              return (
                 <button
                   key={stat.section}
+                  type="button"
                   onClick={() => setSelectedSection(stat.section)}
-                  className={`rounded-3xl border p-5 text-left transition ${
+                  aria-pressed={isActive}
+                  className={`rounded-xl border p-3 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 ${
                     isActive
                       ? "border-emerald-700 bg-emerald-50"
                       : "border-stone-200 bg-stone-50 hover:border-emerald-300 hover:bg-emerald-50"
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-black text-stone-950">
-                        {stat.section}
-                      </p>
-                      <p className="mt-1 text-sm text-stone-500">
-                        {stat.completed} of {stat.total} completed
-                      </p>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-black text-stone-950">{stat.section}</p>
+                      <p className="mt-0.5 text-xs text-stone-500">{stat.completed} / {stat.total} completed</p>
                     </div>
-
-                    <div className="text-right">
-                      <p className="text-xl font-black text-emerald-900">
-                        {percentage}%
-                      </p>
-
-                      {weather && (
-                        <p className="mt-1 text-2xl" aria-label={weather.condition}>
-                          {getWeatherSymbol(weather.condition)}
-                        </p>
-                      )}
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {weather && <span className="text-lg" aria-label={weather.condition}>{getWeatherSymbol(weather.condition)}</span>}
+                      <span className="text-lg font-black text-emerald-900">{percentage}%</span>
                     </div>
                   </div>
 
-                  <div className="mt-4 h-2 overflow-hidden rounded-full bg-stone-200">
-                    <div
-                      className="h-full rounded-full bg-emerald-800"
-                      style={{ width: `${percentage}%` }}
-                    />
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-stone-200"
+                       role="progressbar" aria-label={`${stat.section} completion`}
+                       aria-valuenow={stat.completed} aria-valuemin={0} aria-valuemax={stat.total}>
+                    <div className="h-full rounded-full bg-emerald-800" style={{ width: `${percentage}%` }} />
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold text-stone-600">
+                    <span>{stat.planned} planned</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{stat.priority} priority</span>
                   </div>
 
                   {weather && (
-                    <div className="mt-4 space-y-2 rounded-2xl bg-white/70 p-3 text-xs font-bold text-stone-700">
-                      <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                        <span>{weather.temperatureC}°C</span>
-                        <span>{weather.gustMph}mph gusts</span>
-                        <span>{weather.rainChance}% rain</span>
-                      </div>
-
-                      <div className="flex items-center justify-between rounded-xl bg-stone-100 px-3 py-2">
-                        <span>{weather.rainfallMm}mm rainfall</span>
-                        <span>
-                          {weather.warningLevel === "none"
-                            ? "No warning"
-                            : `${weather.warningLevel} risk`}
-                        </span>
-                      </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-stone-200/80 pt-2 text-[11px] font-medium text-stone-600">
+                      <span>{weather.temperatureC}°C</span>
+                      <span>{weather.gustMph}mph gusts</span>
+                      <span>{weather.rainChance}% rain</span>
+                      <span>{weather.rainfallMm}mm rainfall</span>
+                      {weather.warningLevel !== "none" && (
+                        <span className="font-bold text-amber-800">{weather.warningLevel} risk</span>
+                      )}
                     </div>
                   )}
-
-                  <div className="mt-3 flex gap-2 text-xs font-bold text-stone-600">
-                    <span>{stat.planned} planned</span>
-                    <span>·</span>
-                    <span>{stat.priority} priority</span>
-                  </div>
                 </button>
               );
             })}
@@ -288,41 +259,58 @@ export default function OverviewView({ fells, onSelectFell }: Props) {
             Prioritising planned fells, priority fells, then easier lower fells.
           </p>
 
-          <div className="mt-5 space-y-3">
+          
+          <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200">
             {sectionSuggestions.length === 0 ? (
-              <p className="rounded-2xl bg-stone-50 p-4 text-sm text-stone-600">
-                You’ve completed everything in this area.
+              <p className="p-4 text-sm text-stone-500">
+                You&apos;ve completed everything in this area.
               </p>
             ) : (
-              sectionSuggestions.map((fell) => (
+              sectionSuggestions.map((fell, index) => (
                 <button
                   key={fell.id}
+                  type="button"
                   onClick={() => onSelectFell(fell.id)}
-                  className="w-full rounded-2xl border border-stone-200 bg-stone-50 p-4 text-left transition hover:border-emerald-300 hover:bg-emerald-50"
+                  className={`group flex w-full items-center justify-between
+                    gap-3 px-4 py-3 text-left transition
+                    hover:bg-emerald-50
+                    ${index !== 0 ? "border-t border-stone-200" : ""}
+                  `}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-black text-stone-950">{fell.name}</p>
-                      <p className="text-sm text-stone-500">{fell.heightM}m</p>
-                    </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-stone-950">
+                      {fell.name}
+                    </p>
+                    <p className="text-xs text-stone-500">
+                      {fell.heightM}m
+                    </p>
+                  </div>
 
-                    <div className="flex gap-1">
-                      {fell.plannedDate && (
-                        <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-bold text-blue-800">
-                          Planned
-                        </span>
-                      )}
-                      {fell.priority && (
-                        <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900">
-                          Priority
-                        </span>
-                      )}
-                    </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {fell.plannedDate && (
+                      <span className="rounded-full bg-blue-100 px-2 py-1
+                        text-[10px] font-bold text-blue-800">
+                        Planned
+                      </span>
+                    )}
+
+                    {fell.priority && (
+                      <span className="rounded-full bg-amber-100 px-2 py-1
+                        text-[10px] font-bold text-amber-900">
+                        Priority
+                      </span>
+                    )}
+
+                    <span className="text-stone-300 transition
+                      group-hover:translate-x-0.5 group-hover:text-emerald-700">
+                      →
+                    </span>
                   </div>
                 </button>
               ))
             )}
           </div>
+
         </aside>
       </section>
     </div>
