@@ -351,7 +351,10 @@ const handleUpdatePlannedDate = async (fellId: string, plannedDate: string) => {
     {activeView === "overview" && (
       <OverviewView
         fells={mergedFells}
-        onSelectFell={setSelectedFellId}
+        onSelectFell={(fellId) => {
+          setSelectedFellId(fellId);
+          setActiveView("map");
+        }}
       />
     )}
 
