@@ -21,7 +21,30 @@ import Achievements from "@/components/Achievements";
 type ProgressState = Record<string, FellProgress>;
 
 export default function WainwrightDashboard({ fells }: { fells: Wainwright[] }) {
-  const [activeView, setActiveView] = useState<DashboardView>("overview");
+  const [activeView, setActiveView] = useState<DashboardView>(() => {
+    if (typeof window === "undefined") return "overview";
+
+    const saved = localStorage.getItem("summitr-active-view");
+
+    const validViews: DashboardView[] = [
+      "overview",
+      "map",
+      "planner",
+      "logbook",
+      "achievements",
+    ];
+
+    return saved && validViews.includes(saved as DashboardView)
+      ? (saved as DashboardView)
+      : "overview";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("summitr-active-view", activeView);
+  }, [activeView]);
+
+  // Keep the rest of your existing component code below here.
+
   const [search, setSearch] = useState("");
   const [section, setSection] = useState("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
