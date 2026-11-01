@@ -88,101 +88,48 @@ export default function MapView({
   const [toolPanel, setToolPanel] = useState<ToolPanel>("none");
   const [openRouteMenuId, setOpenRouteMenuId] = useState<string | null>(null);
 
+
+  const fieldClass = "w-full min-w-0 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5 text-sm !text-stone-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100";
+  const toolbarButton = "rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-sm font-semibold !text-stone-900 transition hover:border-emerald-300 hover:bg-emerald-50";
+
   return (
-    <div className="mx-auto max-w-[1500px] space-y-5 px-4 sm:px-6">
-      <section className="rounded-3xl border border-stone-200 bg-white p-4 shadow-sm">
-        <div className="flex flex-wrap items-center gap-3">
-          <Stat label="Completed" value={completedFellsCount} dark />
-          <Stat label="Planned" value={plannedFellsCount} />
-          <Stat label="Showing" value={filteredFellsCount} />
-          <Stat label="Routes" value={savedRoutesCount} dark />
-
-          <input
-            value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search fell..."
-            className="min-w-[220px] flex-1 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm outline-none focus:border-emerald-500 focus:bg-white"
-          />
-
-          <select
-            value={section}
-            onChange={(e) => onSectionChange(e.target.value)}
-            className="min-w-[180px] rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm"
-          >
-            <option value="All">All regions</option>
-            {sections
-              .filter((sectionName) => sectionName !== "All")
-              .map((sectionName) => (
-                <option key={sectionName} value={sectionName}>
-                  {sectionName}
-                </option>
-              ))}
-          </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) =>
-              onStatusFilterChange(e.target.value as StatusFilter)
-            }
-            className="min-w-[180px] rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm"
-          >
-            <option value="All">All statuses</option>
-            <option value="Not completed">Not completed</option>
-            <option value="Completed">Completed</option>
-            <option value="Planned">Planned</option>
-            <option value="Priority">Priority</option>
-          </select>
-
-          <select
-            value={sortBy}
-            onChange={(e) => onSortByChange(e.target.value as SortOption)}
-            className="min-w-[160px] rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm"
-          >
-            <option value="name">Name A–Z</option>
-            <option value="height-high">Highest first</option>
-            <option value="height-low">Lowest first</option>
-            <option value="section">Region</option>
-            <option value="planned-date">Planned date</option>
-          </select>
-
-          <button
-            type="button"
-            onClick={onResetFilters}
-            className="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-black hover:bg-stone-50"
-          >
-            Reset
-          </button>
+    <div className="mx-auto max-w-[1500px] space-y-3 px-2 sm:px-4 lg:px-6">
+      <section className="rounded-2xl border border-stone-200 bg-white p-3 text-stone-900 shadow-sm sm:p-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-stone-200 pb-3 text-sm">
+          <span className="font-bold text-emerald-900">{completedFellsCount} <span className="font-normal text-stone-500">completed</span></span>
+          <span className="font-bold text-emerald-900">{plannedFellsCount} <span className="font-normal text-stone-500">planned</span></span>
+          <span className="font-bold text-emerald-900">{filteredFellsCount} <span className="font-normal text-stone-500">showing</span></span>
+          <span className="font-bold text-emerald-900">{savedRoutesCount} <span className="font-normal text-stone-500">routes</span></span>
         </div>
-      </section>
 
-      <section className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() =>
-            setToolPanel((current) => (current === "route" ? "none" : "route"))
-          }
-          className={`rounded-2xl border px-4 py-3 text-sm font-black ${
-            toolPanel === "route"
-              ? "border-emerald-700 bg-emerald-50 text-emerald-900"
-              : "border-stone-200 bg-white hover:bg-stone-50"
-          }`}
-        >
-          Route builder
-        </button>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <label className="min-w-0 flex-[1_1_180px] sm:flex-[1_1_300px]">
+            <span className="sr-only">Search fells</span>
+            <input value={search} onChange={(e) => onSearchChange(e.target.value)} placeholder="Search fells…" className={fieldClass} />
+          </label>
+          <button type="button" onClick={() => setToolPanel((v) => v === "route" ? "none" : "route")} aria-pressed={toolPanel === "route"} className={`${toolbarButton} ${toolPanel === "route" ? "border-emerald-600 bg-emerald-50" : ""}`}>Route builder</button>
+          <button type="button" onClick={() => setToolPanel((v) => v === "saved" ? "none" : "saved")} aria-pressed={toolPanel === "saved"} className={`${toolbarButton} ${toolPanel === "saved" ? "border-emerald-600 bg-emerald-50" : ""}`}>Saved routes</button>
+        </div>
 
-        <button
-          type="button"
-          onClick={() =>
-            setToolPanel((current) => (current === "saved" ? "none" : "saved"))
-          }
-          className={`rounded-2xl border px-4 py-3 text-sm font-black ${
-            toolPanel === "saved"
-              ? "border-emerald-700 bg-emerald-50 text-emerald-900"
-              : "border-stone-200 bg-white hover:bg-stone-50"
-          }`}
-        >
-          Saved routes
-        </button>
+        <div id="map-filters" className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
+            <label className="block text-xs font-semibold text-stone-600">Region
+              <select value={section} onChange={(e) => onSectionChange(e.target.value)} className={`mt-1 ${fieldClass}`}>
+                <option value="All">All regions</option>
+                {sections.filter((name) => name !== "All").map((name) => <option key={name} value={name}>{name}</option>)}
+              </select>
+            </label>
+            <label className="block text-xs font-semibold text-stone-600">Status
+              <select value={statusFilter} onChange={(e) => onStatusFilterChange(e.target.value as StatusFilter)} className={`mt-1 ${fieldClass}`}>
+                <option value="All">All statuses</option><option value="Not completed">Not completed</option><option value="Completed">Completed</option><option value="Planned">Planned</option><option value="Priority">Priority</option>
+              </select>
+            </label>
+            <label className="block text-xs font-semibold text-stone-600">Sort by
+              <select value={sortBy} onChange={(e) => onSortByChange(e.target.value as SortOption)} className={`mt-1 ${fieldClass}`}>
+                <option value="name">Name A–Z</option><option value="height-high">Highest first</option><option value="height-low">Lowest first</option><option value="section">Region</option><option value="planned-date">Planned date</option>
+              </select>
+            </label>
+            <button type="button" onClick={onResetFilters} className={toolbarButton}>Reset filters</button>
+        </div>
       </section>
 
       {toolPanel === "route" && (
@@ -344,7 +291,7 @@ export default function MapView({
         </section>
       )}
 
-      <section className="h-[calc(100vh-14rem)] min-h-[680px] overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
+      <section className="h-[65dvh] min-h-[420px] min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm sm:h-[75dvh] sm:min-h-[550px] lg:h-[calc(100vh-12rem)]">
         <MapWrapper
           fells={fells}
           onSelectFell={onSelectFell}

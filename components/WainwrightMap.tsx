@@ -55,6 +55,22 @@ function FlyToFell({ lat, lng }: { lat: number; lng: number }) {
   return null;
 }
 
+function RefreshMapSize({ panelOpen }: { panelOpen: boolean }) {
+  const map = useMap();
+  useEffect(() => {
+    const container = map.getContainer();
+    const observer = new ResizeObserver(() => { map.invalidateSize({ pan: false }); });
+    observer.observe(container);
+    map.invalidateSize({ pan: false });
+    return () => observer.disconnect();
+  }, [map]);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => map.invalidateSize({ pan: false }));
+    return () => cancelAnimationFrame(frame);
+  }, [map, panelOpen]);
+  return null;
+}
+
 function RouteClickHandler({
   isRouteMode,
   onAddRoutePoint,
@@ -117,6 +133,7 @@ export default function WainwrightMap({
   onSetPlannedDate,
 }: Props) {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [mobileListOpen, setMobileListOpen] = useState(false);
 
 
   const fallbackRoutePositions = routePoints.map(
@@ -127,90 +144,90 @@ export default function WainwrightMap({
 
 
   return (
-    <div
-      className={`grid h-[calc(100vh-8rem)] min-h-[640px] gap-4 transition-all ${
-        isPanelOpen
-          ? "grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr]"
-          : "grid-cols-1 md:grid-cols-[56px_1fr]"
-      }`}
-    >
-      <aside className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
-        <div className="flex items-center justify-between border-b border-stone-100 p-3">
-          {isPanelOpen && (
-            <div>
-              <h2 className="text-sm font-black uppercase tracking-[0.18em] text-emerald-800">
-                Wainwrights
-              </h2>
-              <p className="text-xs text-stone-500">
-                {fells.length} shown
-              </p>
-            </div>
-          )}
-
+    <div className={`relative grid h-full min-h-0 min-w-0 grid-rows-[minmax(0,1fr)] gap-0 md:gap-3 ${
+      isPanelOpen
+        ? "md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,1fr)]"
+        : "md:grid-cols-[52px_minmax(0,1fr)]"
+    }`}>
+      {/* On phones, the map fills the viewport and the list opens over it. */}
+      <aside
+        id="mobile-fell-list"
+        className={`absolute inset-x-2 bottom-2 top-14 z-[1100] min-h-0 flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-xl md:static md:z-auto md:h-full md:min-h-0 md:rounded-2xl md:shadow-sm ${
+          mobileListOpen ? "flex" : "hidden md:flex"
+        }`}
+      >
+        <div className="flex shrink-0 items-center justify-between border-b border-stone-100 px-3 py-2.5">
+          <div className={`${!isPanelOpen ? "md:hidden" : ""}`}>
+            <h2 className="text-xs font-black uppercase tracking-[0.14em] text-emerald-800">
+              Wainwrights
+            </h2>
+            <p className="text-xs text-stone-500">{fells.length} shown</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMobileListOpen(false)}
+            className="rounded-lg border border-stone-200 px-3 py-2 text-sm font-bold md:hidden"
+            aria-label="Close fell list"
+          >
+            Close
+          </button>
           <button
             type="button"
             onClick={() => setIsPanelOpen((current) => !current)}
-            className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-bold hover:bg-stone-50"
+            className="hidden rounded-lg border border-stone-200 px-3 py-2 text-sm font-bold hover:bg-stone-50 md:block"
             aria-label={isPanelOpen ? "Collapse panel" : "Expand panel"}
           >
             {isPanelOpen ? "‹" : "›"}
           </button>
         </div>
-
-        {isPanelOpen && (
-          <>
-
-            <div className="h-[calc(100%-146px)] overflow-y-auto p-2">
-              {fells.map((fell) => {
-                const isSelected = selectedFell?.id === fell.id;
-                const isPlanned = Boolean(fell.plannedDate);
-
-                return (
-                  <button
-                    key={fell.id}
-                    type="button"
-                    onClick={() => onSelectFell(fell.id)}
-                    className={`w-full rounded-2xl px-3 py-2 text-left transition ${
-                      isSelected
-                        ? "bg-emerald-50 text-emerald-950 ring-1 ring-emerald-200"
-                        : "hover:bg-stone-50"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="text-sm font-black">{fell.name}</p>
-                        <p className="text-xs text-stone-500">
-                          {fell.heightM}m · {fell.section}
-                        </p>
-                      </div>
-
-                      <span className="text-xs">
-                        {fell.completed
-                          ? "✅"
-                          : isPlanned
-                          ? "📅"
-                          : fell.priority
-                          ? "⭐"
-                          : ""}
-                      </span>
-                    </div>
-
+        <div className={`min-h-0 flex-1 overflow-y-auto overscroll-contain p-2 ${!isPanelOpen ? "md:hidden" : ""}`}>
+          {fells.map((fell) => {
+            const isSelected = selectedFell?.id === fell.id;
+            return (
+              <button
+                key={fell.id}
+                type="button"
+                onClick={() => {
+                  onSelectFell(fell.id);
+                  setMobileListOpen(false);
+                }}
+                className={`w-full rounded-xl px-3 py-2.5 text-left transition ${
+                  isSelected
+                    ? "bg-emerald-50 text-emerald-950 ring-1 ring-emerald-200"
+                    : "hover:bg-stone-50"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold">{fell.name}</p>
+                    <p className="text-xs text-stone-500">{fell.heightM}m · {fell.section}</p>
                     {fell.plannedDate && (
-                      <p className="mt-1 text-xs font-semibold text-blue-700">
-                        Planned{" "}
-                        {new Date(fell.plannedDate).toLocaleDateString("en-GB")}
+                      <p className="mt-0.5 text-xs font-semibold text-blue-700">
+                        Planned {new Date(fell.plannedDate).toLocaleDateString("en-GB")}
                       </p>
                     )}
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        )}
+                  </div>
+                  <span className="text-xs" aria-hidden="true">
+                    {fell.completed ? "✅" : fell.plannedDate ? "📅" : fell.priority ? "⭐" : ""}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </aside>
 
-      <div className="relative h-full overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
-        <div className="absolute bottom-4 left-4 right-4 z-[500] rounded-2xl border border-stone-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
+      <div className="relative h-full min-h-0 min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => setMobileListOpen(true)}
+          aria-controls="mobile-fell-list"
+          aria-expanded={mobileListOpen}
+          className="absolute left-3 top-3 z-[600] rounded-xl border border-stone-200 bg-white/95 px-4 py-2.5 text-sm font-bold text-stone-900 shadow-md backdrop-blur md:hidden"
+        >
+          ☰ Browse fells · {fells.length}
+        </button>
+        <div className="absolute bottom-3 left-3 right-3 z-[500] hidden rounded-xl border border-stone-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur lg:block">
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
             <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
               Legend
@@ -252,6 +269,7 @@ export default function WainwrightMap({
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
+          <RefreshMapSize panelOpen={isPanelOpen} />
           <RouteClickHandler
             isRouteMode={isRouteMode}
             onAddRoutePoint={onAddRoutePoint}

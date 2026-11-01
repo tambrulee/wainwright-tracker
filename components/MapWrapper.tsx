@@ -129,7 +129,8 @@ export default function MapWrapper({
   }, [routePoints, onRouteSummaryChange]);
 
   return (
-    <div className="relative">
+    <div className="relative flex h-full min-h-0 flex-col">
+      <div className="min-h-0 flex-1">
       <WainwrightMap
         fells={fells}
         onSelectFell={onSelectFell}
@@ -143,9 +144,10 @@ export default function MapWrapper({
         onTogglePriority={onTogglePriority}
         onSetPlannedDate={onSetPlannedDate}
       />
+      </div>
 
       {(routeLoading || routeError || walkingRoute || isRouteMode) && (
-        <div className="absolute bottom-4 left-4 z-[1000] rounded-xl bg-white px-4 py-3 text-sm font-semibold text-stone-900 shadow-lg">
+        <div className="absolute bottom-4 left-4 z-[1000] max-w-[calc(100%-2rem)] rounded-xl bg-white px-4 py-3 text-sm font-semibold text-stone-900 shadow-lg">
           {isRouteMode && !routeLoading && !routeError && !walkingRoute && (
             <span>Route mode: click map or fells to add points</span>
           )}
@@ -165,11 +167,7 @@ export default function MapWrapper({
         </div>
       )}
 
-      {walkingRoute && (
-        <div className="mt-6">
-          <ElevationProfile route={walkingRoute} />
-        </div>
-      )}
+
     </div>
   );
 }
