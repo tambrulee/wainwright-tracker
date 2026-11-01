@@ -155,6 +155,9 @@ export default function FellPlanner({
     String(today.getDate()).padStart(2, "0"),
   ].join("-");
   const nextPlannedDate = plannedDates.find((date) => date >= todayKey);
+  const upcomingDates = plannedDates.filter((date) => date >= todayKey);
+  const overdueDates = plannedDates.filter((date) => date < todayKey);
+  const [showOverdue, setShowOverdue] = useState(false);
 
   const saveDate = (fellId: string, value: string) => {
     onUpdatePlannedDate?.(fellId, value);
@@ -217,58 +220,44 @@ export default function FellPlanner({
   };
 
   return (
-    <section className="space-y-6">
-      <div>
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-800">
-          Wainwright Planner
-        </p>
-        <h1 className="mt-1 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-          Plan your 214
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
-          Add planned dates, filter by area, and keep your upcoming fells tidy.
-        </p>
-      </div>
-    {/* Filter Controls */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1.3fr_1fr_1fr_1fr]">
+    <section className="space-y-4 sm:space-y-5">
+      {/* Lightweight toolbar, no redundant page heading */}
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-[minmax(180px,1.4fr)_repeat(3,minmax(0,1fr))]">
           <input
+            aria-label="Search fells"
             value={search}
             onChange={(e) => updateFilter("search", e.target.value)}
-            placeholder="Search fell..."
-            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-emerald-700 focus:bg-white"
+            placeholder="Search fells..."
+            className="col-span-2 min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-emerald-700 focus:bg-white lg:col-span-1"
           />
-
           <select
+            aria-label="Filter by area"
             value={area}
             onChange={(e) => updateFilter("area", e.target.value)}
-            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-700 focus:bg-white"
+            className="min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 outline-none focus:border-emerald-700 focus:bg-white"
           >
             <option value="all">All areas</option>
             {areas.map((areaName) => (
-              <option key={areaName} value={areaName}>
-                {areaName}
-              </option>
+              <option key={areaName} value={areaName}>{areaName}</option>
             ))}
           </select>
-
           <select
+            aria-label="Filter by status"
             value={status}
-            onChange={(e) =>
-              updateFilter("status", e.target.value as StatusFilter)
-            }
-            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-700 focus:bg-white"
+            onChange={(e) => updateFilter("status", e.target.value as StatusFilter)}
+            className="min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 outline-none focus:border-emerald-700 focus:bg-white"
           >
             <option value="all">All fells</option>
             <option value="planned">Planned</option>
             <option value="unplanned">Unplanned</option>
             <option value="completed">Completed</option>
           </select>
-
           <select
+            aria-label="Sort fells"
             value={sort}
             onChange={(e) => updateFilter("sort", e.target.value as SortOption)}
-            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-700 focus:bg-white"
+            className="col-span-2 min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 outline-none focus:border-emerald-700 focus:bg-white lg:col-span-1"
           >
             <option value="planned-date">Planned date</option>
             <option value="rank">Wainwright rank</option>
@@ -278,67 +267,48 @@ export default function FellPlanner({
           </select>
         </div>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-          <label className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
+          <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-slate-700 sm:text-sm">
             <input
               type="checkbox"
               checked={hideCompleted}
-              onChange={(e) =>
-                updateFilter("hideCompleted", e.target.checked)
-              }
+              onChange={(e) => updateFilter("hideCompleted", e.target.checked)}
               className="h-4 w-4 accent-emerald-700"
             />
-            Hide completed fells
+            Hide completed
           </label>
-
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50"
-          >
-            Reset filters
-          </button>
-        </div>
-
-        <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-bold sm:flex sm:flex-wrap sm:text-sm">
-          <span className="rounded-xl bg-slate-50 px-3 py-2 text-slate-600">
-            Showing {filteredFells.length}
-          </span>
-          <span className="rounded-xl bg-blue-50 px-3 py-2 text-blue-700">
-            Planned {plannedCount}
-          </span>
-          <span className="rounded-xl bg-emerald-50 px-3 py-2 text-emerald-700">
-            Completed {completedCount}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500" aria-live="polite">
+              {filteredFells.length} showing
+            </span>
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="text-xs font-bold text-emerald-800 underline-offset-4 hover:underline focus-visible:underline sm:text-sm"
+            >
+              Reset filters
+            </button>
+          </div>
         </div>
       </div>
 
-      <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-start justify-between gap-4 px-4 pb-4 pt-5 sm:px-5">
+      <section className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-800">
-              Your hiking diary
-            </p>
-            <h2 className="mt-1 text-2xl font-black text-slate-950">
-              Hiking days at a glance
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {plannedCount} fell{plannedCount === 1 ? "" : "s"} across {plannedDates.length} hiking day{plannedDates.length === 1 ? "" : "s"}
-            </p>
+            <h1 className="text-xl font-black text-slate-950 sm:text-2xl">Your hiking diary</h1>
+            <p className="text-sm text-slate-500">{plannedCount} fells across {plannedDates.length} hiking days</p>
           </div>
-
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">
-            {nextPlannedDate ? `${formatShortDate(nextPlannedDate)} next` : "No upcoming plans"}
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+            {nextPlannedDate ? `Next hike · ${formatShortDate(nextPlannedDate)}` : "No upcoming hikes"}
           </span>
         </div>
-
-        {plannedDates.length === 0 ? (
+        {upcomingDates.length === 0 ? (
           <p className="mx-4 mb-5 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600 sm:mx-5">
-            Nothing planned yet.
+            No upcoming hikes planned.
           </p>
         ) : (
-          <div className="flex gap-2 overflow-x-auto border-t border-slate-100 bg-slate-50/70 px-4 py-3 sm:px-5">
-            {plannedDates.map((date) => {
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {upcomingDates.map((date) => {
               const dayFells = plannedCalendarDays[date];
               const isNext = date === nextPlannedDate;
               const isPast = date < todayKey;
@@ -384,6 +354,28 @@ export default function FellPlanner({
           </div>
         )}
       </section>
+
+      {overdueDates.length > 0 && (
+        <section className="rounded-xl border border-slate-200 bg-white">
+          <button type="button" aria-expanded={showOverdue}
+            onClick={() => setShowOverdue((value) => !value)}
+            className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-slate-700">
+            <span>Overdue hikes <span className="ml-2 text-slate-500">{overdueDates.length} date{overdueDates.length === 1 ? "" : "s"}</span></span>
+            <span aria-hidden="true">{showOverdue ? "−" : "+"}</span>
+          </button>
+          {showOverdue && (
+            <div className="divide-y divide-slate-100 border-t border-slate-100">
+              {overdueDates.map((date) => (
+                <button key={date} type="button" onClick={() => jumpToDate(date)}
+                  className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm hover:bg-slate-50">
+                  <span><strong>{formatShortDate(date)}</strong> · {plannedCalendarDays[date].map((fell) => fell.name).join(" · ")}</span>
+                  <span className="shrink-0 text-emerald-700">View →</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Planned Dates */}
 
